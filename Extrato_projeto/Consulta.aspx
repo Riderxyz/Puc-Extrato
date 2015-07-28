@@ -1,0 +1,223 @@
+﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="Consulta.aspx.vb" Inherits="Extrato_projeto.Consulta" %>
+
+<%@ Register Assembly="DevExpress.Web.ASPxPivotGrid.v15.1, Version=15.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.ASPxPivotGrid" TagPrefix="dx" %>
+
+<%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web" TagPrefix="dx" %>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="utf-8">
+    <title>FPLF</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="../CSS/bootstrap.css" media="screen" />
+    <link rel="stylesheet" href="../assets/css/bootswatch.min.css" />
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../bower_components/html5shiv/dist/html5shiv.js"></script>
+      <script src="../bower_components/respond/dest/respond.min.js"></script>
+    <![endif]-->
+    <script>
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-23019901-1']);
+        _gaq.push(['_setDomainName', "bootswatch.com"]);
+        _gaq.push(['_setAllowLinker', true]);
+        _gaq.push(['_trackPageview']);
+
+        (function () {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+
+</head>
+
+<body>
+    <form id="form1" runat="server">
+
+        <div class="container">
+
+            <div class="panel-info">
+                <h2>Fundação Padre Leonel Franca</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <dx:ASPxDateEdit ID="dtInicio" Width="98%" runat="server" Caption="Data inicial" EnableTheming="True" Theme="BlackGlass">
+                        <CaptionSettings HorizontalAlign="Left" Position="Top" />
+                        <ValidationSettings Display="Dynamic">
+                            <RequiredField ErrorText="Campo obrigatório" IsRequired="True" />
+                        </ValidationSettings>
+                        <CaptionStyle ForeColor="White">
+                        </CaptionStyle>
+                    </dx:ASPxDateEdit>
+                </div>
+                <div class="col-md-2 vcenter">
+                    <dx:ASPxDateEdit ID="dtFinal" Width="98%" runat="server" Caption="Data final" Theme="BlackGlass">
+                        <CaptionSettings HorizontalAlign="Left" Position="Top" />
+                        <ValidationSettings Display="Dynamic">
+                            <RequiredField ErrorText="Campo obrigatório" IsRequired="True" />
+                        </ValidationSettings>
+                        <CaptionStyle ForeColor="White">
+                        </CaptionStyle>
+                    </dx:ASPxDateEdit>
+                </div>
+                <div class="col-md-2" style="padding-top: 16px;"></div>
+                <div class="col-md-2" style="padding-top: 16px;">
+                    <button type="button" id="btExtratoProjetos" runat="server" class="btn-sm btn-default">Extrato de Projeto</button>
+                </div>
+                <div class="col-md-2" style="padding-top: 16px;">
+                    <button type="button" class="btn-sm  btn-default">Extrato de contas</button>
+                </div>
+                <div class="col-md-2" style="padding-top: 16px;">
+                    <button type="button" class="btn-sm  btn-default">Saldo das contas</button>
+                </div>
+            </div>
+            <hr class="divider" />
+            <dx:ASPxRoundPanel ID="PanelExtrato" ClientInstanceName="roundPanel" runat="server" LoadContentViaCallback="true"
+                HeaderText="Contact Information" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true"
+                Width="100%" Visible ="false" BackColor="#444545" Theme="BlackGlass">
+                <PanelCollection>
+                    <dx:PanelContent ID="PanelContent3" runat="server">
+                        <div id="DivGridExtratoProjeto">
+                            <div class="row">
+                                <div class="col-md-4" style="padding-bottom: 4px">
+                                    <dx:ASPxComboBox ID="comboProjetos" runat="server" ValueType="System.String" Caption="Escolha o Projeto" Theme="BlackGlass" Width="98%" AutoPostBack="True">
+                                        <CaptionSettings Position="Top" />
+                                        <CaptionStyle ForeColor="White">
+                                        </CaptionStyle>
+                                    </dx:ASPxComboBox>
+                                </div>
+                                <div class="col-md-2" style="padding-bottom: 4px">
+                                </div>
+                                <div class="col-md-6" style="padding-top: 6px">
+                                    Opções de exportação
+                    <dx:ASPxMenu ID="ASPxMenu1" runat="server" EnableTheming="True" Theme="BlackGlass" Width="100%">
+                        <Items>
+                            <dx:MenuItem Text="Excel">
+                            </dx:MenuItem>
+                            <dx:MenuItem Text="Excel (XLS)">
+                            </dx:MenuItem>
+                            <dx:MenuItem Text="PDF">
+                            </dx:MenuItem>
+                            <dx:MenuItem Text="RTF">
+                            </dx:MenuItem>
+                        </Items>
+                    </dx:ASPxMenu>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="panel-default>">
+
+                                        <dx:ASPxGridView ID="gridProjetos" runat="server" AutoGenerateColumns="False" EnableTheming="True" Theme="BlackGlass" Width="100%">
+
+                                            <GroupSummary>
+                                                <dx:ASPxSummaryItem DisplayFormat="###,###,##0.00" FieldName="receita" ShowInColumn="Receita" ShowInGroupFooterColumn="Receita" SummaryType="Sum" ValueDisplayFormat="###,###,##0.00" />
+                                            </GroupSummary>
+                                            <Columns>
+                                                <dx:GridViewDataDateColumn Caption="Data" FieldName="data" VisibleIndex="1" Width="10%">
+                                                    <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy">
+                                                    </PropertiesDateEdit>
+                                                    <Settings ShowFilterRowMenu="True" />
+                                                </dx:GridViewDataDateColumn>
+                                                <dx:GridViewDataTextColumn Caption="Descrição" FieldName="texto" ReadOnly="True" VisibleIndex="2" Width="50%">
+                                                </dx:GridViewDataTextColumn>
+                                                <dx:GridViewDataTextColumn Caption="Receita" FieldName="receita" VisibleIndex="3">
+                                                    <PropertiesTextEdit DisplayFormatString="###,###,##0.00">
+                                                    </PropertiesTextEdit>
+                                                </dx:GridViewDataTextColumn>
+                                                <dx:GridViewDataTextColumn Caption="Despesa" FieldName="despesa" VisibleIndex="4">
+                                                    <PropertiesTextEdit DisplayFormatString="###,###,##0.00">
+                                                    </PropertiesTextEdit>
+                                                </dx:GridViewDataTextColumn>
+                                                <dx:GridViewDataTextColumn Caption="Saldo" FieldName="saldo" VisibleIndex="5" Width="10%">
+                                                    <PropertiesTextEdit DisplayFormatString="###,###,##0.00">
+                                                    </PropertiesTextEdit>
+                                                </dx:GridViewDataTextColumn>
+                                            </Columns>
+                                            <SettingsPager AlwaysShowPager="True" Mode="EndlessPaging" PageSize="15">
+                                            </SettingsPager>
+                                            <Settings ShowFilterBar="Auto" ShowTitlePanel="True" ShowFooter="True" ShowGroupFooter="VisibleAlways" ShowStatusBar="Visible" ShowHeaderFilterButton="True" />
+                                            <SettingsText Title="Projeto XPTO" />
+                                            <SettingsDataSecurity AllowDelete="False" AllowEdit="False" AllowInsert="False" />
+                                            <SettingsSearchPanel ShowApplyButton="True" ShowClearButton="True" Visible="True" />
+                                            <Styles>
+                                                <TitlePanel Font-Size="14pt" HorizontalAlign="Left" VerticalAlign="Middle">
+                                                </TitlePanel>
+                                            </Styles>
+                                            <TotalSummary>
+                                                <dx:ASPxSummaryItem DisplayFormat="##,###,##0" FieldName="data" ShowInColumn="Data" ShowInGroupFooterColumn="Data" SummaryType="Count" ValueDisplayFormat="#####0" />
+                                                <dx:ASPxSummaryItem DisplayFormat="###,###,##0.00" FieldName="receita" ShowInColumn="Receita" ShowInGroupFooterColumn="Receita" SummaryType="Sum" ValueDisplayFormat="###,###,##0.00" />
+                                                <dx:ASPxSummaryItem DisplayFormat="###,###,###,##0.00" FieldName="despesa" ShowInColumn="Despesa" ShowInGroupFooterColumn="Despesa" SummaryType="Sum" ValueDisplayFormat="###,###,###,##0.00" />
+                                            </TotalSummary>
+                                        </dx:ASPxGridView>
+
+                                    </div>
+                                    <hr class="divider" />
+
+                                </div>
+                            </div>
+                        </div>
+                    </dx:PanelContent>
+                </PanelCollection>
+            </dx:ASPxRoundPanel>
+            <dx:ASPxRoundPanel ID="ASPxRoundPanel1" ClientInstanceName="roundPanel" runat="server" LoadContentViaCallback="true"
+                HeaderText="Contact Information" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true"
+                Width="100%" Visible ="false">
+                <PanelCollection>
+                    <dx:PanelContent ID="PanelContent1" runat="server">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-4" style="padding-bottom: 4px">
+                                    <dx:ASPxComboBox ID="ASPxComboBox1" runat="server" ValueType="System.String" Caption="Escolha o Projeto" Theme="BlackGlass" Width="98%" AutoPostBack="True">
+                                        <CaptionSettings Position="Top" />
+                                        <CaptionStyle ForeColor="White">
+                                        </CaptionStyle>
+                                    </dx:ASPxComboBox>
+                                </div>
+                                <div class="col-md-2" style="padding-bottom: 4px">
+                                </div>
+                                <div class="col-md-6" style="padding-top: 6px">
+                                    Opções de exportação
+                    <dx:ASPxMenu ID="ASPxMenu2" runat="server" EnableTheming="True" Theme="BlackGlass" Width="100%">
+                        <Items>
+                            <dx:MenuItem Text="Excel">
+                            </dx:MenuItem>
+                            <dx:MenuItem Text="Excel (XLS)">
+                            </dx:MenuItem>
+                            <dx:MenuItem Text="PDF">
+                            </dx:MenuItem>
+                            <dx:MenuItem Text="RTF">
+                            </dx:MenuItem>
+                        </Items>
+                    </dx:ASPxMenu>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="panel-default>">
+
+                                        <dx:ASPxPivotGrid ID="ASPxPivotGrid1" runat="server"></dx:ASPxPivotGrid>
+
+                                    </div>
+                                    <hr class="divider" />
+
+                                </div>
+                            </div>
+                        </div>
+                    </dx:PanelContent>
+                </PanelCollection>
+
+            </dx:ASPxRoundPanel>
+
+        </div>
+
+    </form>
+</body>
+</html>

@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard CurrencyCulture="en-US">
+  <Title Text="Dashboard" />
+  <DataConnections>
+    <DataConnection Name="FPLFConnection1" ConnectionString="Asynchronous Processing=true;Pooling=false;User ID=sa; password='Sdfplf98#'; Initial Catalog=FPLF;  Data Source=139.82.24.10,1433" />
+  </DataConnections>
+  <DataSources>
+    <DataSource ComponentName="dataSource1" Name="Data Source 1">
+      <DataProvider DataConnection="FPLFConnection1">
+        <Selection>
+          <Table Name="Vw_Internet_Extrato">
+            <Columns>
+              <Column Name="Fatura" Alias="Fatura" />
+              <Column Name="Data" Alias="Data" />
+              <Column Name="Receita" Alias="Receita" />
+              <Column Name="Despesa" Alias="Despesa" />
+              <Column Name="Historico" Alias="Historico" />
+              <Column Name="Mes" Alias="Mes" />
+              <Column Name="Codigo_Lancamento" Alias="Codigo_Lancamento" />
+              <Column Name="Nome" Alias="Nome" />
+              <Column Name="Conta_Principal" Alias="Conta_Principal" />
+              <Column Name="Coordenador" Alias="Coordenador" />
+              <Column Name="Codigo" Alias="Codigo" />
+              <Column Name="Projeto" Alias="Projeto" />
+              <Column Name="Nome_Projeto" Alias="Nome_Projeto" />
+              <Column Name="Tipo_Projeto" Alias="Tipo_Projeto" />
+            </Columns>
+          </Table>
+        </Selection>
+      </DataProvider>
+    </DataSource>
+  </DataSources>
+  <Items>
+    <Grid ComponentName="gridDashboardItem2" Name="Saldo Mensal por projetos" DataSource="dataSource1">
+      <InteractivityOptions MasterFilterMode="Multiple" />
+      <DataItems>
+        <Dimension DataMember="Nome_Projeto" UniqueName="DataItem0" />
+        <Measure DataMember="Receita" UniqueName="DataItem2" />
+        <Measure DataMember="Despesa" UniqueName="DataItem3" />
+        <Dimension DataMember="Data" DateTimeGroupInterval="MonthYear" UniqueName="DataItem4" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="Nome_Projeto">
+          <Dimension UniqueName="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Data (Month-Year)">
+          <Dimension UniqueName="DataItem4" />
+        </GridDimensionColumn>
+        <GridMeasureColumn Name="Receita (Sum)">
+          <Measure UniqueName="DataItem2" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="Despesa (Sum)">
+          <Measure UniqueName="DataItem3" />
+        </GridMeasureColumn>
+      </GridColumns>
+      <GridOptions />
+    </Grid>
+    <TreeView ComponentName="treeViewDashboardItem1" Name="Coordenadores" DataSource="dataSource1">
+      <DataItems>
+        <Dimension DataMember="Nome" UniqueName="DataItem0" />
+        <Dimension DataMember="Nome_Projeto" UniqueName="DataItem1" />
+      </DataItems>
+      <FilterDimensions>
+        <Dimension UniqueName="DataItem0" />
+        <Dimension UniqueName="DataItem1" />
+      </FilterDimensions>
+    </TreeView>
+    <TreeView ComponentName="treeViewDashboardItem2" Name="Período" DataSource="dataSource1">
+      <DataItems>
+        <Dimension DataMember="Data" SortOrder="Descending" UniqueName="DataItem0" />
+        <Dimension DataMember="Data" DateTimeGroupInterval="Month" UniqueName="DataItem1" />
+      </DataItems>
+      <FilterDimensions>
+        <Dimension UniqueName="DataItem0" />
+        <Dimension UniqueName="DataItem1" />
+      </FilterDimensions>
+    </TreeView>
+    <Grid ComponentName="gridDashboardItem1" Name="Movimento por período" DataSource="dataSource1">
+      <DataItems>
+        <Dimension DataMember="Data" DateTimeGroupInterval="DayMonthYear" UniqueName="DataItem0" />
+        <Dimension DataMember="Historico" UniqueName="DataItem5" />
+        <Measure DataMember="Receita" UniqueName="DataItem6" />
+        <Measure DataMember="Despesa" UniqueName="DataItem7" />
+        <Dimension DataMember="Nome_Projeto" UniqueName="DataItem8" />
+      </DataItems>
+      <HiddenDimensions>
+        <Dimension UniqueName="DataItem8" />
+      </HiddenDimensions>
+      <GridColumns>
+        <GridDimensionColumn Name="Data (Year)">
+          <Dimension UniqueName="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Historico">
+          <Dimension UniqueName="DataItem5" />
+        </GridDimensionColumn>
+        <GridMeasureColumn Name="Receita (Sum)">
+          <Measure UniqueName="DataItem6" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="Despesa (Sum)">
+          <Measure UniqueName="DataItem7" />
+        </GridMeasureColumn>
+      </GridColumns>
+      <GridOptions />
+    </Grid>
+    <Grid ComponentName="gridDashboardItem3" Name="Movimento por contas no período" DataSource="dataSource1">
+      <DataItems>
+        <Dimension DataMember="Conta_Principal" UniqueName="DataItem0" />
+        <Dimension DataMember="Data" DateTimeGroupInterval="MonthYear" UniqueName="DataItem5" />
+        <Measure DataMember="Receita" UniqueName="DataItem6" />
+        <Measure DataMember="Despesa" UniqueName="DataItem7" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="Conta_Principal">
+          <Dimension UniqueName="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Data (Month-Year)">
+          <Dimension UniqueName="DataItem5" />
+        </GridDimensionColumn>
+        <GridMeasureColumn Name="Receita (Sum)">
+          <Measure UniqueName="DataItem6" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="Despesa (Sum)">
+          <Measure UniqueName="DataItem7" />
+        </GridMeasureColumn>
+      </GridColumns>
+      <GridOptions />
+    </Grid>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup Orientation="Vertical">
+      <LayoutGroup Weight="44.18938307030129">
+        <LayoutItem DashboardItem="treeViewDashboardItem2" Weight="23.781009409751924" />
+        <LayoutItem DashboardItem="treeViewDashboardItem1" Weight="26.176218990590247" />
+        <LayoutItem DashboardItem="gridDashboardItem2" Weight="50.042771599657826" />
+      </LayoutGroup>
+      <LayoutGroup Weight="55.81061692969871">
+        <LayoutItem DashboardItem="gridDashboardItem1" Weight="49.957228400342174" />
+        <LayoutItem DashboardItem="gridDashboardItem3" Weight="50.042771599657826" />
+      </LayoutGroup>
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

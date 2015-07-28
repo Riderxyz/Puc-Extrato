@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard CurrencyCulture="en-US">
+  <Title Text="Dashboard" />
+  <DataConnections>
+    <DataConnection Name="FPLFConnection1" ConnectionString="Asynchronous Processing=true;Pooling=false;User ID=sa; password='Sdfplf98#'; Initial Catalog=FPLF;  Data Source=139.82.24.10,1433" />
+  </DataConnections>
+  <DataSources>
+    <DataSource ComponentName="dataSource1" Name="Data Source 1">
+      <DataProvider DataConnection="FPLFConnection1">
+        <Selection>
+          <Table Name="Vw_Internet_Extrato">
+            <Columns>
+              <Column Name="Fatura" Alias="Fatura" />
+              <Column Name="Data" Alias="Data" />
+              <Column Name="Receita" Alias="Receita" />
+              <Column Name="Despesa" Alias="Despesa" />
+              <Column Name="Historico" Alias="Historico" />
+              <Column Name="Mes" Alias="Mes" />
+              <Column Name="Codigo_Lancamento" Alias="Codigo_Lancamento" />
+              <Column Name="Nome" Alias="Nome" />
+              <Column Name="Conta_Principal" Alias="Conta_Principal" />
+              <Column Name="Coordenador" Alias="Coordenador" />
+              <Column Name="Codigo" Alias="Codigo" />
+              <Column Name="Projeto" Alias="Projeto" />
+              <Column Name="Nome_Projeto" Alias="Nome_Projeto" />
+              <Column Name="Tipo_Projeto" Alias="Tipo_Projeto" />
+            </Columns>
+          </Table>
+        </Selection>
+      </DataProvider>
+    </DataSource>
+  </DataSources>
+  <Items>
+    <Grid ComponentName="gridDashboardItem1" Name="Grid 1" DataSource="dataSource1">
+      <DataItems>
+        <Measure DataMember="Receita" UniqueName="DataItem1" />
+        <Measure DataMember="Despesa" UniqueName="DataItem2" />
+        <Dimension DataMember="Nome_Projeto" UniqueName="DataItem0" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn>
+          <Dimension UniqueName="DataItem0" />
+        </GridDimensionColumn>
+        <GridMeasureColumn>
+          <Measure UniqueName="DataItem1" />
+        </GridMeasureColumn>
+        <GridMeasureColumn>
+          <Measure UniqueName="DataItem2" />
+        </GridMeasureColumn>
+      </GridColumns>
+      <GridOptions />
+    </Grid>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup>
+      <LayoutItem DashboardItem="gridDashboardItem1" />
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>
