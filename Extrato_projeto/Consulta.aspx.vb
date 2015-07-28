@@ -41,14 +41,12 @@ Public Class Consulta
             gridProjetos.DataBind()
         End If
         CarregarComboProjetos()
-        'Dim sConexion As String = "Asynchronous Processing=true;Pooling=false;User ID=sa; password='Sdfplf98#'; Initial Catalog=FPLF;  Data Source=139.82.24.10,1433"
-        'Dim conexion = New SqlConnection(sConexion)
-        'conexion.Open()
-
     End Sub
-
-
     Protected Sub comboProjetos_ValueChanged(sender As Object, e As EventArgs) Handles comboProjetos.ValueChanged
         CarregarMovimentos(comboProjetos.SelectedItem.Value, dtInicio.Value, dtFinal.Value)
+    End Sub
+
+    Protected Sub ASPxMenu1_ItemClick(source As Object, e As DevExpress.Web.MenuItemEventArgs) Handles ASPxMenu1.ItemClick
+
     End Sub
 End Class
