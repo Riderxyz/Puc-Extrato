@@ -95,6 +95,15 @@ Partial Public Class Consulta
     Protected WithEvents gridProjetos As Global.DevExpress.Web.ASPxGridView
 
     '''<summary>
+    '''Exporter control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Exporter As Global.DevExpress.Web.ASPxGridViewExporter
+
+    '''<summary>
     '''ASPxRoundPanel1 control.
     '''</summary>
     '''<remarks>

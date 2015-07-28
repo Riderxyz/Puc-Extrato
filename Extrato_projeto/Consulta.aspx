@@ -79,7 +79,7 @@
             <hr class="divider" />
             <dx:ASPxRoundPanel ID="PanelExtrato" ClientInstanceName="roundPanel" runat="server" LoadContentViaCallback="true"
                 HeaderText="Contact Information" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true"
-                Width="100%" Visible ="false" BackColor="#444545" Theme="BlackGlass">
+                Width="100%" Visible="false" BackColor="#444545" Theme="BlackGlass">
                 <PanelCollection>
                     <dx:PanelContent ID="PanelContent3" runat="server">
                         <div id="DivGridExtratoProjeto">
@@ -97,13 +97,11 @@
                                     Opções de exportação
                     <dx:ASPxMenu ID="ASPxMenu1" runat="server" EnableTheming="True" Theme="BlackGlass" Width="100%">
                         <Items>
-                            <dx:MenuItem Text="Excel">
+                            <dx:MenuItem Text="Excel" Name="xls">
                             </dx:MenuItem>
-                            <dx:MenuItem Text="Excel (XLS)">
+                            <dx:MenuItem Text="PDF" Name="pdf">
                             </dx:MenuItem>
-                            <dx:MenuItem Text="PDF">
-                            </dx:MenuItem>
-                            <dx:MenuItem Text="RTF">
+                            <dx:MenuItem Text="RTF" Name="rtf">
                             </dx:MenuItem>
                         </Items>
                     </dx:ASPxMenu>
@@ -156,7 +154,7 @@
                                                 <dx:ASPxSummaryItem DisplayFormat="###,###,###,##0.00" FieldName="despesa" ShowInColumn="Despesa" ShowInGroupFooterColumn="Despesa" SummaryType="Sum" ValueDisplayFormat="###,###,###,##0.00" />
                                             </TotalSummary>
                                         </dx:ASPxGridView>
-
+                                        <dx:ASPxGridViewExporter ID="Exporter" runat="server" />
                                     </div>
                                     <hr class="divider" />
 
@@ -168,7 +166,7 @@
             </dx:ASPxRoundPanel>
             <dx:ASPxRoundPanel ID="ASPxRoundPanel1" ClientInstanceName="roundPanel" runat="server" LoadContentViaCallback="true"
                 HeaderText="Contact Information" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true"
-                Width="100%" Visible ="false">
+                Width="100%" Visible="false">
                 <PanelCollection>
                     <dx:PanelContent ID="PanelContent1" runat="server">
                         <div class="container">

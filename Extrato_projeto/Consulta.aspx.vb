@@ -1,7 +1,11 @@
 ﻿Imports System.Data.SqlClient
 Imports Negocio.clBanco
+Imports DevExpress.Export
+Imports DevExpress.XtraPrinting
+Imports DevExpress.Web
+
 Public Class Consulta
-    Inherits Page
+    Inherits System.Web.UI.Page
     Public Property DataInicial As Date
     Public Property DataFinal As Date
     Public Property codigoProjeto As String
@@ -44,9 +48,29 @@ Public Class Consulta
     End Sub
     Protected Sub comboProjetos_ValueChanged(sender As Object, e As EventArgs) Handles comboProjetos.ValueChanged
         CarregarMovimentos(comboProjetos.SelectedItem.Value, dtInicio.Value, dtFinal.Value)
+        gridProjetos.Caption = comboProjetos.SelectedItem.Text
+        gridProjetos.SettingsText.Title = "PROJETO " + comboProjetos.SelectedItem.Text + " Período " + dtInicio.Text + " a " + dtFinal.Text
     End Sub
-
+    Protected Sub UpdateExportMode()
+        '  gridProjetos.SettingsDetail.ExportMode = CType(System.Enum.Parse(GetType(GridViewDetailExportMode), ddlExportMode.SelectedItem.Value), GridViewDetailExportMode)
+    End Sub
     Protected Sub ASPxMenu1_ItemClick(source As Object, e As DevExpress.Web.MenuItemEventArgs) Handles ASPxMenu1.ItemClick
+        If e.Item.Name.ToLower = "xls".ToLower Then
+            UpdateExportMode()
+            Exporter.WriteXlsToResponse(New XlsExportOptionsEx() With {.ExportType = ExportType.WYSIWYG})
+        ElseIf e.Item.Name.ToLower = "xlsx".ToLower Then
+            UpdateExportMode()
+            Exporter.WriteXlsxToResponse(New XlsxExportOptionsEx() With {.ExportType = ExportType.WYSIWYG})
 
+        ElseIf e.Item.Name.ToLower = "pdf".ToLower Then
+            UpdateExportMode()
+            Exporter.WritePdfToResponse()
+        ElseIf e.Item.Name.ToLower = "rtf".ToLower Then
+            UpdateExportMode()
+            Exporter.WriteRtfToResponse()
+        ElseIf e.Item.Name.ToLower = "csv".ToLower Then
+            UpdateExportMode()
+            Exporter.WriteCsvToResponse(New CsvExportOptionsEx() With {.ExportType = ExportType.WYSIWYG})
+        End If
     End Sub
 End Class
