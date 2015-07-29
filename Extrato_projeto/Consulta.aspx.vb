@@ -73,4 +73,8 @@ Public Class Consulta
             Exporter.WriteCsvToResponse(New CsvExportOptionsEx() With {.ExportType = ExportType.WYSIWYG})
         End If
     End Sub
+
+    Protected Sub dtFinal_DateChanged(sender As Object, e As EventArgs) Handles dtFinal.DateChanged
+
+    End Sub
 End Class
