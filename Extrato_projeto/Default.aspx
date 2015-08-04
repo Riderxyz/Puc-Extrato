@@ -1,45 +1,47 @@
-﻿<%@ Page Title="Home Page" Language="VB" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.vb" Inherits="Extrato_projeto._Default" %>
+﻿<%@ Page Title="Home Page" Language="VB" AutoEventWireup="true" CodeBehind="Default.aspx.vb" Inherits="Extrato_projeto._Default" %>
 
-<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
-        <div class="navbar-header">
-          <a href="../" class="navbar-brand">Bootswatch</a>
-          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-        </div>
+<%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web" TagPrefix="dx" %>
 
-    <div class="row">
-        <div class="col-md-4">
-            <h2>Getting Started</h2>
-            <p>
-                ASP.NET Web Forms lets you build dynamic websites using a familiar drag-and-drop, event-driven model.
-            A design surface and hundreds of controls and components let you rapidly build sophisticated, powerful UI-driven sites with data access.
-            </p>
-            <p>
-                <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301948">Learn more &raquo;</a>
-            </p>
-        </div>
-        <div class="col-md-4">
-            <h2>Get more libraries</h2>
-            <p>
-                NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.
-            </p>
-            <p>
-                <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301949">Learn more &raquo;</a>
-            </p>
-        </div>
-        <div class="col-md-4">
-            <h2>Web Hosting</h2>
-            <p>
-                You can easily find a web hosting company that offers the right mix of features and price for your applications.
-            </p>
-            <p>
-                <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301950">Learn more &raquo;</a>
-            </p>
-        </div>
-    </div>
 
-</asp:Content>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>FPLF - Controle de Projetos</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+    
+<body style="background-image:url('fundo.jpg')" >
+    <form id="form1" runat="server">
+        <dx:ASPxPopupControl ID="ASPxPopupControl1" runat="server" AllowDragging="True" Modal="True" ShowOnPageLoad="True" Theme="PlasticBlue" HeaderText="Acesso ao Sistema" Width="400px" EnableTheming="True" FooterText="Fundação Padre Leonel Franca" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" PopupAnimationType="Fade">
+            <Windows>
+                <dx:PopupWindow Width="500px" ShowOnPageLoad ="true" FooterText="Fundação Padre Leonel Franca" ShowFooter="True" Modal="True"  >
+                    <HeaderStyle Font-Bold="True" Font-Size="Medium" />
+                    <ContentCollection>
+                        <dx:PopupControlContentControl runat="server">
+                            <dx:ASPxTextBox ID="edUsuario" runat="server" Caption="Usuário" Theme="PlasticBlue" Width="98%">
+                                <CaptionSettings Position="Top" />
+                                <CaptionStyle Font-Bold="True" Font-Size="Small">
+                                </CaptionStyle>
+                            </dx:ASPxTextBox><br />
+                            <dx:ASPxTextBox ID="edSenha" runat="server" Caption="Senha" Theme="PlasticBlue" Width="98%" Password="True">
+                                <CaptionSettings Position="Top" />
+                                <CaptionStyle Font-Bold="True" Font-Size="Small">
+                                </CaptionStyle>
+                            </dx:ASPxTextBox>
+                        </dx:PopupControlContentControl>
+                    </ContentCollection>
+                </dx:PopupWindow>
+            </Windows>
+            <ContentCollection>
+            </ContentCollection>
+            <ContentStyle HorizontalAlign="Center" VerticalAlign="Middle">
+            </ContentStyle>
+        </dx:ASPxPopupControl>
+    </form>
+</body>
+</html>

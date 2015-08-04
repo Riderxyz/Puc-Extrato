@@ -1,0 +1,1 @@
+﻿<%@ WebService Language="C#" CodeBehind="NovaEra.asmx.cs" Class="NovaEraPortais.Servico.Service1" %>
