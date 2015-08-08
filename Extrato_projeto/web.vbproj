@@ -87,6 +87,8 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
@@ -250,7 +252,9 @@
     <Content Include="css\bootstrap.css" />
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\simple-sidebar.css" />
+    <Content Include="excel.jpg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fundo.jpg" />
     <Content Include="js\bootstrap.js" />
     <Content Include="js\bootstrap.min.js" />
     <Content Include="js\jquery.js" />
@@ -261,6 +265,8 @@
     <Content Include="Account\Web.config" />
     <None Include="My Project\PublishProfiles\padrao.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="pdf.jpg" />
+    <Content Include="rtf.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -293,11 +299,84 @@
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <None Include="Service References\wsExtrato\configuration91.svcinfo" />
+    <None Include="Service References\wsExtrato\configuration.svcinfo" />
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.ArrayOfBasecamposcoordenadores.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.ArrayOfBasecamposcoordenadoresprojetos.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.ArrayOfBasecampos_Projetos.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.ArrayOfBasecampos_view_extrato.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.ArrayOfBasecampos_View_Extrato2.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.ArrayOfBasecampos_vw_contamae.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.ArrayOfBasecampos_vw_int_saldosProjetos.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.GetExcelOf_View_extrato2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.GetListOf_View_extrato2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.GetListOf_Vw_contamaeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.GetProjetosCoordenadoresResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.GetRangeOf_View_extrato2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.GetRangeOf_vw_contamaeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.GetUnique_View_extrato2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.GetUnique_Vw_contamaeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.ListarMovimentosResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.LIstarProjetosFullResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.LIstarProjetosResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.PalavraResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.SaldoProjetosCoordenadorResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.TesteGravarResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\wsExtrato\Extrato_projeto.wsExtrato.ValidarCoordenadorResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\wsExtrato\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.vb</LastGenOutput>
+    </None>
     <Content Include="simple-sidebar.css" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <None Include="Service References\wsExtrato\novaera.wsdl" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -467,6 +546,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Service References\wsExtrato\Reference.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Site.Master.designer.vb">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
@@ -527,6 +611,12 @@
       <Project>{4c5351ab-8f1c-471b-b252-f9a9113befec}</Project>
       <Name>Negocio</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\wsExtrato\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

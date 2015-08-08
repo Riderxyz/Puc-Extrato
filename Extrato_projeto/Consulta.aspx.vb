@@ -9,6 +9,8 @@ Public Class Consulta
     Public Property DataInicial As Date
     Public Property DataFinal As Date
     Public Property codigoProjeto As String
+    Public Property Coordenador As String
+    Dim ws As wsExtrato.Service1SoapClient = New wsExtrato.Service1SoapClient
 
 
     Public Sub btnExtratoProjeto_Click(sender As Object, e As EventArgs) Handles btExtratoProjetos.ServerClick
@@ -18,8 +20,8 @@ Public Class Consulta
     Sub CarregarComboProjetos()
 
         Dim banco As Negocio.clBanco = New Negocio.clBanco
-        banco.CarregarTabela("SELECT Codigo, Projeto, Nome, Nm_Cord_Projeto  FROM gif_vw_proj_faturamento WHERE     (CHARINDEX('ENCERRADOS', Nm_Cord_Projeto) = 0)")
-        comboProjetos.DataSource = banco.tabela
+        'banco.CarregarTabela("SELECT Codigo, Projeto, Nome, Nm_Cord_Projeto  FROM gif_vw_proj_faturamento WHERE     (CHARINDEX('ENCERRADOS', Nm_Cord_Projeto) = 0)")
+        comboProjetos.DataSource = ws.LIstarProjetos(Coordenador)
         comboProjetos.TextField = "Projeto"
         comboProjetos.ValueField = "Codigo"
         comboProjetos.DataBind()
@@ -35,6 +37,15 @@ Public Class Consulta
 
         gridProjetos.DataBind()
 
+    End Sub
+
+    Private Sub Page_Init(sender As Object, e As EventArgs) Handles Me.Init
+        Try
+            Coordenador = Session("coordenador")
+        Catch ex As Exception
+            Coordenador = -1
+            Response.Redirect("/default.aspx")
+        End Try
     End Sub
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load

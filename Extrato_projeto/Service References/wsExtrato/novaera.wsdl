@@ -1,0 +1,779 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="ValidarCoordenador">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="senha" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ValidarCoordenadorResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ValidarCoordenadorResult" type="tns:ArrayOfBasecamposcoordenadores" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfBasecamposcoordenadores">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="basecamposcoordenadores" nillable="true" type="tns:basecamposcoordenadores" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="basecamposcoordenadores">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Coordenador" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Projeto" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Conectado" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetProjetosCoordenadores">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetProjetosCoordenadoresResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetProjetosCoordenadoresResult" type="tns:ArrayOfBasecamposcoordenadoresprojetos" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfBasecamposcoordenadoresprojetos">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="basecamposcoordenadoresprojetos" nillable="true" type="tns:basecamposcoordenadoresprojetos" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="basecamposcoordenadoresprojetos">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Coordenador" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Nomeprojeto" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Contaprincipal" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Nome" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Codigo" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="LIstarProjetos">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Coordenador" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LIstarProjetosResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LIstarProjetosResult" type="tns:ArrayOfBasecampos_Projetos" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfBasecampos_Projetos">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="basecampos_Projetos" nillable="true" type="tns:basecampos_Projetos" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="basecampos_Projetos">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Codigo" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Projeto" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Nome" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Descricao" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Inicio" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="Coordenador" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Conta_principal" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tipo_projeto" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="LIstarProjetosFull">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Coordenador" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LIstarProjetosFullResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LIstarProjetosFullResult" type="tns:ArrayOfBasecampos_Projetos" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListarMovimentos">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="parmCoordenador" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="projeto" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="inicio" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fim" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NomePLanilha" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="titulos" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListarMovimentosResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListarMovimentosResult" type="tns:ArrayOfBasecampos_view_extrato" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfBasecampos_view_extrato">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="basecampos_view_extrato" nillable="true" type="tns:basecampos_view_extrato" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="basecampos_view_extrato">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Codigo_lancamento" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Projeto" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Rubrica" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Fatura" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Data" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="Valor" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="Saldo" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="Despesa" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="Pre_lancamento" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Receita" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="Historico" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Expr1" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Coordenador" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tipo_projeto" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Conta_principal" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Descricao" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Nome" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SaldoProjetosCoordenador">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="coordenador" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="inicio" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SaldoProjetosCoordenadorResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SaldoProjetosCoordenadorResult" type="tns:ArrayOfBasecampos_vw_int_saldosProjetos" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfBasecampos_vw_int_saldosProjetos">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="basecampos_vw_int_saldosProjetos" nillable="true" type="tns:basecampos_vw_int_saldosProjetos" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="basecampos_vw_int_saldosProjetos">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Saldo" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="Projeto" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Coordenador" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Receita" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="Despesa" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="TesteGravar">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="campo" type="tns:basecampos_projetos" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="basecampos_projetos">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Codigo" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Projeto" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Inicio" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="Coordenador" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="TesteGravarResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetListOf_Vw_contamae">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="parm_coordenador" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetListOf_Vw_contamaeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetListOf_Vw_contamaeResult" type="tns:ArrayOfBasecampos_vw_contamae" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfBasecampos_vw_contamae">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="basecampos_vw_contamae" nillable="true" type="tns:basecampos_vw_contamae" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="basecampos_vw_contamae">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Conta_mae" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Descricaocontamae" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetRangeOf_vw_contamae">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="parm_coordenador" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="parm_chave" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="inicio" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="final" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRangeOf_vw_contamaeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRangeOf_vw_contamaeResult" type="tns:ArrayOfBasecampos_vw_contamae" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUnique_Vw_contamae">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="parm_coordenador" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="parm_chave" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUnique_Vw_contamaeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetUnique_Vw_contamaeResult" type="tns:ArrayOfBasecampos_vw_contamae" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetListOf_View_extrato2">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="parm_coordenador" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetListOf_View_extrato2Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetListOf_View_extrato2Result" type="tns:ArrayOfBasecampos_View_Extrato2" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfBasecampos_View_Extrato2">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="basecampos_View_Extrato2" nillable="true" type="tns:basecampos_View_Extrato2" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="basecampos_View_Extrato2">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Conta_principal" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Descricao" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Data" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="Receita" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="Despesa" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="Historico" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Saldo" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetRangeOf_View_extrato2">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="parm_coordenador" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="parm_chave" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="inicio" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="final" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="titulos" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRangeOf_View_extrato2Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRangeOf_View_extrato2Result" type="tns:ArrayOfBasecampos_View_Extrato2" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUnique_View_extrato2">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="parm_coordenador" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="parm_chave" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="titulos" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUnique_View_extrato2Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetUnique_View_extrato2Result" type="tns:ArrayOfBasecampos_View_Extrato2" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetExcelOf_View_extrato2">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="parm_coordenador" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="_filtro" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NomePlanilha" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="_titulos" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetExcelOf_View_extrato2Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetExcelOf_View_extrato2Result" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Palavra">
+        <s:complexType />
+      </s:element>
+      <s:element name="PalavraResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PalavraResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ValidarCoordenadorSoapIn">
+    <wsdl:part name="parameters" element="tns:ValidarCoordenador" />
+  </wsdl:message>
+  <wsdl:message name="ValidarCoordenadorSoapOut">
+    <wsdl:part name="parameters" element="tns:ValidarCoordenadorResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetProjetosCoordenadoresSoapIn">
+    <wsdl:part name="parameters" element="tns:GetProjetosCoordenadores" />
+  </wsdl:message>
+  <wsdl:message name="GetProjetosCoordenadoresSoapOut">
+    <wsdl:part name="parameters" element="tns:GetProjetosCoordenadoresResponse" />
+  </wsdl:message>
+  <wsdl:message name="LIstarProjetosSoapIn">
+    <wsdl:part name="parameters" element="tns:LIstarProjetos" />
+  </wsdl:message>
+  <wsdl:message name="LIstarProjetosSoapOut">
+    <wsdl:part name="parameters" element="tns:LIstarProjetosResponse" />
+  </wsdl:message>
+  <wsdl:message name="LIstarProjetosFullSoapIn">
+    <wsdl:part name="parameters" element="tns:LIstarProjetosFull" />
+  </wsdl:message>
+  <wsdl:message name="LIstarProjetosFullSoapOut">
+    <wsdl:part name="parameters" element="tns:LIstarProjetosFullResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListarMovimentosSoapIn">
+    <wsdl:part name="parameters" element="tns:ListarMovimentos" />
+  </wsdl:message>
+  <wsdl:message name="ListarMovimentosSoapOut">
+    <wsdl:part name="parameters" element="tns:ListarMovimentosResponse" />
+  </wsdl:message>
+  <wsdl:message name="SaldoProjetosCoordenadorSoapIn">
+    <wsdl:part name="parameters" element="tns:SaldoProjetosCoordenador" />
+  </wsdl:message>
+  <wsdl:message name="SaldoProjetosCoordenadorSoapOut">
+    <wsdl:part name="parameters" element="tns:SaldoProjetosCoordenadorResponse" />
+  </wsdl:message>
+  <wsdl:message name="TesteGravarSoapIn">
+    <wsdl:part name="parameters" element="tns:TesteGravar" />
+  </wsdl:message>
+  <wsdl:message name="TesteGravarSoapOut">
+    <wsdl:part name="parameters" element="tns:TesteGravarResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetListOf_Vw_contamaeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetListOf_Vw_contamae" />
+  </wsdl:message>
+  <wsdl:message name="GetListOf_Vw_contamaeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetListOf_Vw_contamaeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRangeOf_vw_contamaeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRangeOf_vw_contamae" />
+  </wsdl:message>
+  <wsdl:message name="GetRangeOf_vw_contamaeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRangeOf_vw_contamaeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetUnique_Vw_contamaeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetUnique_Vw_contamae" />
+  </wsdl:message>
+  <wsdl:message name="GetUnique_Vw_contamaeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetUnique_Vw_contamaeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetListOf_View_extrato2SoapIn">
+    <wsdl:part name="parameters" element="tns:GetListOf_View_extrato2" />
+  </wsdl:message>
+  <wsdl:message name="GetListOf_View_extrato2SoapOut">
+    <wsdl:part name="parameters" element="tns:GetListOf_View_extrato2Response" />
+  </wsdl:message>
+  <wsdl:message name="GetRangeOf_View_extrato2SoapIn">
+    <wsdl:part name="parameters" element="tns:GetRangeOf_View_extrato2" />
+  </wsdl:message>
+  <wsdl:message name="GetRangeOf_View_extrato2SoapOut">
+    <wsdl:part name="parameters" element="tns:GetRangeOf_View_extrato2Response" />
+  </wsdl:message>
+  <wsdl:message name="GetUnique_View_extrato2SoapIn">
+    <wsdl:part name="parameters" element="tns:GetUnique_View_extrato2" />
+  </wsdl:message>
+  <wsdl:message name="GetUnique_View_extrato2SoapOut">
+    <wsdl:part name="parameters" element="tns:GetUnique_View_extrato2Response" />
+  </wsdl:message>
+  <wsdl:message name="GetExcelOf_View_extrato2SoapIn">
+    <wsdl:part name="parameters" element="tns:GetExcelOf_View_extrato2" />
+  </wsdl:message>
+  <wsdl:message name="GetExcelOf_View_extrato2SoapOut">
+    <wsdl:part name="parameters" element="tns:GetExcelOf_View_extrato2Response" />
+  </wsdl:message>
+  <wsdl:message name="PalavraSoapIn">
+    <wsdl:part name="parameters" element="tns:Palavra" />
+  </wsdl:message>
+  <wsdl:message name="PalavraSoapOut">
+    <wsdl:part name="parameters" element="tns:PalavraResponse" />
+  </wsdl:message>
+  <wsdl:portType name="Service1Soap">
+    <wsdl:operation name="ValidarCoordenador">
+      <wsdl:input message="tns:ValidarCoordenadorSoapIn" />
+      <wsdl:output message="tns:ValidarCoordenadorSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjetosCoordenadores">
+      <wsdl:input message="tns:GetProjetosCoordenadoresSoapIn" />
+      <wsdl:output message="tns:GetProjetosCoordenadoresSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LIstarProjetos">
+      <wsdl:input message="tns:LIstarProjetosSoapIn" />
+      <wsdl:output message="tns:LIstarProjetosSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LIstarProjetosFull">
+      <wsdl:input message="tns:LIstarProjetosFullSoapIn" />
+      <wsdl:output message="tns:LIstarProjetosFullSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListarMovimentos">
+      <wsdl:input message="tns:ListarMovimentosSoapIn" />
+      <wsdl:output message="tns:ListarMovimentosSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SaldoProjetosCoordenador">
+      <wsdl:input message="tns:SaldoProjetosCoordenadorSoapIn" />
+      <wsdl:output message="tns:SaldoProjetosCoordenadorSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TesteGravar">
+      <wsdl:input message="tns:TesteGravarSoapIn" />
+      <wsdl:output message="tns:TesteGravarSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListOf_Vw_contamae">
+      <wsdl:input message="tns:GetListOf_Vw_contamaeSoapIn" />
+      <wsdl:output message="tns:GetListOf_Vw_contamaeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRangeOf_vw_contamae">
+      <wsdl:input message="tns:GetRangeOf_vw_contamaeSoapIn" />
+      <wsdl:output message="tns:GetRangeOf_vw_contamaeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUnique_Vw_contamae">
+      <wsdl:input message="tns:GetUnique_Vw_contamaeSoapIn" />
+      <wsdl:output message="tns:GetUnique_Vw_contamaeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListOf_View_extrato2">
+      <wsdl:input message="tns:GetListOf_View_extrato2SoapIn" />
+      <wsdl:output message="tns:GetListOf_View_extrato2SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRangeOf_View_extrato2">
+      <wsdl:input message="tns:GetRangeOf_View_extrato2SoapIn" />
+      <wsdl:output message="tns:GetRangeOf_View_extrato2SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUnique_View_extrato2">
+      <wsdl:input message="tns:GetUnique_View_extrato2SoapIn" />
+      <wsdl:output message="tns:GetUnique_View_extrato2SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetExcelOf_View_extrato2">
+      <wsdl:input message="tns:GetExcelOf_View_extrato2SoapIn" />
+      <wsdl:output message="tns:GetExcelOf_View_extrato2SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Palavra">
+      <wsdl:input message="tns:PalavraSoapIn" />
+      <wsdl:output message="tns:PalavraSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Service1Soap" type="tns:Service1Soap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ValidarCoordenador">
+      <soap:operation soapAction="http://tempuri.org/ValidarCoordenador" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjetosCoordenadores">
+      <soap:operation soapAction="http://tempuri.org/GetProjetosCoordenadores" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LIstarProjetos">
+      <soap:operation soapAction="http://tempuri.org/LIstarProjetos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LIstarProjetosFull">
+      <soap:operation soapAction="http://tempuri.org/LIstarProjetosFull" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListarMovimentos">
+      <soap:operation soapAction="http://tempuri.org/ListarMovimentos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaldoProjetosCoordenador">
+      <soap:operation soapAction="http://tempuri.org/SaldoProjetosCoordenador" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TesteGravar">
+      <soap:operation soapAction="http://tempuri.org/TesteGravar" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListOf_Vw_contamae">
+      <soap:operation soapAction="http://tempuri.org/GetListOf_Vw_contamae" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRangeOf_vw_contamae">
+      <soap:operation soapAction="http://tempuri.org/GetRangeOf_vw_contamae" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUnique_Vw_contamae">
+      <soap:operation soapAction="http://tempuri.org/GetUnique_Vw_contamae" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListOf_View_extrato2">
+      <soap:operation soapAction="http://tempuri.org/GetListOf_View_extrato2" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRangeOf_View_extrato2">
+      <soap:operation soapAction="http://tempuri.org/GetRangeOf_View_extrato2" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUnique_View_extrato2">
+      <soap:operation soapAction="http://tempuri.org/GetUnique_View_extrato2" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetExcelOf_View_extrato2">
+      <soap:operation soapAction="http://tempuri.org/GetExcelOf_View_extrato2" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Palavra">
+      <soap:operation soapAction="http://tempuri.org/Palavra" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="Service1Soap12" type="tns:Service1Soap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ValidarCoordenador">
+      <soap12:operation soapAction="http://tempuri.org/ValidarCoordenador" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjetosCoordenadores">
+      <soap12:operation soapAction="http://tempuri.org/GetProjetosCoordenadores" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LIstarProjetos">
+      <soap12:operation soapAction="http://tempuri.org/LIstarProjetos" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LIstarProjetosFull">
+      <soap12:operation soapAction="http://tempuri.org/LIstarProjetosFull" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListarMovimentos">
+      <soap12:operation soapAction="http://tempuri.org/ListarMovimentos" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaldoProjetosCoordenador">
+      <soap12:operation soapAction="http://tempuri.org/SaldoProjetosCoordenador" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TesteGravar">
+      <soap12:operation soapAction="http://tempuri.org/TesteGravar" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListOf_Vw_contamae">
+      <soap12:operation soapAction="http://tempuri.org/GetListOf_Vw_contamae" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRangeOf_vw_contamae">
+      <soap12:operation soapAction="http://tempuri.org/GetRangeOf_vw_contamae" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUnique_Vw_contamae">
+      <soap12:operation soapAction="http://tempuri.org/GetUnique_Vw_contamae" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListOf_View_extrato2">
+      <soap12:operation soapAction="http://tempuri.org/GetListOf_View_extrato2" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRangeOf_View_extrato2">
+      <soap12:operation soapAction="http://tempuri.org/GetRangeOf_View_extrato2" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUnique_View_extrato2">
+      <soap12:operation soapAction="http://tempuri.org/GetUnique_View_extrato2" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetExcelOf_View_extrato2">
+      <soap12:operation soapAction="http://tempuri.org/GetExcelOf_View_extrato2" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Palavra">
+      <soap12:operation soapAction="http://tempuri.org/Palavra" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Service1">
+    <wsdl:port name="Service1Soap" binding="tns:Service1Soap">
+      <soap:address location="http://plantao.filmeb.com.br/ws/novaera.asmx" />
+    </wsdl:port>
+    <wsdl:port name="Service1Soap12" binding="tns:Service1Soap12">
+      <soap12:address location="http://plantao.filmeb.com.br/ws/novaera.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

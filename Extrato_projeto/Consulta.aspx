@@ -7,7 +7,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>FPLF</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -36,17 +36,17 @@
 
 </head>
 
-<body>
+<body style="background-image: url('fundo.jpg')">
     <form id="form1" runat="server">
 
-        <div class="container">
+        <div class="container-fluid">
 
             <div class="panel-info">
                 <h2>Fundação Padre Leonel Franca</h2>
             </div>
             <div class="row">
                 <div class="col-md-2">
-                    <dx:ASPxDateEdit ID="dtInicio" Width="98%" runat="server" Caption="Data inicial" EnableTheming="True" Theme="BlackGlass">
+                    <dx:ASPxDateEdit ID="dtInicio" Width="98%" runat="server" Caption="Data inicial" EnableTheming="True" Theme="PlasticBlue">
                         <CaptionSettings HorizontalAlign="Left" Position="Top" />
                         <ValidationSettings Display="Dynamic">
                             <RequiredField ErrorText="Campo obrigatório" IsRequired="True" />
@@ -56,8 +56,9 @@
                     </dx:ASPxDateEdit>
                 </div>
                 <div class="col-md-2 vcenter">
-                    <dx:ASPxDateEdit ID="dtFinal" Width="98%" runat="server" Caption="Data final" Theme="BlackGlass">
+                    <dx:ASPxDateEdit ID="dtFinal" Width="98%" runat="server" Caption="Data final" Theme="PlasticBlue">
                         <CaptionSettings HorizontalAlign="Left" Position="Top" />
+                        <DateRangeSettings StartDateEditID="dtInicio"></DateRangeSettings>
                         <ValidationSettings Display="Dynamic">
                             <RequiredField ErrorText="Campo obrigatório" IsRequired="True" />
                         </ValidationSettings>
@@ -67,52 +68,39 @@
                 </div>
                 <div class="col-md-2" style="padding-top: 16px;"></div>
                 <div class="col-md-2" style="padding-top: 16px;">
-                    <button type="button" id="btExtratoProjetos" runat="server" class="btn-sm btn-default">Extrato de Projeto</button>
+                    <button type="button" id="btExtratoProjetos" runat="server" class="btn btn-primary btn-lg">Extrato de Projeto</button>
                 </div>
                 <div class="col-md-2" style="padding-top: 16px;">
-                    <button type="button" class="btn-sm  btn-default">Extrato de contas</button>
+                    <button type="button" class="btn btn-primary btn-lg">Extrato de contas</button>
                 </div>
                 <div class="col-md-2" style="padding-top: 16px;">
-                    <button type="button" class="btn-sm  btn-default">Saldo das contas</button>
+                    <button type="button" class="btn btn-primary btn-lg">Saldo das contas</button>
                 </div>
             </div>
             <hr class="divider" />
             <dx:ASPxRoundPanel ID="PanelExtrato" ClientInstanceName="roundPanel" runat="server" LoadContentViaCallback="true"
-                HeaderText="Contact Information" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true"
-                Width="100%" Visible="false" BackColor="#444545" Theme="BlackGlass">
+                HeaderText="" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true"
+                Width="100%" Visible="false" Theme="PlasticBlue">
+                <HeaderStyle Font-Size="12pt" />
                 <PanelCollection>
                     <dx:PanelContent ID="PanelContent3" runat="server">
                         <div id="DivGridExtratoProjeto">
                             <div class="row">
                                 <div class="col-md-4" style="padding-bottom: 4px">
-                                    <dx:ASPxComboBox ID="comboProjetos" runat="server" ValueType="System.String" Caption="Escolha o Projeto" Theme="BlackGlass" Width="98%" AutoPostBack="True">
+                                    <dx:ASPxComboBox ID="comboProjetos" runat="server" ValueType="System.String" Caption="Escolha o Projeto" Theme="PlasticBlue" Width="98%" AutoPostBack="True">
                                         <CaptionSettings Position="Top" />
-                                        <CaptionStyle ForeColor="White">
-                                        </CaptionStyle>
                                     </dx:ASPxComboBox>
                                 </div>
                                 <div class="col-md-2" style="padding-bottom: 4px">
                                 </div>
-                                <div class="col-md-6" style="padding-top: 6px">
-                                    Opções de exportação
-                    <dx:ASPxMenu ID="ASPxMenu1" runat="server" EnableTheming="True" Theme="BlackGlass" Width="100%">
-                        <Items>
-                            <dx:MenuItem Text="Excel" Name="xls">
-                            </dx:MenuItem>
-                            <dx:MenuItem Text="PDF" Name="pdf">
-                            </dx:MenuItem>
-                            <dx:MenuItem Text="RTF" Name="rtf">
-                            </dx:MenuItem>
-                        </Items>
-                    </dx:ASPxMenu>
-                                </div>
+
                             </div>
 
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="panel-default>">
 
-                                        <dx:ASPxGridView ID="gridProjetos" runat="server" AutoGenerateColumns="False" EnableTheming="True" Theme="BlackGlass" Width="100%">
+                                        <dx:ASPxGridView ID="gridProjetos" runat="server" AutoGenerateColumns="False" EnableTheming="True" Theme="PlasticBlue" Width="100%">
 
                                             <GroupSummary>
                                                 <dx:ASPxSummaryItem DisplayFormat="###,###,##0.00" FieldName="receita" ShowInColumn="Receita" ShowInGroupFooterColumn="Receita" SummaryType="Sum" ValueDisplayFormat="###,###,##0.00" />
@@ -140,10 +128,9 @@
                                             </Columns>
                                             <SettingsPager AlwaysShowPager="True" Mode="EndlessPaging" PageSize="15">
                                             </SettingsPager>
-                                            <Settings ShowFilterBar="Auto" ShowTitlePanel="True" ShowFooter="True" ShowGroupFooter="VisibleAlways" ShowStatusBar="Visible" ShowHeaderFilterButton="True" />
-                                            <SettingsText Title="Projeto XPTO" />
+                                            <Settings ShowFilterBar="Auto" ShowTitlePanel="True" ShowFooter="True" ShowGroupFooter="VisibleAlways" ShowStatusBar="Visible" ShowHeaderFilterButton="True" ShowFilterRowMenu="True" />
                                             <SettingsDataSecurity AllowDelete="False" AllowEdit="False" AllowInsert="False" />
-                                            <SettingsSearchPanel ShowApplyButton="True" ShowClearButton="True" Visible="True" />
+                                            <SettingsSearchPanel ShowApplyButton="True" ShowClearButton="True" Visible="True" Delay="600" GroupOperator="Or" />
                                             <Styles>
                                                 <TitlePanel Font-Size="14pt" HorizontalAlign="Left" VerticalAlign="Middle">
                                                 </TitlePanel>
@@ -157,7 +144,31 @@
                                         <dx:ASPxGridViewExporter ID="Exporter" runat="server" />
                                     </div>
                                     <hr class="divider" />
+                                    <div class="col-md-6" style="padding-top: 6px">
 
+                                        <dx:ASPxMenu ID="ASPxMenu1" runat="server" EnableTheming="True" Theme="PlasticBlue" Width="100%">
+                                            <Items>
+                                                <dx:MenuItem Text="" Name="xls">
+                                                    <Image Height="32px" Url="~/excel.jpg" Width="32px">
+                                                    </Image>
+                                                </dx:MenuItem>
+                                                <dx:MenuItem Text="" Name="pdf">
+                                                    <Image Height="32px" Url="~/pdf.jpg" Width="32px">
+                                                    </Image>
+                                                </dx:MenuItem>
+                                                <dx:MenuItem Text="" Name="rtf">
+                                                    <Image Height="32px" Url="~/rtf.jpg" Width="32px">
+                                                    </Image>
+                                                </dx:MenuItem>
+                                            </Items>
+                                            <ItemStyle Font-Bold="False" Font-Size="12pt">
+                                                <SelectedStyle BackColor="#0099FF">
+                                                </SelectedStyle>
+                                                <HoverStyle Font-Bold="True" Font-Size="12pt">
+                                                </HoverStyle>
+                                            </ItemStyle>
+                                        </dx:ASPxMenu>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -172,7 +183,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-4" style="padding-bottom: 4px">
-                                    <dx:ASPxComboBox ID="ASPxComboBox1" runat="server" ValueType="System.String" Caption="Escolha o Projeto" Theme="BlackGlass" Width="98%" AutoPostBack="True">
+                                    <dx:ASPxComboBox ID="ASPxComboBox1" runat="server" ValueType="System.String" Caption="Escolha o Projeto" Theme="PlasticBlue" Width="98%" AutoPostBack="True">
                                         <CaptionSettings Position="Top" />
                                         <CaptionStyle ForeColor="White">
                                         </CaptionStyle>
@@ -182,7 +193,7 @@
                                 </div>
                                 <div class="col-md-6" style="padding-top: 6px">
                                     Opções de exportação
-                    <dx:ASPxMenu ID="ASPxMenu2" runat="server" EnableTheming="True" Theme="BlackGlass" Width="100%">
+                    <dx:ASPxMenu ID="ASPxMenu2" runat="server" EnableTheming="True" Theme="PlasticBlue" Width="100%">
                         <Items>
                             <dx:MenuItem Text="Excel">
                             </dx:MenuItem>

@@ -77,15 +77,6 @@ Partial Public Class Consulta
     Protected WithEvents comboProjetos As Global.DevExpress.Web.ASPxComboBox
 
     '''<summary>
-    '''ASPxMenu1 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents ASPxMenu1 As Global.DevExpress.Web.ASPxMenu
-
-    '''<summary>
     '''gridProjetos control.
     '''</summary>
     '''<remarks>
@@ -102,6 +93,15 @@ Partial Public Class Consulta
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents Exporter As Global.DevExpress.Web.ASPxGridViewExporter
+
+    '''<summary>
+    '''ASPxMenu1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ASPxMenu1 As Global.DevExpress.Web.ASPxMenu
 
     '''<summary>
     '''ASPxRoundPanel1 control.
