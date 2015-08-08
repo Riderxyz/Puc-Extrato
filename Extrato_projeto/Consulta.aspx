@@ -71,7 +71,7 @@
                     <button type="button" id="btExtratoProjetos" runat="server" class="btn btn-primary btn-lg">Extrato de Projeto</button>
                 </div>
                 <div class="col-md-2" style="padding-top: 16px;">
-                    <button type="button" class="btn btn-primary btn-lg">Extrato de contas</button>
+                    <button type="button"  id="btMovimentoContas" runat="server"  class="btn btn-primary btn-lg">Extrato de contas</button>
                 </div>
                 <div class="col-md-2" style="padding-top: 16px;">
                     <button type="button" class="btn btn-primary btn-lg">Saldo das contas</button>
@@ -99,9 +99,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="panel-default>">
-
                                         <dx:ASPxGridView ID="gridProjetos" runat="server" AutoGenerateColumns="False" EnableTheming="True" Theme="PlasticBlue" Width="100%">
-
                                             <GroupSummary>
                                                 <dx:ASPxSummaryItem DisplayFormat="###,###,##0.00" FieldName="receita" ShowInColumn="Receita" ShowInGroupFooterColumn="Receita" SummaryType="Sum" ValueDisplayFormat="###,###,##0.00" />
                                             </GroupSummary>
@@ -147,6 +145,101 @@
                                     <div class="col-md-6" style="padding-top: 6px">
 
                                         <dx:ASPxMenu ID="ASPxMenu1" runat="server" EnableTheming="True" Theme="PlasticBlue" Width="100%">
+                                            <Items>
+                                                <dx:MenuItem Text="" Name="xls">
+                                                    <Image Height="32px" Url="~/excel.jpg" Width="32px">
+                                                    </Image>
+                                                </dx:MenuItem>
+                                                <dx:MenuItem Text="" Name="pdf">
+                                                    <Image Height="32px" Url="~/pdf.jpg" Width="32px">
+                                                    </Image>
+                                                </dx:MenuItem>
+                                                <dx:MenuItem Text="" Name="rtf">
+                                                    <Image Height="32px" Url="~/rtf.jpg" Width="32px">
+                                                    </Image>
+                                                </dx:MenuItem>
+                                            </Items>
+                                            <ItemStyle Font-Bold="False" Font-Size="12pt">
+                                                <SelectedStyle BackColor="#0099FF">
+                                                </SelectedStyle>
+                                                <HoverStyle Font-Bold="True" Font-Size="12pt">
+                                                </HoverStyle>
+                                            </ItemStyle>
+                                        </dx:ASPxMenu>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </dx:PanelContent>
+                </PanelCollection>
+            </dx:ASPxRoundPanel>
+            <dx:ASPxRoundPanel ID="PanelMovimentoConta" ClientInstanceName="roundPanel" runat="server" LoadContentViaCallback="true"
+                HeaderText="" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true"
+                Width="100%" Visible="false" Theme="PlasticBlue">
+                <HeaderStyle Font-Size="12pt" />
+                <PanelCollection>
+                    <dx:PanelContent ID="PanelContent2" runat="server">
+                        <div id="DivGridMovimentoConta">
+                            <div class="row">
+                                <div class="col-md-4" style="padding-bottom: 4px">
+                                    <dx:ASPxComboBox ID="ComboContas" runat="server" ValueType="System.String" Caption="Escolha a Conta" Theme="PlasticBlue" Width="98%" AutoPostBack="True">
+                                        <CaptionSettings Position="Top" />
+                                        <CaptionStyle Font-Bold="True">
+                                        </CaptionStyle>
+                                    </dx:ASPxComboBox>
+                                </div>
+                                <div class="col-md-2" style="padding-bottom: 4px">
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="panel-default>">
+                                        <dx:ASPxGridView ID="gridMovimentoContas" runat="server" AutoGenerateColumns="False" EnableTheming="True" Theme="PlasticBlue" Width="100%">
+                                            <GroupSummary>
+                                                <dx:ASPxSummaryItem DisplayFormat="###,###,##0.00" FieldName="receita" ShowInColumn="Receita" ShowInGroupFooterColumn="Receita" SummaryType="Sum" ValueDisplayFormat="###,###,##0.00" />
+                                            </GroupSummary>
+                                            <Columns>
+                                                <dx:GridViewDataDateColumn Caption="Data" FieldName="Data" VisibleIndex="2" Width="10%" ExportWidth="80">
+                                                    <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy">
+                                                    </PropertiesDateEdit>
+                                                    <Settings ShowFilterRowMenu="True" />
+                                                </dx:GridViewDataDateColumn>
+                                                <dx:GridViewDataTextColumn Caption="Descrição" FieldName="Descricao" ReadOnly="True" VisibleIndex="1" Width="30%" ExportWidth="250">
+                                                </dx:GridViewDataTextColumn>
+                                                <dx:GridViewDataTextColumn Caption="Receita" FieldName="Receita" VisibleIndex="3" ExportWidth="80" Width="10%">
+                                                    <PropertiesTextEdit DisplayFormatString="###,###,##0.00">
+                                                    </PropertiesTextEdit>
+                                                </dx:GridViewDataTextColumn>
+                                                <dx:GridViewDataTextColumn Caption="Despesa" FieldName="Despesa" VisibleIndex="4" ExportWidth="80" Width="10%">
+                                                    <PropertiesTextEdit DisplayFormatString="###,###,##0.00">
+                                                    </PropertiesTextEdit>
+                                                </dx:GridViewDataTextColumn>
+                                                <dx:GridViewDataTextColumn Caption="Histórico" FieldName="Historico" VisibleIndex="0" Width="40%" ExportWidth="300">
+                                                </dx:GridViewDataTextColumn>
+                                            </Columns>
+                                            <SettingsPager AlwaysShowPager="True" PageSize="15" Position="TopAndBottom">
+                                            </SettingsPager>
+                                            <Settings ShowFilterBar="Auto" ShowTitlePanel="True" ShowFooter="True" ShowGroupFooter="VisibleAlways" ShowStatusBar="Visible" ShowHeaderFilterButton="True" ShowFilterRowMenu="True" />
+                                            <SettingsDataSecurity AllowDelete="False" AllowEdit="False" AllowInsert="False" />
+                                            <SettingsSearchPanel ShowApplyButton="True" ShowClearButton="True" Visible="True" Delay="600" GroupOperator="Or" />
+                                            <Styles>
+                                                <TitlePanel Font-Size="14pt" HorizontalAlign="Left" VerticalAlign="Middle">
+                                                </TitlePanel>
+                                            </Styles>
+                                            <TotalSummary>
+                                                <dx:ASPxSummaryItem DisplayFormat="##,###,##0" FieldName="data" ShowInColumn="Data" ShowInGroupFooterColumn="Data" SummaryType="Count" ValueDisplayFormat="#####0" />
+                                                <dx:ASPxSummaryItem DisplayFormat="###,###,##0.00" FieldName="receita" ShowInColumn="Receita" ShowInGroupFooterColumn="Receita" SummaryType="Sum" ValueDisplayFormat="###,###,##0.00" />
+                                                <dx:ASPxSummaryItem DisplayFormat="###,###,###,##0.00" FieldName="despesa" ShowInColumn="Despesa" ShowInGroupFooterColumn="Despesa" SummaryType="Sum" ValueDisplayFormat="###,###,###,##0.00" />
+                                            </TotalSummary>
+                                        </dx:ASPxGridView>
+                                        <dx:ASPxGridViewExporter ID="ASPxGridViewExporter1" runat="server" />
+                                    </div>
+                                    <hr class="divider" />
+                                    <div class="col-md-6" style="padding-top: 6px">
+
+                                        <dx:ASPxMenu ID="ASPxMenu3" runat="server" EnableTheming="True" Theme="PlasticBlue" Width="100%">
                                             <Items>
                                                 <dx:MenuItem Text="" Name="xls">
                                                     <Image Height="32px" Url="~/excel.jpg" Width="32px">
