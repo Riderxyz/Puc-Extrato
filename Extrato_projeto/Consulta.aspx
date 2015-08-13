@@ -71,7 +71,7 @@
                     <button type="button" id="btExtratoProjetos" runat="server" class="btn btn-primary btn-lg">Extrato de Projeto</button>
                 </div>
                 <div class="col-md-2" style="padding-top: 16px;">
-                    <button type="button"  id="btMovimentoContas" runat="server"  class="btn btn-primary btn-lg">Extrato de contas</button>
+                    <button type="button" id="btMovimentoContas" runat="server" class="btn btn-primary btn-lg">Extrato de contas</button>
                 </div>
                 <div class="col-md-2" style="padding-top: 16px;">
                     <button type="button" class="btn btn-primary btn-lg">Saldo das contas</button>
@@ -87,11 +87,15 @@
                         <div id="DivGridExtratoProjeto">
                             <div class="row">
                                 <div class="col-md-4" style="padding-bottom: 4px">
-                                    <dx:ASPxComboBox ID="comboProjetos" runat="server" ValueType="System.String" Caption="Escolha o Projeto" Theme="PlasticBlue" Width="98%" AutoPostBack="True">
-                                        <CaptionSettings Position="Top" />
+                                    <dx:ASPxComboBox ID="comboProjetos" runat="server" ValueType="System.String" Caption="Projeto" Theme="PlasticBlue" Width="98%" AutoPostBack="True">
+                                        <CaptionSettings Position="left" />
                                     </dx:ASPxComboBox>
                                 </div>
-                                <div class="col-md-2" style="padding-bottom: 4px">
+                                <div class="col-md-6" style="padding-bottom: 4px;vertical-align:bottom;">
+                                    <dx:ASPxTextBox ID="txtFiltro" runat="server" Width="100%" Theme="PlasticBlue"></dx:ASPxTextBox>
+                                </div>
+                                <div class="col-md-2" style="padding-bottom: 4px;">
+                                    <dx:ASPxButton ID="btExecutar" runat="server" Text="Pesquisar" Theme="PlasticBlue"></dx:ASPxButton>
                                 </div>
 
                             </div>
@@ -128,7 +132,7 @@
                                             </SettingsPager>
                                             <Settings ShowFilterBar="Auto" ShowTitlePanel="True" ShowFooter="True" ShowGroupFooter="VisibleAlways" ShowStatusBar="Visible" ShowHeaderFilterButton="True" ShowFilterRowMenu="True" />
                                             <SettingsDataSecurity AllowDelete="False" AllowEdit="False" AllowInsert="False" />
-                                            <SettingsSearchPanel ShowApplyButton="True" ShowClearButton="True" Visible="True" Delay="600" GroupOperator="Or" />
+                                            <SettingsSearchPanel Delay="400" GroupOperator="Or" CustomEditorID="txtfiltro" />
                                             <Styles>
                                                 <TitlePanel Font-Size="14pt" HorizontalAlign="Left" VerticalAlign="Middle">
                                                 </TitlePanel>

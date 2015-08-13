@@ -86,6 +86,24 @@ Partial Public Class Consulta
     Protected WithEvents comboProjetos As Global.DevExpress.Web.ASPxComboBox
 
     '''<summary>
+    '''txtFiltro control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtFiltro As Global.DevExpress.Web.ASPxTextBox
+
+    '''<summary>
+    '''btExecutar control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btExecutar As Global.DevExpress.Web.ASPxButton
+
+    '''<summary>
     '''gridProjetos control.
     '''</summary>
     '''<remarks>
