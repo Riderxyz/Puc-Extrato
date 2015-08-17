@@ -242,8 +242,12 @@
     <Content Include="Account\TwoFactorAuthenticationSignIn.aspx" />
     <Content Include="Account\VerifyPhoneNumber.aspx" />
     <Content Include="App_Data\fundo.jpg" />
+    <Content Include="blank-page.html" />
+    <Content Include="bootstrap-elements.html" />
+    <Content Include="bootstrap-grid.html" />
     <Content Include="bootstrap.css" />
     <Content Include="bootstrap.min.css" />
+    <Content Include="charts.html" />
     <Content Include="Consulta.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap.css" />
@@ -254,7 +258,11 @@
     <Content Include="css\simple-sidebar.css" />
     <Content Include="excel.jpg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="forms.html" />
     <Content Include="fundo.jpg" />
+    <Content Include="index-rtl.html" />
+    <Content Include="Index.aspx" />
+    <Content Include="index.html" />
     <Content Include="js\bootstrap.js" />
     <Content Include="js\bootstrap.min.js" />
     <Content Include="js\jquery.js" />
@@ -525,6 +533,13 @@
     </Compile>
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Index.aspx.designer.vb">
+      <DependentUpon>Index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Index.aspx.vb">
+      <DependentUpon>Index.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Models\IdentityModels.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
