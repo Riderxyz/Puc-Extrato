@@ -1,10 +1,9 @@
 ﻿
 Imports System.Text
-Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Configuration
-Imports System.Data.OleDb
-Imports System.Collections.Specialized
+Imports Newtonsoft.Json
+Imports Newtonsoft.Json.Serialization
 
 Public Class clBanco
 #Region "Propriedades"
@@ -29,13 +28,14 @@ Public Class clBanco
         End Get
     End Property
     Public Property Comando As StringBuilder
+    Public Property parametros As List(Of SqlParameter) = New List(Of SqlParameter)
     Public Property UltimoErro As StringBuilder
     'Public Property log As LogEvent.log = New LogEvent.log
     Public Property adapter As SqlDataAdapter
     Public Property ds As System.Data.DataSet
     Public Property tabela As System.Data.DataTable
     Public Property Conexao As SqlConnection
-    Public Property OraCOmmand As SqlCommand
+    Public Property OraCommand As SqlCommand
 
 #End Region
 
@@ -57,8 +57,6 @@ Public Class clBanco
         End If
     End Function
     Public Function executarComando(comando As String) As Boolean
-
-
         Dim result As Integer = -1
         If (comando <> "") Then
             Conexao = New SqlConnection(ConectionString)
@@ -71,6 +69,32 @@ Public Class clBanco
         End If
         Return (result = 0)
     End Function
+    ''' <summary>
+    ''' Executa um comando exec e retorna os dados na tabela TABELA interna do objeto
+    ''' </summary>
+    ''' <param name="comando">Comando a ser executado</param>
+
+    Public sub ExecuteAndReturnData(comando As String)
+        If (comando <> "") Then
+            Dim reader As SqlDataReader
+            Conexao = New SqlConnection(ConectionString)
+            OraCommand = New SqlCommand(comando, Conexao)
+            If (parametros.Count > 0)
+                For Each p In parametros
+                    OraCommand.Parameters.Add(p)
+                Next
+            End If
+            OraCOmmand.CommandType = CommandType.StoredProcedure
+            Conexao.Open()
+            reader = OraCOmmand.ExecuteReader()
+            ds = New DataSet 
+            tabela = New DataTable 
+            tabela.Load(reader)
+            ds.Tables.Add(tabela)
+            parametros.Clear  ' log Logging.Log.listLog.Add(New LogEvent.baseLog())
+        End If
+
+    End sub
 
     Public Function CarregarTabela() As Boolean
 
@@ -153,6 +177,37 @@ Public Class clBanco
         End If
     End Function
 
+#End Region
+
+#Region "Json"
+    'kkk
+    ' 'http://stackoverflow.com/questions/34272427/c-sharp-custom-json-using-json-net-from-dataset-or-datatable
+    <System.Diagnostics.CodeAnalysis.SuppressMessage("CodeRush", "String.Format can be used")>
+    Public Function GetJsonTabela() As String
+        Dim jss As JsonSerializerSettings = New JsonSerializerSettings()
+        jss.ContractResolver = New CamelCasePropertyNamesContractResolver()
+
+        If (Not IsNothing(tabela))
+            Return JsonConvert.SerializeObject(ds, Formatting.Indented, jss)
+        ElseIf (Not IsNothing(ds.Tables(0)))
+            Return JsonConvert.SerializeObject(ds.Tables(0), Formatting.Indented, jss)
+        Else
+            Return JsonConvert.SerializeObject("Sem dados na tabela", jss)
+        End If
+
+    End Function
+#End Region
+
+#Region "Check Null"
+    public Function GetNullable(Of T)(dataobj As Object) As T
+        If Convert.IsDBNull(dataobj) Then
+            Return Nothing
+        Else
+            Return CType(dataobj, T)
+
+        End If
+
+    End Function
 #End Region
 
 End Class

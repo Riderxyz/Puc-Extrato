@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "web", "web\web.vbproj", "{CD8E53D2-B177-494B-AE08-1CEEF98E43D7}"
 EndProject
@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{EE1E22
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NovaEra", "NovaEra\NovaEra.csproj", "{E8E2D28B-9E3E-46CA-A6AC-6C2AAEB3E7D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "services", "services\services.csproj", "{E144C827-B9DA-4A4D-B89E-40E49971CAF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,10 @@ Global
 		{E8E2D28B-9E3E-46CA-A6AC-6C2AAEB3E7D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8E2D28B-9E3E-46CA-A6AC-6C2AAEB3E7D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8E2D28B-9E3E-46CA-A6AC-6C2AAEB3E7D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E144C827-B9DA-4A4D-B89E-40E49971CAF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E144C827-B9DA-4A4D-B89E-40E49971CAF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E144C827-B9DA-4A4D-B89E-40E49971CAF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E144C827-B9DA-4A4D-B89E-40E49971CAF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
