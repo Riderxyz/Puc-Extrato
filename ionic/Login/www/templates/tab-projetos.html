@@ -1,26 +1,18 @@
 <ion-view view-title="FPLF - Projetos" ng-controller='ProjetoCtrl'>
-  <ion-content class="padding" scroll="false">
+  <ion-content ng-init="init('2387')" class="padding" scroll="false">
     <center>
-      <h4> <b>Extrato de Projetos</b>
-      </h4>
-    </center>
-    <ionic-datepicker date="currentDate" min="minDate" max="maxDate" callback="datePickerCallback">
-      <button class="button button-block button-positive">De: {{ currentDate | date:'MMMM/dd/yyyy' }}</button>
-    </ionic-datepicker>
-
-    <ionic-datepicker class="padding-top" date="currentDate2" min="minDate" max="maxDate" callback="datePickerCallback">
-      <button class="button button-block button-positive">Até: {{ currentDate2 | date:'MMMM/dd/yyyy' }}</button>
-    </ionic-datepicker>
-      <ion-list class="list-positive">
-          <ion-item class="item-divider">
-        Projetos
-    </ion-item>
-        <ion-item ng-repeat="item in items">
-        <a href="#">{{item.title}}</a>
-          <ion-option-button class="button-positive" ng-click="editItem(item)">Edit</ion-option-button>
-        </ion-item>
-      </ion-list>
+      <h4> <b>Seus Projetos</b></h4>
+      <h5>-- {{parmdata}} --</h5>
+      
+    </center> 
+    <div ng-repeat="p in projetos" class="row">
+      <div class="col-xs-8">{{p.nome}}</div>
+      <div class="col-xs-4">{{p.saldo}}</div>
+    </div>
 
   </ion-content>
 
 </ion-view>
+
+
+<!--ng-controller="ProjetoCtrl" -->
