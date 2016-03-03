@@ -1,0 +1,23 @@
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Unable to start the daemon process.
+This problem might be caused by incorrect configuration of the daemon.
+For example, an unrecognized jvm option is used.
+Please refer to the user guide chapter on the daemon at http://gradle.org/docs/2
+.2.1/userguide/gradle_daemon.html
+Please read the following process output to find out more:
+-----------------------
+Error occurred during initialization of VM
+Could not reserve enough space for object heap
+Error: Could not create the Java Virtual Machine.
+Error: A fatal exception has occurred. Program will exit.
+
+
+* Try:
+Run with --stacktrace option to get the stack trace. Run with --info or --debug
+option to get more log output.
+Error: Error code 1 for command: cmd with args: /s,/c,"G:\Users\nilto\Documents\
+ionic\Login\platforms\android\gradlew cdvBuildDebug -b G:\Users\nilto\Documents\
+ionic\Login\platforms\android\build.gradle -Dorg.gradle.daemon=true -Pandroid.us
+eDeprecatedNdk=true"

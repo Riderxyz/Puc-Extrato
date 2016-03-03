@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="G:\Users\nilto\Documents\ionic\Login\platforms\android\build\intermediates\exploded-aar\android\CordovaLib\unspecified\debug\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="efe8dea71c6332fd20dc610abc454a56394dc140">
+        <dex dex="G:\Users\nilto\Documents\ionic\Login\platforms\android\build\intermediates\pre-dexed\debug\CordovaLib-unspecified-debug_102c9cf566ec0585c24eb61115ef0c1cea74f454.jar" />
+    </item>
+    <item
+        jar="G:\Users\nilto\Documents\ionic\Login\platforms\android\build\intermediates\exploded-aar\android\CordovaLib\unspecified\debug\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="efe8dea71c6332fd20dc610abc454a56394dc140">
+        <dex dex="G:\Users\nilto\Documents\ionic\Login\platforms\android\build\intermediates\pre-dexed\debug\CordovaLib-unspecified-debug_102c9cf566ec0585c24eb61115ef0c1cea74f454.jar" />
+    </item>
+
+</items>
