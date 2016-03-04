@@ -1,0 +1,23 @@
+<ion-view view-title="FPLF - Projetos" >
+  <ion-content class="padding" scroll="false" ng-controller="ExtratoCtrl">
+    <center>
+      <h4> <b>Extrato de Projetos</b>
+      </h4>
+    </center>
+    <ion-list>
+      <ion-item href="#" ng-repeat="e in extratos.tabExtrato">
+        <div class="row">
+          <div><h4><b>{{e.texto}}</b></h4></div>
+        </div>
+        <div class="row">
+          <div class="col col-30"><h4>{{e.data | date:'dd/MM/yyyy'}}</h4></div>
+          <div class="col col-23"><h4>{{e.receita | number:2}}</h4></div>
+          <div class="col col-23"><h4>{{e.despesa | number:2}}</h4></div>
+          <div class="col col-24"><h4>{{e.saldo | number:2}}</h4></div>
+        </div>
+      </ion-item>
+    </ion-list>
+
+  </ion-content>
+
+</ion-view>
