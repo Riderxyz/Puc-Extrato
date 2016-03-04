@@ -14,19 +14,33 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
     Usuario.codigo = codigo
   }
 
+  Usuario.setProjeto = function(projeto) {
+    Usuario.projeto = projeto
+  }
+
   Usuario.getCodigo = function() {
     return Usuario.codigo
   }
 
+  Usuario.getProjeto = function() {
+    return '6289'; //Usuario.projeto
+  }
+
+  Usuario.getNomeProjeto = function() {
+    return '6289'; //Usuario.Nomeprojeto
+  }
+
+  Usuario.setNomeProjeto = function(Nomeprojeto) {
+    Usuario.Nomeprojeto = Nomeprojeto
+  }
 }])
 
 .service('UrlServicoSrv', [function servico(emProducao) {
   var servico = this;
   servico.getCodigo = function() {
-    if (emProducao == 'sim'){
+    if (emProducao == 'sim') {
       return 'http://139.82.24.10/MobServ'
-    }
-    else{
+    } else {
       return 'http://localhost:19017'
     }
   }
@@ -48,7 +62,7 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
   });
 })
 
-.controller('LoginCtrl', ['$scope', '$http', '$location', 'UsuarioSrv','UrlServicoSrv', function($scope, $http, $location, UsuarioSrv, UrlServicoSrv) {
+.controller('LoginCtrl', ['$scope', '$http', '$location', 'UsuarioSrv', 'UrlServicoSrv', function($scope, $http, $location, UsuarioSrv, UrlServicoSrv) {
   $scope.data = {};
   $scope.data.username = '2387';
   $scope.data.password = '123456';
@@ -69,7 +83,7 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
   }
 }])
 
-.controller('ProjetoCtrl', ['$scope', '$http', '$location', 'UsuarioSrv','UrlServicoSrv', function($scope, $http, $location, UsuarioSrv, UrlServicoSrv) {
+.controller('ProjetoCtrl', ['$scope', '$http', '$location', 'UsuarioSrv', 'UrlServicoSrv', function($scope, $http, $location, UsuarioSrv, UrlServicoSrv) {
   var d = new Date();
   $scope.parmdata = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate()
   $http.get(UrlServicoSrv.getCodigo('nao') + "/api/projetos?coordenador=" + UsuarioSrv.getCodigo() + "&data=" + $scope.parmdata).then(
@@ -77,6 +91,18 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
       $scope.projetos = JSON.parse(data.data);
     }
   )
+
+}])
+
+.controller('ExtratoCtrl', ['$scope', '$http', '$location', 'UsuarioSrv', 'UrlServicoSrv', function($scope, $http, $location, UsuarioSrv, UrlServicoSrv) {
+  var month = 0; // January
+  var d = new Date();
+  var dt = new Date(d.getFullYear(), d.getMonth(), 0);
+  $scope.df = dt.getFullYear() + "-" + dt.getMonth() + "-" + dt.getDate();
+  $scope.di = "2005" + "-" + dt.getMonth() + "-1";
+  $http.get(UrlServicoSrv.getCodigo('nao') + "/api/extratos?projeto=" + UsuarioSrv.getProjeto() + "&di=" + $scope.di + "&df=" + $scope.df).then(function(data) {
+    $scope.extratos = JSON.parse(data.data);
+  })
 
 }])
 
@@ -100,12 +126,12 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
       templateUrl: 'templates/login.html',
       controller: 'LoginCtrl'
     })
-    .state('tab.dash', {
-      url: '/dash',
+    .state('tab.extrato', {
+      url: '/extrato',
       views: {
-        'tab-dash': {
-          templateUrl: 'templates/tab-dash.html',
-          controller: 'DashCtrl'
+        'tab-extrato': {
+          templateUrl: 'templates/tab-extrato.html',
+          controller: 'ExtratoCtrl'
         }
       }
     })
