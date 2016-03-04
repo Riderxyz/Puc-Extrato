@@ -92,6 +92,13 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
     }
   )
 
+  $scope.gotoExtrato = function(projeto,nomeprojeto) {
+    UsuarioSrv.setProjeto(projeto);
+    UsuarioSrv.setNomeProjeto(nomeprojeto);
+    alert(projeto);
+    $location.path("/tab-extrato");
+  }
+
 }])
 
 .controller('ExtratoCtrl', ['$scope', '$http', '$location', 'UsuarioSrv', 'UrlServicoSrv', function($scope, $http, $location, UsuarioSrv, UrlServicoSrv) {
