@@ -74,7 +74,7 @@ Public Class clBanco
     ''' </summary>
     ''' <param name="comando">Comando a ser executado</param>
 
-    Public sub ExecuteAndReturnData(comando As String)
+    Public sub ExecuteAndReturnData(comando As String, optional ByRef tablename As String = "tabela")
         If (comando <> "") Then
             Dim reader As SqlDataReader
             Conexao = New SqlConnection(ConectionString)
@@ -89,6 +89,7 @@ Public Class clBanco
             reader = OraCOmmand.ExecuteReader()
             ds = New DataSet 
             tabela = New DataTable 
+            tabela.TableName = tablename 
             tabela.Load(reader)
             ds.Tables.Add(tabela)
             parametros.Clear  ' log Logging.Log.listLog.Add(New LogEvent.baseLog())

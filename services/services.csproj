@@ -248,6 +248,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ExtratosController.cs" />
     <Compile Include="Controllers\ProjetosController.cs" />
     <Compile Include="Controllers\usuariosController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />

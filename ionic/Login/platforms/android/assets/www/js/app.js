@@ -7,45 +7,67 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', 'starter.services'])
 
-.run(function($ionicPlatform) {
-  $ionicPlatform.ready(function($scope) {
-    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
+.service('UsuarioSrv', [function Usuario(codigo) {
+    var Usuario = this;
 
+    Usuario.setCodigo = function(codigo) {
+      Usuario.codigo = codigo
     }
-    if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
+
+    Usuario.getCodigo = function() {
+      return Usuario.codigo
     }
-  });
-})
 
-.controller('LoginCtrl', ['$scope','$http','$location', function($scope, $http, $location) 
- {
-    $scope.data = {};
-    $scope.data.username = '2387';
-    $scope.data.password = '123456';
-    $scope.data.errormessage = 'Informe usuario e senha';
-    $scope.login = function()
-      {
-        $http.get('http://139.82.24.10/MobServ/api/usuarios?_usuario='+$scope.data.username+'&_senha='+$scope.data.password).then(function(data)
-        { 
-          //console.log(JSON.parse(data.nome);
-          $scope.coordenador = JSON.parse(data.data[0]).tab1[0];
-          if ($scope.coordenador.coordenador == $scope.data.username){
-            $scope.errormessage = ' ';
-            $location.path( "/tab" ); 
-          }
-          else
-          {
-            $scope.data.errormessage = 'Usuario ou senha inválidos';            
-          }
-        })   
-      }; 
-    }])
+  }])
+  .run(function($ionicPlatform) {
 
+    $ionicPlatform.ready(function($scope) {
+      if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        cordova.plugins.Keyboard.disableScroll(true);
 
+      }
+      if (window.StatusBar) {
+        // org.apache.cordova.statusbar required
+        StatusBar.styleDefault();
+      }
+    });
+  })
+
+.controller('LoginCtrl', ['$scope', '$http', '$location', 'UsuarioSrv', function($scope, $http, $location, UsuarioSrv) {
+  $scope.data = {};
+  $scope.data.username = '2387';
+  $scope.data.password = '123456';
+  //$rootScope.usuario = 'usuario dentro do controler';
+  $scope.data.errormessage = 'Informe usuario e senha';
+  $scope.login = function() {
+    $http.get('http://139.82.24.10/MobServ/api/usuarios?_usuario=' + $scope.data.username + '&_senha=' + $scope.data.password).then(function(data) {
+//    $http.get('http://localhost:19017/api/usuarios?_usuario=' + $scope.data.username + '&_senha=' + $scope.data.password).then(function(data) {
+      //console.log(JSON.parse(data.nome);
+      $scope.coordenador = JSON.parse(data.data[0]).tab1[0];
+      UsuarioSrv.setCodigo($scope.coordenador.coordenador);
+      if ($scope.coordenador.coordenador == $scope.data.username) {
+        $scope.errormessage = ' ';
+
+        $location.path("/tab");
+      } else {
+        $scope.data.errormessage = 'Usuario ou senha inválidos';
+      }
+    })
+  };
+}])
+
+.controller('ProjetoCtrl', ['$scope', '$http', '$location', 'UsuarioSrv', function($scope, $http, $location, UsuarioSrv) {
+  var d = new Date();
+  $scope.parmdata = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate()
+//   $http.get("http://localhost:19017/api/projetos?coordenador=" + UsuarioSrv.getCodigo() + "&data=" + $scope.parmdata).then(
+  $http.get("http://139.82.24.10/MobServ/api/projetos?coordenador=" + UsuarioSrv.getCodigo() + "&data=" + $scope.parmdata).then(
+    function(data) {
+      $scope.projetos = JSON.parse(data.data);
+    }
+  )
+
+}])
 
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -62,20 +84,20 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
   })
 
   // Each tab has its own nav history stack:
- .state('login', {
+  .state('login', {
       url: '/login',
       templateUrl: 'templates/login.html',
-      controller:'LoginCtrl'
-  })
-  .state('tab.dash', {
-    url: '/dash',
-    views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
+      controller: 'LoginCtrl'
+    })
+    .state('tab.dash', {
+      url: '/dash',
+      views: {
+        'tab-dash': {
+          templateUrl: 'templates/tab-dash.html',
+          controller: 'DashCtrl'
+        }
       }
-    }
-  })
+    })
 
   .state('tab.projetos', {
     url: '/projetos',
@@ -118,6 +140,6 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('login'); 
+  $urlRouterProvider.otherwise('login');
 
 });

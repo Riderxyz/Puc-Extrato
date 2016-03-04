@@ -2,11 +2,11 @@
 <items version="2" >
 
     <item
-        jar="G:\Users\nilto\Documents\ionic\Login\platforms\android\build\intermediates\exploded-aar\android\CordovaLib\unspecified\debug\jars\classes.jar"
+        jar="G:\Projetos\puc-extrato\ionic\Login\platforms\android\build\intermediates\exploded-aar\android\CordovaLib\unspecified\release\jars\classes.jar"
         jumboMode="false"
         revision="23.0.2"
-        sha1="efe8dea71c6332fd20dc610abc454a56394dc140">
-        <dex dex="G:\Users\nilto\Documents\ionic\Login\platforms\android\build\intermediates\pre-dexed\debug\CordovaLib-unspecified-debug_102c9cf566ec0585c24eb61115ef0c1cea74f454.jar" />
+        sha1="c05b0bcfed5ba6e333e44f9b3e373246d0dae23a">
+        <dex dex="G:\Projetos\puc-extrato\ionic\Login\platforms\android\build\intermediates\pre-dexed\release\CordovaLib-unspecified-release_2c37070fd0469411883c57cbe7a455cc8a6e8886.jar" />
     </item>
     <item
         jar="G:\Users\nilto\Documents\ionic\Login\platforms\android\build\intermediates\exploded-aar\android\CordovaLib\unspecified\debug\jars\classes.jar"
@@ -14,6 +14,20 @@
         revision="23.0.1"
         sha1="efe8dea71c6332fd20dc610abc454a56394dc140">
         <dex dex="G:\Users\nilto\Documents\ionic\Login\platforms\android\build\intermediates\pre-dexed\debug\CordovaLib-unspecified-debug_102c9cf566ec0585c24eb61115ef0c1cea74f454.jar" />
+    </item>
+    <item
+        jar="G:\Users\nilto\Documents\ionic\Login\platforms\android\build\intermediates\exploded-aar\android\CordovaLib\unspecified\debug\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="efe8dea71c6332fd20dc610abc454a56394dc140">
+        <dex dex="G:\Users\nilto\Documents\ionic\Login\platforms\android\build\intermediates\pre-dexed\debug\CordovaLib-unspecified-debug_102c9cf566ec0585c24eb61115ef0c1cea74f454.jar" />
+    </item>
+    <item
+        jar="G:\Projetos\puc-extrato\ionic\Login\platforms\android\build\intermediates\exploded-aar\android\CordovaLib\unspecified\debug\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="ce9b5d561dfb213943d291388e1afba8d12c9555">
+        <dex dex="G:\Projetos\puc-extrato\ionic\Login\platforms\android\build\intermediates\pre-dexed\debug\CordovaLib-unspecified-debug_313cbf48c47d47a8ef7517e6add3fb3708ebfc9a.jar" />
     </item>
 
 </items>

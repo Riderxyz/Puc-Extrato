@@ -1,29 +1,32 @@
 angular.module('starter.controllers', [])
-
 .controller('DashCtrl', function($scope) {})
 
-.controller('ProjetoCtrl',function($scope) {
+.controller('ProjetoCtrl', function($scope) {
 
-    $scope.currentDate = new Date();
-    $scope.currentDate2 = new Date();
-    $scope.minDate = new Date(2015, 6, 1);
-    $scope.maxDate = new Date(2016, 6, 31);
+  $scope.currentDate = new Date();
+  $scope.currentDate2 = new Date();
+  $scope.minDate = new Date(2015, 6, 1);
+  $scope.maxDate = new Date(2016, 6, 31);
 
 
-      $scope.items = [
-    {title: "Item 1"},
-    {title: "Item 2"},
-    {title: "Item 3"}, 
-    {title: "Item 4"},
-    {title: "Item 5"},
-  ]
+  $scope.items = [{
+    title: "Item 1"
+  }, {
+    title: "Item 2"
+  }, {
+    title: "Item 3"
+  }, {
+    title: "Item 4"
+  }, {
+    title: "Item 5"
+  }, ]
 
   $scope.editItem = function(item) {
     item.title = "Edited Item"
   }
 
-    $scope.datePickerCallback = function (val) {
-    if (!val) { 
+  $scope.datePickerCallback = function(val) {
+    if (!val) {
       console.log('Date not selected');
     } else {
       alert(val);

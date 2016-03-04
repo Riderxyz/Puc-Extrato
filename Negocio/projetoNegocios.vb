@@ -16,7 +16,7 @@ Public Class projetoNegocios
         banco.parametros.Add(New SqlParameter("datafim", data))
         banco.parametros.Add(New SqlParameter ("coordenador",coordenador ))
 
-        banco.ExecuteAndReturnData("sp_int_saldos")
+        banco.ExecuteAndReturnData("sp_int_saldos","tabProjetos")
         If (Not IsNothing(banco.tabela)) Then
             If (banco.tabela.Rows.Count > 0) Then
                 Mapear(banco.tabela)

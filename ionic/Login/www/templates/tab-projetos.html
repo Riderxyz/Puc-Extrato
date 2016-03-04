@@ -1,18 +1,51 @@
-<ion-view view-title="FPLF - Projetos" ng-controller='ProjetoCtrl'>
-  <ion-content ng-init="init('2387')" class="padding" scroll="false">
-    <center>
-      <h4> <b>Seus Projetos</b></h4>
-      <h5>-- {{parmdata}} --</h5>
-      
-    </center> 
-    <div ng-repeat="p in projetos" class="row">
-      <div class="col-xs-8">{{p.nome}}</div>
-      <div class="col-xs-4">{{p.saldo}}</div>
-    </div>
 
-  </ion-content>
+<ion-view view-title="FPLF - Projetos" ng-controller='ProjetoCtrl'>
+
+  <ion-content class="has-header">
+    <!--
+    <ul class="list-group" ng-repeat="p in projetos.tabProjetos">
+    <li class="list-group-item">
+      <span class="label label-default label-pill pull-xs-right">{{p.saldo}}</span>
+      {{p.projeto}}
+    </li>
+  </ul>
+  -->
+
+
+  <ion-list >
+    <ion-item  ng-click="collapse()" ng-repeat="p in projetos.tabProjetos">
+    <h4><b>{{p.projeto}}</b></h4>
+      <h5>{{p.saldo | currency}}</h5>
+    </ion-item>
+  </ion-list>
+
+  <!--<div class="row header">
+  <label class="item item-dark">Seus Projetos</label>
+  <div class="col-70">Projeto</div>
+  <div class="col-30">Saldo</div>
+</div>
+<div class="row" ng-repeat="p in projetos.tabProjetos">
+  <div class="col-70">{{p.projeto}}</div>
+  <div class="col-30">{{p.saldo}}</div>
+</div>
+-->
+<!-- ng table
+    <table ng-table="projetos.tabProjetos" class="table" show-filter="true">
+<tr ng-repeat="p in projetos.tabProjetos">
+  <td width="70%" title="'Projeto'" sortable="'projeto'">{{p.projeto}}</td>
+  <td width="30%" title="'Saldo'" sortable="'saldo'">{{p.saldo}}</td>
+</tr>
+</table>
+-->
+<!-- <ul ng-repeat="p in projetos.tabProjetos" class="list ul-positive" >
+<li class="item">
+<div class="col-xs-8">{{p.projeto}}</div>
+<div class="col-xs-4">{{p.saldo}}</div>
+</li>
+</ul>
+-->
+</ion-content>
 
 </ion-view>
-
 
 <!--ng-controller="ProjetoCtrl" -->
