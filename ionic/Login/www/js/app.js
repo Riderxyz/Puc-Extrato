@@ -37,7 +37,7 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
 
 .service('UrlServicoSrv', [function servico(emProducao) {
   var servico = this;
-  servico.getCodigo = function() {
+  servico.getCodigo = function(emProducao) {
     if (emProducao == 'sim') {
       return 'http://139.82.24.10/MobServ'
     } else {
@@ -69,7 +69,7 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
   //$rootScope.usuario = 'usuario dentro do controler';
   $scope.data.errormessage = 'Informe usuario e senha';
   $scope.login = function() {
-    $http.get(UrlServicoSrv.getCodigo('nao') + '/api/usuarios?_usuario=' + $scope.data.username + '&_senha=' + $scope.data.password).then(function(data) {
+    $http.get(UrlServicoSrv.getCodigo('sim') + '/api/usuarios?_usuario=' + $scope.data.username + '&_senha=' + $scope.data.password).then(function(data) {
       $scope.coordenador = JSON.parse(data.data[0]).tab1[0];
       UsuarioSrv.setCodigo($scope.coordenador.coordenador);
       if ($scope.coordenador.coordenador == $scope.data.username) {
@@ -83,20 +83,20 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
   }
 }])
 
-.controller('ProjetoCtrl', ['$scope', '$http', '$location', 'UsuarioSrv', 'UrlServicoSrv', function($scope, $http, $location, UsuarioSrv, UrlServicoSrv) {
+.controller('ProjetoCtrl', ['$scope', '$state', '$http', '$location', 'UsuarioSrv', 'UrlServicoSrv', function($scope, $state, $http, $location, UsuarioSrv, UrlServicoSrv) {
   var d = new Date();
   $scope.parmdata = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate()
-  $http.get(UrlServicoSrv.getCodigo('nao') + "/api/projetos?coordenador=" + UsuarioSrv.getCodigo() + "&data=" + $scope.parmdata).then(
+  $http.get(UrlServicoSrv.getCodigo('sim') + "/api/projetos?coordenador=" + UsuarioSrv.getCodigo() + "&data=" + $scope.parmdata).then(
     function(data) {
       $scope.projetos = JSON.parse(data.data);
     }
   )
 
-  $scope.gotoExtrato = function(projeto,nomeprojeto) {
+  $scope.gotoExtrato = function(projeto, nomeprojeto) {
     UsuarioSrv.setProjeto(projeto);
     UsuarioSrv.setNomeProjeto(nomeprojeto);
     alert(projeto);
-    $location.path("/tab-extrato");
+    $state.go("/tab-extrato");
   }
 
 }])
@@ -107,7 +107,7 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
   var dt = new Date(d.getFullYear(), d.getMonth(), 0);
   $scope.df = dt.getFullYear() + "-" + dt.getMonth() + "-" + dt.getDate();
   $scope.di = "2005" + "-" + dt.getMonth() + "-1";
-  $http.get(UrlServicoSrv.getCodigo('nao') + "/api/extratos?projeto=" + UsuarioSrv.getProjeto() + "&di=" + $scope.di + "&df=" + $scope.df).then(function(data) {
+  $http.get(UrlServicoSrv.getCodigo('sim') + "/api/extratos?projeto=" + UsuarioSrv.getProjeto() + "&di=" + $scope.di + "&df=" + $scope.df).then(function(data) {
     $scope.extratos = JSON.parse(data.data);
   })
 
