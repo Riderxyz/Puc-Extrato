@@ -1,25 +1,35 @@
-<ion-view view-title="FPLF - Projetos" ng-controller='ProjetoCtrl'>
-  <ion-content class="padding" scroll="false">
-    <center>
-      <h4> <b>Extrato de Projetos</b>
-      </h4>
-    </center>
-    <ionic-datepicker date="currentDate" min="minDate" max="maxDate" callback="datePickerCallback">
-      <button class="button button-block button-positive">De: {{ currentDate | date:'MMMM/dd/yyyy' }}</button>
-    </ionic-datepicker>
+<ion-view view-title="FPLF - Projetos" ng-controller="ExtratoCtrl">
 
-    <ionic-datepicker class="padding-top" date="currentDate2" min="minDate" max="maxDate" callback="datePickerCallback">
-      <button class="button button-block button-positive">Até: {{ currentDate2 | date:'MMMM/dd/yyyy' }}</button>
-    </ionic-datepicker>
-      <ion-list class="list-positive">
-          <ion-item class="item-divider">
-        Projetos
-    </ion-item>
-        <ion-item ng-repeat="item in items">
-        <a href="#">{{item.title}}</a>
-          <ion-option-button class="button-positive" ng-click="editItem(item)">Edit</ion-option-button>
-        </ion-item>
-      </ion-list>
+  <ion-content class="padding has-header">
+    <div class="bar bar-header bar-positive">
+      <h1 class="title">{{NomeProjeto}}</h1>
+      <button class="button button-positive" ng-click="envioemail()" > <i class="icon ion-ios-email"></i>
+      </button>
+    </div><br>
+    <ion-list>
+      <ion-item href="#" ng-repeat="e in extratos.tabExtrato">
+        <div class="row">
+          <div class="col" style="text-align:left">
+            <h4> <b>{{e.texto}}</b>
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col col-30" style="text-align:left" >
+            <h4>{{e.data | date:'dd/MM/yyyy'}}</h4>
+          </div>
+          <div class="col col-23" style="text-align:right">
+            <h4>{{e.receita | number:2}}</h4>
+          </div>
+          <div class="col col-23" style="text-align:right">
+            <h4>{{e.despesa | number:2}}</h4>
+          </div>
+          <div class="col col-24" style="text-align:right">
+            <h4>{{e.saldo | number:2}}</h4>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
 
   </ion-content>
 

@@ -23,11 +23,11 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
   }
 
   Usuario.getProjeto = function() {
-    return '6289'; //Usuario.projeto
+    return Usuario.projeto
   }
 
   Usuario.getNomeProjeto = function() {
-    return '6289'; //Usuario.Nomeprojeto
+    return Usuario.Nomeprojeto
   }
 
   Usuario.setNomeProjeto = function(Nomeprojeto) {
@@ -74,7 +74,6 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
       UsuarioSrv.setCodigo($scope.coordenador.coordenador);
       if ($scope.coordenador.coordenador == $scope.data.username) {
         $scope.errormessage = ' ';
-
         $location.path("/tab");
       } else {
         $scope.data.errormessage = 'Usuario ou senha inválidos';
@@ -95,22 +94,26 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
   $scope.gotoExtrato = function(projeto, nomeprojeto) {
     UsuarioSrv.setProjeto(projeto);
     UsuarioSrv.setNomeProjeto(nomeprojeto);
-    alert(projeto);
-    $state.go("/tab-extrato");
+    $state.go("tab.extrato");
   }
 
-}])
+}]) 
 
 .controller('ExtratoCtrl', ['$scope', '$http', '$location', 'UsuarioSrv', 'UrlServicoSrv', function($scope, $http, $location, UsuarioSrv, UrlServicoSrv) {
-  var month = 0; // January
   var d = new Date();
   var dt = new Date(d.getFullYear(), d.getMonth(), 0);
+  $scope.NomeProjeto = UsuarioSrv.getNomeProjeto();
   $scope.df = dt.getFullYear() + "-" + dt.getMonth() + "-" + dt.getDate();
-  $scope.di = "2005" + "-" + dt.getMonth() + "-1";
+  $scope.di = "2015" + "-" + dt.getMonth() + "-1";
+
   $http.get(UrlServicoSrv.getCodigo('sim') + "/api/extratos?projeto=" + UsuarioSrv.getProjeto() + "&di=" + $scope.di + "&df=" + $scope.df).then(function(data) {
     $scope.extratos = JSON.parse(data.data);
+
   })
 
+  $scope.envioEmail = function(){
+    alert("Processo de envio de email em desenvolvimento!")
+  }
 }])
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -135,6 +138,7 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
     })
     .state('tab.extrato', {
       url: '/extrato',
+      cache: false,
       views: {
         'tab-extrato': {
           templateUrl: 'templates/tab-extrato.html',

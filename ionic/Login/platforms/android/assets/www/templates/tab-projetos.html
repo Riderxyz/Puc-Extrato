@@ -9,15 +9,29 @@
       {{p.projeto}}
     </li>
   </ul>
-  -->
-
-
+ 
   <ion-list >
-    <ion-item  class="hei" item-height="2500" ng-repeat="p in projetos.tabProjetos">
-    <h4><b>{{p.projeto}}</b></h4>
-      <h5>{{p.saldo | currency}}</h5>
+    <ion-item  ng-click="projetos.gotoExtrato(p.projeto)" ng-repeat="p in projetos.tabProjetos">
+      <h4> <b>{{p.projeto}}</b>
+      </h4>
+      <h4>{{p.saldo | currency}}</h4>
+      
     </ion-item>
   </ion-list>
+ -->  
+<div class="list">
+
+  <div class="item item-button-right" ng-repeat="p in projetos.tabProjetos">
+    <h4> <b>{{p.projeto}}</b>
+      </h4>
+    <button class="button button-positive" ng-click="gotoExtrato(p.codigo,p.projeto)" >
+      <i class="icon ion-navicon"></i>
+    </button>
+    <h4>{{p.saldo | currency}}</h4>
+  </div>
+  </div>
+
+
 
   <!--<div class="row header">
   <label class="item item-dark">Seus Projetos</label>
