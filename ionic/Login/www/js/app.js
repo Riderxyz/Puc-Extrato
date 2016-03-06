@@ -33,12 +33,64 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
   Usuario.setNomeProjeto = function(Nomeprojeto) {
     Usuario.Nomeprojeto = Nomeprojeto
   }
+
+  usuario.dataLancamento = function(data){
+    if (typeof data === "undefined"){
+      return usuario.data
+    }
+    else
+    {
+      usuario.data = data
+    }
+  }
+
+  usuario.descricaoLancamento = function(descricao){
+    if (typeof descricao === "undefined"){
+      return usuario.descricaoLancamento
+    }
+    else
+    {
+      usuario.descricaoLancamento = descricao
+    }
+  }
+
+  usuario.receitaLancamento = function(receita){
+    if (typeof receita === "undefined"){
+      return usuario.receitaLancamento
+    }
+    else
+    {
+      usuario.receitaLancamento = receita
+    }
+  }
+
+  usuario.despesaLancamento = function(despesa){
+    if (typeof despesa === "undefined"){
+      return usuario.despesaLancamento
+    }
+    else
+    {
+      usuario.despesaLancamento = despesa
+    }
+  }
+
+  usuario.saldoLancamento = function(saldo){
+    if (typeof saldo === "undefined"){
+      return usuario.saldoLancamento
+    }
+    else
+    {
+      usuario.saldoLancamento = saldo
+    }
+  }
+
 }])
 
 .service('UrlServicoSrv', [function servico(emProducao) {
   var servico = this;
+  var prod = "nao"
   servico.getCodigo = function(emProducao) {
-    if (emProducao == 'sim') {
+    if (prod == 'sim') {
       return 'http://139.82.24.10/MobServ'
     } else {
       return 'http://localhost:19017'
@@ -114,6 +166,24 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
   $scope.envioEmail = function(){
     alert("Processo de envio de email em desenvolvimento!")
   }
+
+  $scope.verLancamento = function(descricao, data){
+      $scope.descricao(descricao);
+  $scope.data(data);
+  $scope.receita(receita);
+  $scope.despesa(despesa);
+  $scope.saldo(saldo);
+    //ngDialog.open({ template: '<h3>{{descricao}}</h3>"', plain: true, className: 'ngdialog-theme-default' });
+  }
+
+}])
+
+.controller('ResumoCtrl', ['$scope', '$location', 'UsuarioSrv', 'UrlServicoSrv', function ($scope, $location, UsuarioSrv, UrlServicoSrv) {
+  $scope.descricao = UsuarioSrv.descricaoLancamento();
+  $scope.data = UsuarioSrv.dataLancamento();
+  $scope.receita = UsuarioSrv.receitaLancamento();
+  $scope.despesa = UsuarioSrv.despesaLancamento();
+  $scope.saldo = UsuarioSrv.saldoLancamento();
 }])
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -133,9 +203,11 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
   // Each tab has its own nav history stack:
   .state('login', {
       url: '/login',
+      cache: false,
       templateUrl: 'templates/login.html',
       controller: 'LoginCtrl'
     })
+
     .state('tab.extrato', {
       url: '/extrato',
       cache: false,
@@ -149,6 +221,7 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
 
   .state('tab.projetos', {
     url: '/projetos',
+    cache: false,
     views: {
       'tab-projetos': {
         templateUrl: 'templates/tab-projetos.html',
@@ -167,6 +240,7 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
         }
       }
     })
+
     .state('tab.chat-detail', {
       url: '/chats/:chatId',
       views: {
@@ -176,6 +250,13 @@ angular.module('starter', ['ionic', 'ionic-datepicker', 'starter.controllers', '
         }
       }
     })
+
+  .state('ResumoLancamento', {
+      url: '/resumoLancamento',
+      cache: false,
+      templateUrl: 'templates/resumo-lancamento.html',
+      controller: 'ResumoCtrl'
+  })
 
   .state('tab.account', {
     url: '/account',
