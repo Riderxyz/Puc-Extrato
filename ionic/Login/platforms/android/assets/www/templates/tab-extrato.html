@@ -3,11 +3,11 @@
   <ion-content class="padding has-header">
     <div class="bar bar-header bar-positive">
       <h1 class="title">{{NomeProjeto}}</h1>
-      <button class="button button-positive" ng-click="envioemail()" > <i class="icon ion-ios-email"></i>
+      <button class="button button-positive" ng-click="envioEmail()" > <i class="icon ion-ios-email"></i>
       </button>
-    </div><br>
+    </div><br> 
     <ion-list>
-      <ion-item href="#" ng-repeat="e in extratos.tabExtrato">
+      <ion-item ng-repeat="e in extratos.tabExtrato" ng-click="verLancamento('{{e.texto}}', '{{e.data}}', '{{e.receita}}', '{{e.despesa}}', '{{e.saldo}}')">
         <div class="row">
           <div class="col" style="text-align:left">
             <h4> <b>{{e.texto}}</b>

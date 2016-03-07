@@ -47,4 +47,92 @@ angular.module('starter.services', [])
       return null;
     }
   };
-});
+})
+
+.service('UsuarioSrv', [function Usuario(codigo) {
+  var Usuario = this;
+
+  Usuario.setCodigo = function(codigo) {
+    Usuario.codigo = codigo
+  }
+
+  Usuario.setProjeto = function(projeto) {
+    Usuario.projeto = projeto
+  }
+
+  Usuario.getCodigo = function() {
+    return Usuario.codigo
+  }
+
+  Usuario.getProjeto = function() {
+    return Usuario.projeto
+  }
+
+  Usuario.getNomeProjeto = function() {
+    return Usuario.Nomeprojeto
+  }
+
+  Usuario.setNomeProjeto = function(Nomeprojeto) {
+    Usuario.Nomeprojeto = Nomeprojeto
+  }
+
+  Usuario.dataLancamento = function(datalan) {
+    if (typeof datalan === "undefined") {
+      return Usuario._datalan
+    } else {
+      Usuario._datalan = datalan
+      return Usuario._datalan
+    }
+  }
+
+  Usuario.descricaoLancamento = function(descricao) {
+    if (descricao === undefined) {
+      return Usuario._descricaoLancamento
+    } else {
+      Usuario._descricaoLancamento = descricao
+      return Usuario._descricaoLancamento
+    }
+  }
+
+  Usuario.receitaLancamento = function(receita) {
+    if (receita === undefined) {
+      return Usuario._receitaLancamento
+    } else {
+      Usuario._receitaLancamento = receita
+    }
+  }
+
+  Usuario.despesaLancamento = function(despesa) {
+    if (despesa === undefined) {
+      return Usuario._despesaLancamento
+    } else {
+      Usuario._despesaLancamento = despesa
+      return despesa
+    }
+  }
+
+  Usuario.saldoLancamento = function(saldo) {
+    if (saldo === undefined) {
+      return Usuario._saldoLancamento
+    } else {
+      Usuario._saldoLancamento = saldo
+      return saldo
+    }
+  }
+
+}])
+
+.service('UrlServicoSrv', [function servico(emProducao) {
+  var servico = this;
+  var prod = "nao"
+  servico.getCodigo = function(emProducao) {
+    if (prod == 'sim') {
+      return 'http://139.82.24.10/MobServ'
+    } else {
+      return 'http://localhost:19017'
+    }
+  }
+
+}])
+
+;
