@@ -65,7 +65,6 @@ angular.module('starter.controllers', [])
   $scope.receita = UsuarioSrv.receitaLancamento();
   $scope.despesa = UsuarioSrv.despesaLancamento();
   $scope.saldo = UsuarioSrv.saldoLancamento();
-
   $scope.voltar = function(){alert(1);
     $ionicHistory.goBack(-2);
   }
