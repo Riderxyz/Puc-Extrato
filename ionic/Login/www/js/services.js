@@ -124,7 +124,7 @@ angular.module('starter.services', [])
 
 .service('UrlServicoSrv', [function servico(emProducao) {
   var servico = this;
-  var prod = "nao"
+  var prod = "sim"
   servico.getCodigo = function(emProducao) {
     if (prod == 'sim') {
       return 'http://139.82.24.10/MobServ'
