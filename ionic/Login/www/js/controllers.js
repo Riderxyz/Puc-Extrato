@@ -102,8 +102,12 @@ angular.module('starter.controllers', [])
   //$rootScope.usuario = 'usuario dentro do controler';
   $scope.data.errormessage = 'Informe usuario e senha';
   $scope.login = function() {
+    console.log(UrlServicoSrv.getCodigo('sim') + '/api/usuarios?_usuario=' + $scope.data.username + '&_senha=' + $scope.data.password)
+    console.log('antes de chamar')
     $http.get(UrlServicoSrv.getCodigo('sim') + '/api/usuarios?_usuario=' + $scope.data.username + '&_senha=' + $scope.data.password).then(function(data) {
+      console.log('dentro')
       $scope.coordenador = JSON.parse(data.data[0]).tab1[0];
+      console.log(data)
       UsuarioSrv.setCodigo($scope.coordenador.coordenador);
       if ($scope.coordenador.coordenador == $scope.data.username) {
         $scope.errormessage = ' ';

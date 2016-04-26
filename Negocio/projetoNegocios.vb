@@ -30,19 +30,37 @@ Public Class projetoNegocios
         Return lResult
     End Function
 
+        Public Function GetProjetos(coordenador As Integer) As String
+        Dim lResult As String
+        Dim banco As clBanco = New clBanco
+        banco.parametros.Add(New SqlParameter ("coordenador",coordenador ))
+
+        banco.ExecuteAndReturnData("ProjetosGet","tabProjetos")
+        If (Not IsNothing(banco.tabela)) Then
+            If (banco.tabela.Rows.Count > 0) Then
+              '  Mapear(banco.tabela)
+                lResult = banco.GetJsonTabela
+            Else
+                lResult = Empty()
+            End If
+        Else
+            lResult = Empty() ' JsonConvert.SerializeObject(New Dominio.usuario With {.coordenador = 0, .senha = "", .nome = "", .descricao = "", .conectado = False, .status = ""})
+        End If
+        Return lResult
+    End Function
+
     Sub Mapear(tabela As DataTable)
         ListaProjetos = New List(Of Dominio.projeto)
         projeto = New Dominio.projeto
         For Each r As DataRow In tabela.Rows
             projeto.codigo = GetNullable(Of Integer)(r("codigo"))
             projeto.coordenador = GetNullable(Of Integer)(r("coordenador"))
-            projeto.despesa = GetNullable(Of Double)(r("despesa"))
-            projeto.receita = GetNullable(Of Double)(r("receita"))
+          '  projeto.despesa = GetNullable(Of Double)(r("despesa"))
+          '  projeto.receita = GetNullable(Of Double)(r("receita"))
             projeto.nome = GetNullable(Of String)(r("projeto"))
             ListaProjetos.Add(projeto)
         Next
     End Sub
-
     Function Empty() As String
         Dim banco As clBanco = New clBanco
         Dim lResult As String

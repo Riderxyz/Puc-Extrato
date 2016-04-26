@@ -13,18 +13,13 @@ namespace services.Controllers
         // GET: api/Projetos
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new string[] { "valssssue1", "value2" };
         }
         // GET: api/Projetos
-        public IEnumerable<string> Get(int coordenador, string data)
+        public IEnumerable<string> Get(int coordenador)
         {
             projetoNegocios projetos = new projetoNegocios();
-            yield return projetos.GetProjetos(coordenador, data);
-        }
-        // GET: api/Projetos/5
-        public string Get(int id)
-        {
-            return "value";
+            yield return projetos.GetProjetos(coordenador);
         }
 
         // POST: api/Projetos
