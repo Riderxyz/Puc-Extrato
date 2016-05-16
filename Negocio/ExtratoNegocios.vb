@@ -10,13 +10,15 @@ Public Class ExtratoNegocios
 #End Region
 
 #Region "Processos"
-    Public Function GetExtrato(projeto As Integer, dataInicial As String, datafinal As string) As String
+    Public Function GetExtrato(projeto As Integer, dataInicial As String, datafinal As string, pagina As Int16, pagina_tamanho As int16) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
-        banco.parametros.Clear 
+        banco.parametros.Clear
         banco.parametros.Add(New SqlParameter("di", datainicial))
         banco.parametros.Add(New SqlParameter("df", datafinal))
         banco.parametros.Add(New SqlParameter("cdProjeto", projeto))
+        banco.parametros.Add(New SqlParameter("pagTamanho", pagina_tamanho))
+        banco.parametros.Add(New SqlParameter("pagAtual", pagina))
 
         banco.ExecuteAndReturnData("sp_internet_movimentos", "tabExtrato")
         If (Not IsNothing(banco.tabela)) Then
@@ -31,6 +33,73 @@ Public Class ExtratoNegocios
         End If
         Return lResult
     End Function
+
+    Public Function GetSaldoProjeto(projeto As Integer, data As String) As String
+        Dim lResult As String
+        Dim banco As clBanco = New clBanco
+        banco.parametros.Clear
+        banco.parametros.Add(New SqlParameter("data", data))
+        banco.parametros.Add(New SqlParameter("cdProjeto", projeto))
+
+        banco.ExecuteAndReturnData("sp_internet_Saldo_Projeto", "tabSaldoProjeto")
+        If (Not IsNothing(banco.tabela)) Then
+            If (banco.tabela.Rows.Count > 0) Then
+                'Mapear(banco.tabela)
+                lResult = banco.GetJsonTabela
+            Else
+                lResult = Empty()
+            End If
+        Else
+            lResult = Empty() ' JsonConvert.SerializeObject(New Dominio.usuario With {.coordenador = 0, .senha = "", .nome = "", .descricao = "", .conectado = False, .status = ""})
+        End If
+        Return lResult
+    End Function
+
+    Public Function GetSaldoContas(coordenador As Integer, data As String) As String
+        Dim lResult As String
+        Dim banco As clBanco = New clBanco
+        banco.parametros.Clear
+        banco.parametros.Add(New SqlParameter("data", data))
+        banco.parametros.Add(New SqlParameter("coordenador", coordenador))
+
+        banco.ExecuteAndReturnData("sp_internet_saldos_contas", "tabSaldoContas")
+        If (Not IsNothing(banco.tabela)) Then
+            If (banco.tabela.Rows.Count > 0) Then
+                'Mapear(banco.tabela)
+                lResult = banco.GetJsonTabela
+            Else
+                lResult = Empty()
+            End If
+        Else
+            lResult = Empty() ' JsonConvert.SerializeObject(New Dominio.usuario With {.coordenador = 0, .senha = "", .nome = "", .descricao = "", .conectado = False, .status = ""})
+        End If
+        Return lResult
+    End Function
+
+    Public Function GetAnaliseContas(coordenador As Integer, conta As String, data As String) As String
+        Dim lResult As String
+        Dim banco As clBanco = New clBanco
+        banco.parametros.Clear
+        banco.parametros.Add(New SqlParameter("data", data))
+        banco.parametros.Add(New SqlParameter("coordenador", coordenador))
+        banco.parametros.Add(New SqlParameter("contaMae", conta))
+
+        banco.ExecuteAndReturnData("sp_internet_Analise_Contas", "tabAnaliseContas")
+        If (Not IsNothing(banco.tabela)) Then
+            If (banco.tabela.Rows.Count > 0) Then
+                'Mapear(banco.tabela)
+                lResult = banco.GetJsonTabela
+            Else
+                lResult = Empty()
+            End If
+        Else
+            lResult = Empty() ' JsonConvert.SerializeObject(New Dominio.usuario With {.coordenador = 0, .senha = "", .nome = "", .descricao = "", .conectado = False, .status = ""})
+        End If
+        Return lResult
+    End Function
+
+
+
 
     'Sub Mapear(tabela As DataTable)
     '    ListaProjetos = New List(Of Dominio.projeto)

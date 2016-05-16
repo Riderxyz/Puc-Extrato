@@ -4,10 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Negocio; 
+using Negocio;
+using Cors.ConfigProfiles;
 
 namespace services.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class ProjetosController : ApiController
     {
         // GET: api/Projetos

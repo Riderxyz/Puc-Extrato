@@ -113,7 +113,7 @@ Public Class clBanco
             Return False
         End If
     End Function
-    <System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")> Public Function CarregarTabela(comando As String) As Boolean
+    <System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")> Public Function CarregarTabela(comando As String, optional tablename As String ="tab1") As Boolean
         If comando <> "" Then
             Dim result As Integer = -1
             If (comando <> "") Then
@@ -122,7 +122,7 @@ Public Class clBanco
                 adapter = New SqlDataAdapter(comando, Conexao)
                 ds = New DataSet
                 Try
-                    adapter.Fill(ds, "tab1")
+                    adapter.Fill(ds, tablename )
                     tabela = ds.Tables(0)
                     result = 0
                 Catch ex As Exception

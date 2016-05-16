@@ -10,6 +10,7 @@ Public Class projetoNegocios
 #End Region
 
 #Region "Processos"
+
     Public Function GetProjetos(coordenador As Integer, data As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
@@ -35,7 +36,7 @@ Public Class projetoNegocios
         Dim banco As clBanco = New clBanco
         banco.parametros.Add(New SqlParameter ("coordenador",coordenador ))
 
-        banco.ExecuteAndReturnData("ProjetosGet","tabProjetos")
+        banco.ExecuteAndReturnData("sp_internet_ProjetosGet","tabProjetos")
         If (Not IsNothing(banco.tabela)) Then
             If (banco.tabela.Rows.Count > 0) Then
               '  Mapear(banco.tabela)
