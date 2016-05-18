@@ -142,4 +142,7 @@ Public Class Consulta
         End If
     End Sub
 
+    Protected Sub ASPxMenu3_ItemClick(source As Object, e As MenuItemEventArgs) Handles ASPxMenu3.ItemClick
+
+    End Sub
 End Class
