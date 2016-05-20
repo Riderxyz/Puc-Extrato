@@ -346,6 +346,10 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="templates\padrao_extrato.xls" />
+    <Content Include="templates\padrao_extrato.xlsx" />
+    <Content Include="templates\padrao_Saldo_Contas.xls" />
+    <Content Include="templates\padrao_Total_Contas.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -52,4 +52,28 @@ Public Class usuariosNegocios
         Next
     End Sub
 #End Region
+
+    #Region "Atualizar Coordenadores"
+    Public function GravarCoordenador(coordenador As Integer, nome As String, email As String,senha As string) As String
+        Dim lResult As String
+        Dim banco As clBanco = New clBanco
+        banco.parametros.Add(New SqlParameter("coordenador", coordenador))
+        banco.parametros.Add(New SqlParameter("pass", senha))
+        banco.parametros.Add(New SqlParameter("email", email))
+        banco.parametros.Add(New SqlParameter("nome", nome))
+
+        banco.ExecuteAndReturnData("sp_internet_CoordenadorAtualizar", nometabela)
+        If (Not IsNothing(banco.tabela)) Then
+            If (banco.tabela.Rows.Count > 0) Then
+                '  Mapear(banco.tabela)
+                lResult = banco.GetJsonTabela
+            Else
+                lResult = Empty()
+            End If
+        Else
+            lResult = Empty() ' JsonConvert.SerializeObject(New Dominio.usuario With {.coordenador = 0, .senha = "", .nome = "", .descricao = "", .conectado = False, .status = ""})
+        End If
+        Return lResult
+    End function
+#End Region
 End Class

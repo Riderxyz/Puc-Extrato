@@ -24,7 +24,7 @@ namespace services.Controllers
             yield return extratos.GetExtrato(projeto, di, df, pagina, pagina_tamanho);
         }
 
-        public IEnumerable<string> getExtratoExcel(int projeto, string di, string df)
+        public IEnumerable<string> getExtratoExcel(int projeto, string di, string df, char modo)
         {
             ExtratoNegocios extratos = new ExtratoNegocios();
             yield return extratos.GetExtratoExcel(projeto, di, df);
@@ -35,7 +35,11 @@ namespace services.Controllers
             ExtratoNegocios extratos = new ExtratoNegocios();
             yield return extratos.GetSaldoProjeto(projeto, data);
         }
-
+        public IEnumerable<string> GetSaldoProjetoExcel(int coordenador, string data, string conta, bool modo)
+        {
+            ExtratoNegocios extratos = new ExtratoNegocios();
+            yield return extratos.GetSaldoContasExcel(coordenador, data, conta);
+        }
         public IEnumerable<string> GetSaldosContas(int coordenador, string data)
         {
             ExtratoNegocios extratos = new ExtratoNegocios();

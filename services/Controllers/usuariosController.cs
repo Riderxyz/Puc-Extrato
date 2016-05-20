@@ -9,19 +9,20 @@ namespace services.Controllers
     public class usuariosController : ApiController
     {
         // GET: api/usuarios
-        public IEnumerable<string> Get()
-        {
-            usuariosNegocios usuario = new usuariosNegocios();
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET: api/usuarios
         public IEnumerable<string> Get(string _usuario , string _senha)
         {
             usuariosNegocios usuario = new usuariosNegocios();
             yield return usuario.ValidarUsuario(_usuario, _senha);
         }
-
+        // GET: api/usuarios
+        [System.Web.Http.AcceptVerbs("GET", "POST")]
+        [System.Web.Http.HttpGet]
+        [EnableCors("*", "*", "*")]
+        public IEnumerable<string> GravarCoordenador(int coordenador, string nomeusuario, string email, string senha)
+        {
+            usuariosNegocios usuario = new usuariosNegocios();
+            yield return usuario.GravarCoordenador(coordenador, nomeusuario, email, senha);
+        }
 
         // GET: api/usuarios/5
         public string Get(int id)
