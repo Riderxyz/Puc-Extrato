@@ -9,7 +9,7 @@ namespace services.Controllers
     public class usuariosController : ApiController
     {
         // GET: api/usuarios
-        public IEnumerable<string> Get(string _usuario , string _senha)
+        public IEnumerable<string> Get(string _usuario, string _senha)
         {
             usuariosNegocios usuario = new usuariosNegocios();
             yield return usuario.ValidarUsuario(_usuario, _senha);
@@ -17,6 +17,10 @@ namespace services.Controllers
         // GET: api/usuarios
         [System.Web.Http.AcceptVerbs("GET", "POST")]
         [System.Web.Http.HttpGet]
+        //[Route("api/usuarios/GravarCoordenador/{coordenador:int}, {nomeusuario}, {email}, {senha}")]
+        //[Route("customers/{customerId}/orders/{orderId}")]
+        [Route("api/usuarios/GravarCoordenador/coordenador/{coordenador}/nomeusuario /{nomeusuario}/email/{email}/senha/{senha}")]
+        //[ActionName("GravarCoordenador")]
         [EnableCors("*", "*", "*")]
         public IEnumerable<string> GravarCoordenador(int coordenador, string nomeusuario, string email, string senha)
         {

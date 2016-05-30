@@ -312,7 +312,7 @@ Public Class ExtratoNegocios
         dataFormatCustom = workbook.CreateDataFormat()
         ws = workbook.GetSheetAt(0)
         rec = tabela.Rows(0)
-        ws.GetRow(3).GetCell(1).SetCellValue(NomeConta)
+        'ws.GetRow(3).GetCell(1).SetCellValue(NomeConta)
         ws.GetRow(4).GetCell(1).SetCellValue(Date.Parse(data))
         ws.GetRow(4).GetCell(1).CellStyle.DataFormat = dataFormatCustom.GetFormat("dd/MM/yyyy")
         For Each r As DataRow In tabela.Rows
