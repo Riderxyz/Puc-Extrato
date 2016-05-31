@@ -75,7 +75,7 @@ Public Class ExtratoNegocios
 
 #End Region
 
-#Region "Processos"
+#Region "Get Extrato Projeto"
     Public Function GetExtrato(projeto As Integer, dataInicial As String, datafinal As String, pagina As Int16, pagina_tamanho As Int16) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
@@ -123,6 +123,9 @@ Public Class ExtratoNegocios
         End If
         Return lResult
     End Function
+#End Region
+
+#Region "Get Saldo dos Projetos"
     Public Function GetSaldoProjeto(projeto As Integer, data As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
@@ -143,6 +146,10 @@ Public Class ExtratoNegocios
         End If
         Return lResult
     End Function
+
+#End Region
+
+#Region "Get Saldo Contas"
     Public Function GetSaldoContas(coordenador As Integer, data As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
@@ -183,6 +190,10 @@ Public Class ExtratoNegocios
         End If
         Return lResult
     End Function
+
+#End Region
+
+#Region "Get Detalhes das contas analisadas"
     Public Function GetAnaliseContas(coordenador As Integer, conta As String, data As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
@@ -204,6 +215,10 @@ Public Class ExtratoNegocios
         End If
         Return lResult
     End Function
+
+#End Region
+
+#Region "Emptys functions"
     Function Empty() As String
         Dim banco As clBanco = New clBanco
         Dim lResult As String
@@ -229,16 +244,6 @@ Public Class ExtratoNegocios
         Return lResult
     End Function
 #End Region
-
-    Private Function GetNullable(Of T)(dataobj As Object) As T
-        If Convert.IsDBNull(dataobj) Then
-            Return Nothing
-        Else
-            Return CType(dataobj, T)
-
-        End If
-
-    End Function
 
 #Region "Excel"
     Private Sub GerarXlsExtrato(tabela As DataTable, inicio As String, fim As string)
@@ -342,7 +347,15 @@ Public Class ExtratoNegocios
 #End Region
 
 #Region "Outros acesso a banco"
+    Private Function GetNullable(Of T)(dataobj As Object) As T
+        If Convert.IsDBNull(dataobj) Then
+            Return Nothing
+        Else
+            Return CType(dataobj, T)
 
+        End If
+
+    End Function
 #End Region
 
 End Class
