@@ -146,6 +146,26 @@ Public Class ExtratoNegocios
         End If
         Return lResult
     End Function
+    Public Function GetSaldoProjetoExcel(coordenador As Integer, data As String, conta As string) As String
+        Dim lResult As String
+        Dim banco As clBanco = New clBanco
+        banco.parametros.Clear
+        banco.parametros.Add(New SqlParameter("data", data))
+        banco.parametros.Add(New SqlParameter("coordenador", coordenador))
+
+        banco.ExecuteAndReturnData("sp_internet_saldos_contas", "tabSaldoContas")
+        If (Not IsNothing(banco.tabela)) Then
+            If (banco.tabela.Rows.Count > 0) Then
+                GetSaldoProjetoExcel(coordenador,data, conta)
+                lResult = ExcelEmpty(NomeArquivoSaldoProjetos)
+            Else
+                lResult = ExcelError("Erro na geracao do arquivo")
+            End If
+        Else
+            lResult = ExcelEmpty(NomeArquivoSaldoProjetos) ' JsonConvert.SerializeObject(New Dominio.usuario With {.coordenador = 0, .senha = "", .nome = "", .descricao = "", .conectado = False, .status = ""})
+        End If
+        Return lResult
+    End Function
 
 #End Region
 
@@ -170,7 +190,7 @@ Public Class ExtratoNegocios
         End If
         Return lResult
     End Function
-    Public Function GetSaldoContasExcel(coordenador As Integer, data As String, conta As string) As String
+    Public Function GetSaldoContasExcel(coordenador As Integer, data As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
         banco.parametros.Clear
@@ -180,13 +200,13 @@ Public Class ExtratoNegocios
         banco.ExecuteAndReturnData("sp_internet_saldos_contas", "tabSaldoContas")
         If (Not IsNothing(banco.tabela)) Then
             If (banco.tabela.Rows.Count > 0) Then
-                GerarXlsSaldoContas(banco.tabela, data, conta)
-                lResult = ExcelEmpty(NomeArquivoSaldoProjetos)
+                GerarXlsSaldoContas(banco.tabela, data, coordenador)
+                lResult = banco.GetJsonTabela
             Else
-                lResult = ExcelError("Erro na geracao do arquivo")
+                lResult = Empty()
             End If
         Else
-            lResult = ExcelEmpty(NomeArquivoSaldoProjetos) ' JsonConvert.SerializeObject(New Dominio.usuario With {.coordenador = 0, .senha = "", .nome = "", .descricao = "", .conectado = False, .status = ""})
+            lResult = Empty() ' JsonConvert.SerializeObject(New Dominio.usuario With {.coordenador = 0, .senha = "", .nome = "", .descricao = "", .conectado = False, .status = ""})
         End If
         Return lResult
     End Function
@@ -215,7 +235,27 @@ Public Class ExtratoNegocios
         End If
         Return lResult
     End Function
+    Public Function GetAnaliseContasExcel(coordenador As Integer, conta As string, data As String) As String
+        Dim lResult As String
+        Dim banco As clBanco = New clBanco
+        banco.parametros.Clear
+        banco.parametros.Add(New SqlParameter("data", data))
+        banco.parametros.Add(New SqlParameter("coordenador", coordenador))
+        banco.parametros.Add(New SqlParameter("contaMae", conta))
 
+        banco.ExecuteAndReturnData("sp_internet_Analise_Contas", "tabAnaliseContas")
+        If (Not IsNothing(banco.tabela)) Then
+            If (banco.tabela.Rows.Count > 0) Then
+                GerarXlsAnaliseContas(banco.tabela, data, conta)
+                lResult = ExcelEmpty(NomeArquivoSaldoProjetos)
+            Else
+                lResult = ExcelError("Erro na geracao do arquivo")
+            End If
+        Else
+            lResult = ExcelEmpty(NomeArquivoSaldoProjetos) ' JsonConvert.SerializeObject(New Dominio.usuario With {.coordenador = 0, .senha = "", .nome = "", .descricao = "", .conectado = False, .status = ""})
+        End If
+        Return lResult
+    End Function
 #End Region
 
 #Region "Emptys functions"
@@ -296,10 +336,48 @@ Public Class ExtratoNegocios
             ws.GetRow(linha).Height = 600
             linha = linha + 1
         Next
+        ws.ForceFormulaRecalculation = true
         SalvarPlanilha(workbook, NomeArquivoExtrato)
         fs.Close()
     End Sub
-    Private Sub GerarXlsSaldoContas(tabela As DataTable, data As String, conta As string)
+    Private Sub GerarXlsSaldoContas(tabela As DataTable, data As String, coordenador As Int32)
+        Dim objConta As Negocio.contaNegocio = New contaNegocio
+        Dim ws As ISheet
+        Dim rec As DataRow
+        Dim linha As Integer = 7
+        Dim _doubleCellStyle as ICellStyle
+        Dim dataFormatCustom As IDataFormat
+
+        Dim fs As FileStream = New FileStream(System.Web.HttpContext.Current.Server.MapPath("\templates\padrao_saldo_contas.xls"), FileMode.Open, FileAccess.Read)
+        workbook = New HSSFWorkbook(fs)
+        wb = workbook
+        NomeConta = coordenador.ToString()
+
+        _doubleCellStyle = workbook.CreateCellStyle()
+        _doubleCellStyle.DataFormat = workbook.CreateDataFormat().GetFormat("#,##0.00")
+        dataFormatCustom = workbook.CreateDataFormat()
+        ws = workbook.GetSheetAt(0)
+        rec = tabela.Rows(0)
+
+        ws.GetRow(4).GetCell(1).SetCellValue(Date.Parse(data))
+        ws.GetRow(4).GetCell(1).CellStyle.DataFormat = dataFormatCustom.GetFormat("dd/MM/yyyy")
+        For Each r As DataRow In tabela.Rows
+            ws.CreateRow(linha)
+            ws.GetRow(linha).CreateCell(0).SetCellValue(r("descricao").ToString)
+            ws.GetRow(linha).GetCell(0).SetCellType(CellType.String)
+            ws.GetRow(linha).CreateCell(8).SetCellValue(Double.Parse(r("saldo").ToString))
+            ws.GetRow(linha).GetCell(8).SetCellType(CellType.Numeric)
+            ws.GetRow(linha).GetCell(8).CellStyle = _doubleCellStyle
+            ws.GetRow(linha).GetCell(0).CellStyle.SetFont(FontePadrao)
+            ws.GetRow(linha).GetCell(8).CellStyle.SetFont(FontePadrao)
+            ws.GetRow(linha).Height = 600
+            linha = linha + 1
+        Next
+        ws.ForceFormulaRecalculation = true
+        SalvarPlanilha(workbook, NomeArquivoSaldoProjetos)
+        fs.Close()
+    End Sub
+    Private Sub GerarXlsAnaliseContas(tabela As DataTable, data As String, conta As string)
         Dim objConta As Negocio.contaNegocio = New contaNegocio
         Dim ws As ISheet
         Dim rec As DataRow
@@ -317,12 +395,12 @@ Public Class ExtratoNegocios
         dataFormatCustom = workbook.CreateDataFormat()
         ws = workbook.GetSheetAt(0)
         rec = tabela.Rows(0)
-        'ws.GetRow(3).GetCell(1).SetCellValue(NomeConta)
+        ws.GetRow(3).GetCell(1).SetCellValue(NomeConta)
         ws.GetRow(4).GetCell(1).SetCellValue(Date.Parse(data))
         ws.GetRow(4).GetCell(1).CellStyle.DataFormat = dataFormatCustom.GetFormat("dd/MM/yyyy")
         For Each r As DataRow In tabela.Rows
             ws.CreateRow(linha)
-            ws.GetRow(linha).CreateCell(0).SetCellValue(r("descricao").ToString)
+            ws.GetRow(linha).CreateCell(0).SetCellValue(r("nomeprojeto").ToString)
             ws.GetRow(linha).GetCell(0).SetCellType(CellType.String)
             ws.GetRow(linha).CreateCell(8).SetCellValue(Double.Parse(r("saldo").ToString))
             ws.GetRow(linha).GetCell(8).SetCellType(CellType.Numeric)
@@ -332,6 +410,7 @@ Public Class ExtratoNegocios
             ws.GetRow(linha).Height = 600
             linha = linha + 1
         Next
+        ws.ForceFormulaRecalculation = true
         SalvarPlanilha(workbook, NomeArquivoSaldoProjetos)
         fs.Close()
     End Sub
