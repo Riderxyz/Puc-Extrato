@@ -58,12 +58,18 @@ Public Class ExtratoNegocios
     End Property
     Public readonly property NomeArquivoExtrato As String
         Get
-            Return "Extrato de projetos - " + NomeProjeto + ".xls"
+            Return String.Format("Extrato de projetos - {0}.xls", NomeProjeto)
         End Get
     End Property
     Public readonly property NomeArquivoSaldoProjetos As String
         Get
-            Return "Saldo dos Projetos - " + NomeConta + ".xls"
+            Return "Total das Contas.xls "
+        End Get
+    End Property
+
+        Public readonly property NomeArquivoAnaliseContas As String
+        Get
+            Return String.Format("Saldo dos Projetos - {0}.xls", NomeConta.Trim)
         End Get
     End Property
 
@@ -156,7 +162,7 @@ Public Class ExtratoNegocios
         banco.ExecuteAndReturnData("sp_internet_saldos_contas", "tabSaldoContas")
         If (Not IsNothing(banco.tabela)) Then
             If (banco.tabela.Rows.Count > 0) Then
-                GetSaldoProjetoExcel(coordenador,data, conta)
+                GetSaldoProjetoExcel(coordenador, data, conta)
                 lResult = ExcelEmpty(NomeArquivoSaldoProjetos)
             Else
                 lResult = ExcelError("Erro na geracao do arquivo")
@@ -201,12 +207,12 @@ Public Class ExtratoNegocios
         If (Not IsNothing(banco.tabela)) Then
             If (banco.tabela.Rows.Count > 0) Then
                 GerarXlsSaldoContas(banco.tabela, data, coordenador)
-                lResult = banco.GetJsonTabela
+                lResult = ExcelEmpty(NomeArquivoSaldoProjetos)
             Else
-                lResult = Empty()
+                lResult = ExcelError("Erro na geracao do arquivo")
             End If
         Else
-            lResult = Empty() ' JsonConvert.SerializeObject(New Dominio.usuario With {.coordenador = 0, .senha = "", .nome = "", .descricao = "", .conectado = False, .status = ""})
+            lResult = ExcelEmpty(NomeArquivoSaldoProjetos)
         End If
         Return lResult
     End Function
@@ -247,12 +253,12 @@ Public Class ExtratoNegocios
         If (Not IsNothing(banco.tabela)) Then
             If (banco.tabela.Rows.Count > 0) Then
                 GerarXlsAnaliseContas(banco.tabela, data, conta)
-                lResult = ExcelEmpty(NomeArquivoSaldoProjetos)
+                lResult = ExcelEmpty(NomeArquivoAnaliseContas)
             Else
                 lResult = ExcelError("Erro na geracao do arquivo")
             End If
         Else
-            lResult = ExcelEmpty(NomeArquivoSaldoProjetos) ' JsonConvert.SerializeObject(New Dominio.usuario With {.coordenador = 0, .senha = "", .nome = "", .descricao = "", .conectado = False, .status = ""})
+            lResult = ExcelEmpty(NomeArquivoAnaliseContas) ' JsonConvert.SerializeObject(New Dominio.usuario With {.coordenador = 0, .senha = "", .nome = "", .descricao = "", .conectado = False, .status = ""})
         End If
         Return lResult
     End Function
@@ -385,7 +391,7 @@ Public Class ExtratoNegocios
         Dim _doubleCellStyle as ICellStyle
         Dim dataFormatCustom As IDataFormat
 
-        Dim fs As FileStream = New FileStream(System.Web.HttpContext.Current.Server.MapPath("\templates\padrao_saldo_contas.xls"), FileMode.Open, FileAccess.Read)
+        Dim fs As FileStream = New FileStream(System.Web.HttpContext.Current.Server.MapPath("\templates\padrao_Saldo_Projetos.xls"), FileMode.Open, FileAccess.Read)
         workbook = New HSSFWorkbook(fs)
         wb = workbook
 
@@ -395,6 +401,8 @@ Public Class ExtratoNegocios
         dataFormatCustom = workbook.CreateDataFormat()
         ws = workbook.GetSheetAt(0)
         rec = tabela.Rows(0)
+        
+        ws.GetRow(1).GetCell(0).SetCellValue("CONTROLE DE PROJETOS - SALDO DOS PROJETOS")
         ws.GetRow(3).GetCell(1).SetCellValue(NomeConta)
         ws.GetRow(4).GetCell(1).SetCellValue(Date.Parse(data))
         ws.GetRow(4).GetCell(1).CellStyle.DataFormat = dataFormatCustom.GetFormat("dd/MM/yyyy")
@@ -411,7 +419,7 @@ Public Class ExtratoNegocios
             linha = linha + 1
         Next
         ws.ForceFormulaRecalculation = true
-        SalvarPlanilha(workbook, NomeArquivoSaldoProjetos)
+        SalvarPlanilha(workbook, NomeArquivoAnaliseContas)
         fs.Close()
     End Sub
 
