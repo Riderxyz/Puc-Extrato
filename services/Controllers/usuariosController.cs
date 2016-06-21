@@ -19,13 +19,13 @@ namespace services.Controllers
         [System.Web.Http.HttpGet]
         //[Route("api/usuarios/GravarCoordenador/{coordenador:int}, {nomeusuario}, {email}, {senha}")]
         //[Route("customers/{customerId}/orders/{orderId}")]
-        [Route("api/usuarios/GravarCoordenador/coordenador/{coordenador}/nomeusuario /{nomeusuario}/email/{email}/senha/{senha}")]
+        [Route("api/usuarios/GravarCoordenador/coordenador/{coordenador}/nomeusuario/{nomeusuario}/email/{email}")]
         //[ActionName("GravarCoordenador")]
         [EnableCors("*", "*", "*")]
-        public IEnumerable<string> GravarCoordenador(int coordenador, string nomeusuario, string email, string senha)
+        public IEnumerable<string> GravarCoordenador(int coordenador, string nomeusuario, string email)
         {
             usuariosNegocios usuario = new usuariosNegocios();
-            yield return usuario.GravarCoordenador(coordenador, nomeusuario, email, senha);
+            yield return usuario.GravarCoordenador(coordenador, nomeusuario, email);
         }
 
         // GET: api/usuarios/5

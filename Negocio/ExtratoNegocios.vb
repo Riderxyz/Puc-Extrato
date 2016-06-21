@@ -5,7 +5,6 @@ Imports System.Data.SqlClient
 Imports System.IO
 Imports NPOI.HSSF.UserModel
 Imports NPOI.SS.UserModel
-Imports linq
 Imports System.web
 
 Public Class ExtratoNegocios

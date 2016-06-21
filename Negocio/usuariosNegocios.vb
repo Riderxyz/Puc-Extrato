@@ -54,11 +54,10 @@ Public Class usuariosNegocios
 #End Region
 
     #Region "Atualizar Coordenadores"
-    Public function GravarCoordenador(coordenador As Integer, nome As String, email As String,senha As string) As String
+    Public function GravarCoordenador(coordenador As Integer, nome As String, email As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
         banco.parametros.Add(New SqlParameter("coordenador", coordenador))
-        banco.parametros.Add(New SqlParameter("pass", senha))
         banco.parametros.Add(New SqlParameter("email", email))
         banco.parametros.Add(New SqlParameter("nome", nome))
 
