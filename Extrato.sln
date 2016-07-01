@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NovaEra", "NovaEra\NovaEra.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "services", "services\services.csproj", "{E144C827-B9DA-4A4D-B89E-40E49971CAF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ctrlProjetoService", "ctrlProjetoService\ctrlProjetoService.csproj", "{2DBF2588-D7B8-4010-A1B9-E0CD84B51BE5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{E144C827-B9DA-4A4D-B89E-40E49971CAF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E144C827-B9DA-4A4D-B89E-40E49971CAF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E144C827-B9DA-4A4D-B89E-40E49971CAF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DBF2588-D7B8-4010-A1B9-E0CD84B51BE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DBF2588-D7B8-4010-A1B9-E0CD84B51BE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DBF2588-D7B8-4010-A1B9-E0CD84B51BE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DBF2588-D7B8-4010-A1B9-E0CD84B51BE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

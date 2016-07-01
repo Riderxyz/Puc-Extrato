@@ -1,0 +1,88 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using Negocio;
+using Cors.ConfigProfiles;
+
+namespace services.Controllers
+{
+    [EnableCors("*", "*", "*")]
+    public class ExtratosController : ApiController
+    {
+        // GET: api/Projetos
+        public IEnumerable<string> Get()
+        {
+            return new string[] { "value1", "value2" };
+        }
+        // GET: api/Projetos
+        [EnableCors("*", "*", "*")]
+        public IEnumerable<string> Get(int projeto, string di, string df, short pagina, short pagina_tamanho)
+        {
+            ExtratoNegocios extratos = new ExtratoNegocios();
+            yield return extratos.GetExtrato(projeto, di, df, pagina, pagina_tamanho);
+        }
+        [EnableCors("*", "*", "*")]
+        public IEnumerable<string> getExtratoExcel(int projeto, string di, string df, char modo)
+        {
+            ExtratoNegocios extratos = new ExtratoNegocios();
+            yield return extratos.GetExtratoExcel(projeto, di, df);
+        }
+
+        [EnableCors("*", "*", "*")]
+        public IEnumerable<string> Get(int projeto, string data)
+        {
+            ExtratoNegocios extratos = new ExtratoNegocios();
+            yield return extratos.GetSaldoProjeto(projeto, data);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [Route("api/extratos/GetSaldoProjetoExcel/projeto/{projeto}/data/{data}/conta/{conta}")]
+        public IEnumerable<string> GetSaldoProjetoExcel(int projeto, string data, string conta)
+        {
+            ExtratoNegocios extratos = new ExtratoNegocios();
+            yield return extratos.GetSaldoContasExcel(projeto, data);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [Route("api/extratos/GetSaldosContasExcel/coordenador/{coordenador}/data/{data}")]
+        public IEnumerable<string> GetSaldosContasExcel(int coordenador, string data)
+        {
+            ExtratoNegocios extratos = new ExtratoNegocios();
+            yield return extratos.GetSaldoContasExcel(coordenador, data);
+        }
+
+        [EnableCors("*", "*", "*")]
+        public IEnumerable<string> GetSaldosContas(int coordenador, string data)
+        {
+            ExtratoNegocios extratos = new ExtratoNegocios();
+            yield return extratos.GetSaldoContas(coordenador, data);
+        }
+
+        [EnableCors("*", "*", "*")]
+        public IEnumerable<string> GetAnaliseContas(int coordenador, string conta, string data)
+        {
+            ExtratoNegocios extratos = new ExtratoNegocios();
+            yield return extratos.GetAnaliseContas(coordenador, conta, data);
+        }
+
+        // GET: api/Projetos/5
+
+        // POST: api/Projetos
+        public void Post([FromBody]string value)
+        {
+        }
+
+        // PUT: api/Projetos/5
+        public void Put(int id, [FromBody]string value)
+        {
+        }
+
+        // DELETE: api/Projetos/5
+        public void Delete(int id)
+        {
+        }
+    }
+}
