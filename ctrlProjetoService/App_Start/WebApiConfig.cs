@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web.Http;
+using Newtonsoft.Json.Serialization;
+using Cors.ConfigProfiles;
 
 namespace ctrlProjetoService
 {
@@ -11,8 +14,12 @@ namespace ctrlProjetoService
         {
             // Web API configuration and services
 
+            //config.SuppressDefaultHostAuthentication();
+            //config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
+            config.EnableCors();
             // Web API routes
             config.MapHttpAttributeRoutes();
+            var cors = new EnableCorsAttribute("*", "*", "*");
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
