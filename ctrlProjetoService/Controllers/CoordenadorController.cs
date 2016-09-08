@@ -16,7 +16,7 @@ namespace ctrlProjetoService.Controllers
         [Route("api/coordenador/GetCoordenadorLista/nome/{nome?}")]
         public IEnumerable<string> GetCoordenadorLista(string nome = "")
         {
-           coordenadorNegocio coordenador = new coordenadorNegocio();
+            coordenadorNegocio coordenador = new coordenadorNegocio();
             yield return coordenador.GetCoordenadorLista(nome);
         }
 
@@ -29,11 +29,28 @@ namespace ctrlProjetoService.Controllers
         }
 
         [EnableCors("*", "*", "*")]
-        [Route("api/coordenador/GetCoordenadorIncluir/nome/{nome}/email/{email}")]
+        [Route("api/coordenador/GetCoordenadorIncluir/nome/{nome}/email/{email?}")]
         public IEnumerable<string> GetCoordenadorIncluir(string nome, string email)
         {
             coordenadorNegocio coordenador = new coordenadorNegocio();
             yield return coordenador.GetCoordenadorIncluir(nome, email);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [Route("api/coordenador/GetCoordenadorUpdate/id/{id}/nome/{nome?}/email/{email?}")]
+        public IEnumerable<string> GetCoordenadorUpdate(int id, string nome = "", string email = "")
+        {
+            coordenadorNegocio coordenador = new coordenadorNegocio();
+            yield return coordenador.GetCoordenadorUpdate(id, nome, email);
+        }
+
+        [HttpGet]
+        [EnableCors("*", "*", "*")]
+        [Route("api/coordenador/ExcluirCoordenador/id/{id}")]
+        public IEnumerable<string> ExcluirCoordenador(int id)
+        {
+            coordenadorNegocio coordenador = new coordenadorNegocio();
+            yield return coordenador.CoordenadorExcluir(id);
         }
 
 

@@ -74,7 +74,7 @@ Public Class clBanco
     ''' </summary>
     ''' <param name="comando">Comando a ser executado</param>
 
-    Public sub ExecuteAndReturnData(comando As String, optional ByRef tablename As String = "tabela")
+    Public sub ExecuteAndReturnData(comando As String, optional tablename As String = "tabela")
         If (comando <> "") Then
             Dim reader As SqlDataReader
             Conexao = New SqlConnection(ConectionString)

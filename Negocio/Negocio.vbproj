@@ -110,6 +110,7 @@
     </Compile>
     <Compile Include="ExtratoNegocios.vb" />
     <Compile Include="projetoNegocios.vb" />
+    <Compile Include="rubricaNegocio.vb" />
     <Compile Include="usuariosNegocios.vb" />
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,77 @@ Public Class contaNegocio
 #End Region
 
 #Region "Processos"
+
+    Public Function GetContasLista(optional nome As String = "") As String
+        Dim lResult As String
+        Dim banco As clBanco = New clBanco
+        banco.parametros.Add(New SqlParameter("nome", nome))
+        banco.ExecuteAndReturnData("sp_CtrlProjetos_ContasLista", "tabcontas")
+        If (Not IsNothing(banco.tabela)) Then
+            If (banco.tabela.Rows.Count > 0) Then
+                '  Mapear(banco.tabela)
+                lResult = banco.GetJsonTabela
+            Else
+                lResult = Empty()
+            End If
+        Else
+            lResult = Empty() ' JsonConvert.SerializeObject(New Dominio.usuario With {.coordenador = 0, .senha = "", .nome = "", .descricao = "", .conectado = False, .status = ""})
+        End If
+        Return lResult
+    End Function
+    Public Function GetContasIncluir(conta As string, nome as string) As string
+        Dim lResult As String
+        Dim banco As clBanco = New clBanco
+        banco.parametros.Clear
+        banco.parametros.Add(New SqlParameter("conta", conta))
+        banco.parametros.Add(New SqlParameter("nome", nome))
+        banco.ExecuteAndReturnData("sp_CtrlProjetos_ContasIncluir", "tabcontas")
+        If (Not IsNothing(banco.tabela)) Then
+            If (banco.tabela.Rows.Count > 0) Then
+                lResult = banco.GetJsonTabela
+            Else
+                lResult = Empty()
+            End If
+        Else
+            lResult = Empty()
+        End If
+        Return lResult
+    End Function
+    Public Function GetContasAtualizar(conta As string, nome as string) As string
+        Dim lResult As String
+        Dim banco As clBanco = New clBanco
+        banco.parametros.Clear
+        banco.parametros.Add(New SqlParameter("conta", conta))
+        banco.parametros.Add(New SqlParameter("descricao", nome))
+        banco.ExecuteAndReturnData("sp_CtrlProjetos_ContasAtualizar", "tabcontas")
+        If (Not IsNothing(banco.tabela)) Then
+            If (banco.tabela.Rows.Count > 0) Then
+                lResult = banco.GetJsonTabela
+            Else
+                lResult = Empty()
+            End If
+        Else
+            lResult = Empty()
+        End If
+        Return lResult
+    End Function
+    Public Function GetContasExcluir(conta As string) As string
+        Dim lResult As String
+        Dim banco As clBanco = New clBanco
+        banco.parametros.Clear
+        banco.parametros.Add(New SqlParameter("conta", conta))
+        banco.ExecuteAndReturnData("sp_CtrlProjetos_ContasExcluir", "tabcontas")
+        If (Not IsNothing(banco.tabela)) Then
+            If (banco.tabela.Rows.Count > 0) Then
+                lResult = banco.GetJsonTabela
+            Else
+                lResult = Empty()
+            End If
+        Else
+            lResult = Empty()
+        End If
+        Return lResult
+    End Function
     Public function GetContas(coordenador As int32) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
@@ -26,7 +97,6 @@ Public Class contaNegocio
         End If
         Return lResult
     End function
-
     Public function GetContasMae(coordenador As int32) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
@@ -43,7 +113,6 @@ Public Class contaNegocio
         End If
         Return lResult
     End function
-
     Function Empty() As String
         Dim banco As clBanco = New clBanco
         Dim lResult As String
@@ -51,7 +120,6 @@ Public Class contaNegocio
         lResult = banco.GetJsonTabela
         Return lResult
     End Function
-
     Public function getConta(conta As string) As Dominio.conta
         Dim banco As clBanco = New clBanco
         banco.CarregarTabela(String.Format("SELECT * FROM PLANO_DE_CONTAS WHERE CONTA = '{0}'", conta))

@@ -217,8 +217,12 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\ContasController.cs" />
     <Compile Include="Controllers\CoordenadorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MovimentoController.cs" />
+    <Compile Include="Controllers\ProjetoController.cs" />
+    <Compile Include="Controllers\RubricaController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -285,6 +289,10 @@
     <ProjectReference Include="..\Dominio\Dominio.vbproj">
       <Project>{0d672190-8a94-4605-bfe2-0b47fb10cdd5}</Project>
       <Name>Dominio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Negocios_C\Negocios_C.csproj">
+      <Project>{c61efd34-e029-4ab4-a418-c085b1a44ab4}</Project>
+      <Name>Negocios_C</Name>
     </ProjectReference>
     <ProjectReference Include="..\Negocio\Negocio.vbproj">
       <Project>{4c5351ab-8f1c-471b-b252-f9a9113befec}</Project>
