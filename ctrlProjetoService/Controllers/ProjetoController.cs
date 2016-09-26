@@ -43,7 +43,7 @@ namespace ctrlProjetoService.Controllers
             projetoNegocios objprojeto = new projetoNegocios();
             yield return objprojeto.GetProjetosAtualizar(codigo, projeto, descricao, coordenador, contaPrincipal, tipo_Projeto);
         }
-             
+               
         [EnableCors("*", "*", "*")]
         [Route("api/projetos/GetProjetosIncluir/codprojeto/{codprojeto}/nome/{nome}/descricao/{descricao}/inicio/{inicio}/coordenador/{coordenador}/contaPrincipal/{contaPrincipal}/tipo_Projeto/{tipo_Projeto}/")]
         public IEnumerable<string> GetProjetosIncluir(string codprojeto, string nome, string descricao, DateTime inicio, int coordenador, string contaPrincipal, string tipo_Projeto)
