@@ -66,7 +66,7 @@ namespace Puc.Negocios_C
             }
             return lResult;
         }
-        public string Incluir(DateTime data, string projeto, string historico, double receita, double despesa, int rubrica, string codbanco, string tipo_lancamento = default(string))
+        public string Incluir(DateTime data, string projeto, string historico, double receita, double despesa, int rubrica, string codbanco, string tipo_lancamento = default(string), string fatura = default(string), int? lote = -1)
         {
             string lResult = "";
             #region Preparação dos parametros
@@ -77,10 +77,9 @@ namespace Puc.Negocios_C
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("receita", receita));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("rubrica", despesa));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("banco", codbanco));
-            if (tipo_lancamento != default(string))
-            {
-                banco.parametros.Add(new System.Data.SqlClient.SqlParameter("tipo_lancamento", tipo_lancamento));
-            }
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("lote", codbanco));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("fatura", codbanco));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("tipo_lancamento", tipo_lancamento));
             #endregion
 
             banco.ExecuteAndReturnData("[sp_CtrlProjetos_MovimentosIncluir]", "tabcoordenador");

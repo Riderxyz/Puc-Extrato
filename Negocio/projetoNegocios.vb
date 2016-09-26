@@ -50,15 +50,13 @@ Public Class projetoNegocios
         End If
         Return lResult
     End Function
-    Public Function GetProjetosAtualizar(codigo As Integer, projeto As string, nome as string, descricao As String, inicio As Date, coordenador As Integer, contaPrincipal As String, tipo_Projeto As string) As string
+    Public Function GetProjetosAtualizar(codigo As Integer, projeto As string, descricao As String, coordenador As Integer, contaPrincipal As String, tipo_Projeto As string) As string
         Dim lResult As String
         Dim banco As clBanco = New clBanco
         banco.parametros.Clear
         banco.parametros.Add(New SqlParameter("codigo", codigo))
         banco.parametros.Add(New SqlParameter("projeto", projeto))
-        banco.parametros.Add(New SqlParameter("nome", nome))
         banco.parametros.Add(New SqlParameter("descricao", descricao))
-        banco.parametros.Add(New SqlParameter("inicio", inicio))
         banco.parametros.Add(New SqlParameter("coordenador", coordenador))
         banco.parametros.Add(New SqlParameter("conta_Principal", contaPrincipal))
         banco.parametros.Add(New SqlParameter("tipo_projeto", tipo_Projeto))

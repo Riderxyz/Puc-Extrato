@@ -15,11 +15,23 @@ namespace ctrlProjetoService.Controllers
         [EnableCors("*", "*", "*")]
         [HttpGet]
         [Route("api/movimentos/ListarMovimentoPorProjeto/CodigoProjeto/{CodigoProjeto}/dataFim/{dataFim?}")]
-        public IEnumerable<string> ListarMovimentoPorProjeto(string CodigoProjeto,  string dataFim = null )
+        public IEnumerable<string> ListarMovimentoPorProjeto(string CodigoProjeto, string dataFim = null)
         {
             Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
             yield return movimento.Listar(CodigoProjeto, dataFim: dataFim);
         }
+
+        // GET: api/Movimento
+        //public IEnumerable<string> ListarMovimentoPorPorProjeto(string projeto = default(string), string conta = default(string), string historico = default(string), int? coordenador = default(int), int? rubrica = default(int), DateTime? dataInicio = null, DateTime? dataFim = null)
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("api/movimentos/MovimentoIncluir/data/{data}/projeto/{projeto?}/historico/{historico?}/receita/{receita?}/despesa/{despesa?}/rubrica/{rubrica?}/codbanco/{codbanco?}/tipo_lancamento/{tipo_lancamento?}/fatura/{fatura?}/lote/{lote?}/")]
+        public IEnumerable<string> Incluir(DateTime data, string projeto, string historico, double receita, double despesa, int rubrica, string codbanco, string tipo_lancamento = default(string), string fatura = default(string), int? lote = -1)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.Incluir(data, projeto, historico, receita, despesa, rubrica, codbanco, tipo_lancamento, fatura, lote);
+        }
+
 
         [EnableCors("*", "*", "*")]
         [HttpGet]
