@@ -27,7 +27,7 @@ namespace ctrlProjetoService.Controllers
             coordenadorNegocio coordenador = new coordenadorNegocio();
             yield return coordenador.GetCoordenadorById(id);
         }
-           
+               
         [EnableCors("*", "*", "*")]
         [Route("api/coordenador/GetCoordenadorIncluir/nome/{nome}/email/{email?}")]
         public IEnumerable<string> GetCoordenadorIncluir(string nome, string email)
