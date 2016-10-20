@@ -14,11 +14,13 @@ namespace ctrlProjetoService
     {
         protected void Application_Start()
         {
+            GlobalFilters.Filters.Add(new ValidateInputAttribute(false));
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            
         }
         public class NotImplExceptionFilterAttribute : ExceptionFilterAttribute
         {

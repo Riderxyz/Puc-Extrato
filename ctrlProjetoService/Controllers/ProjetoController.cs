@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 
 namespace ctrlProjetoService.Controllers
@@ -38,14 +39,16 @@ namespace ctrlProjetoService.Controllers
 
         [EnableCors("*", "*", "*")]
         [Route("api/projetos/GetProjetosAtualizar/codigo/{codigo}/projeto/{projeto}/descricao/{descricao}/coordenador/{coordenador}/contaPrincipal/{contaPrincipal}/tipo_Projeto/{tipo_Projeto}/")]
-        public IEnumerable<string> GetProjetosAtualizar(int codigo, string projeto, string descricao, int coordenador, string contaPrincipal, string tipo_Projeto)
+        public IEnumerable<string> GetProjetosAtualizar(int codigo, string projeto, [FromUri] string descricao, int coordenador, string contaPrincipal, string tipo_Projeto)
         {
+            projeto = projeto.Replace("!2", "%2");
+            string a = HttpContext.Current.Server.UrlDecode(projeto);
             projetoNegocios objprojeto = new projetoNegocios();
             yield return objprojeto.GetProjetosAtualizar(codigo, projeto, descricao, coordenador, contaPrincipal, tipo_Projeto);
         }
-               
+
         [EnableCors("*", "*", "*")]
-        [Route("api/projetos/GetProjetosIncluir/codprojeto/{codprojeto}/nome/{nome}/descricao/{descricao}/inicio/{inicio}/coordenador/{coordenador}/contaPrincipal/{contaPrincipal}/tipo_Projeto/{tipo_Projeto}/")]
+        [System.Web.Http.Route("api/projetos/GetProjetosIncluir/codprojeto/{codprojeto}/nome/{nome}/descricao/{descricao}/inicio/{inicio}/coordenador/{coordenador}/contaPrincipal/{contaPrincipal}/tipo_Projeto/{tipo_Projeto}/")]
         public IEnumerable<string> GetProjetosIncluir(string codprojeto, string nome, string descricao, DateTime inicio, int coordenador, string contaPrincipal, string tipo_Projeto)
         {
             projetoNegocios projeto = new projetoNegocios();

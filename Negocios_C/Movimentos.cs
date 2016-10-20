@@ -46,15 +46,15 @@ namespace Puc.Negocios_C
                 banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataFim", dataFim));
             }
             #endregion
-            try
-            {
-                int a = 1;
-                a = a / 0;
-            }
-            catch (Exception ex)
-            {
-                log.GravarLog(ex);
-            }
+            //try
+            //{
+            //    int a = 1;
+            //    a = a / 0;
+            //}
+            //catch (Exception ex)
+            //{
+            //    log.GravarLog(ex);
+            //}
 
             banco.ExecuteAndReturnData("sp_CtrlProjetos_MovimentosLista", "tabmovimento");
             if (banco.tabela != null)
@@ -75,9 +75,10 @@ namespace Puc.Negocios_C
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("projeto", projeto));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("historico", historico));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("receita", receita));
-            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("rubrica", despesa));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("despesa", despesa));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("banco", codbanco));
-            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("lote", codbanco));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("lote", lote));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("rubrica", rubrica));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("fatura", codbanco));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("tipo_lancamento", tipo_lancamento));
             #endregion
@@ -91,10 +92,27 @@ namespace Puc.Negocios_C
                 }
             }
             return lResult;
-
-
         }
-        public string Atualizar(int id, DateTime data, string projeto, string historico, double receita, double despesa, int rubrica, string codbanco, string tipo_lancamento = default(string), string lote = default(string))
+    
+        public string Excluir(Int64 id)
+        {
+            string lResult = "";
+            #region Preparação dos parametros
+            banco.parametros.Clear();
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("id", id));
+            #endregion
+
+            banco.ExecuteAndReturnData("[sp_CtrlProjetos_MovimentosExcluir]", "tabela");
+            if (banco.tabela != null)
+            {
+                if (banco.tabela.Rows.Count > 0)
+                {
+                    lResult = banco.GetJsonTabela();
+                }
+            }
+            return lResult;
+        }
+        public string Atualizar(Int64 id, string projeto = null, string historico = null, double? receita = null, double? despesa = null, int? rubrica = null, string codbanco = null, string tipo_lancamento = null, string fatura = null, int? lote = null, DateTime? data=null)
         {
             string lResult = "";
             #region Preparação dos parametros
@@ -107,7 +125,8 @@ namespace Puc.Negocios_C
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("rubrica", despesa));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("banco", codbanco));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("lote", lote));
-            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("banco", codbanco));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("fatura", fatura));
+            //banco.parametros.Add(new System.Data.SqlClient.SqlParameter("banco", codbanco));
             if (tipo_lancamento != default(string))
             {
                 banco.parametros.Add(new System.Data.SqlClient.SqlParameter("tipo_lancamento", tipo_lancamento));
