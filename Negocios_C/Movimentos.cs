@@ -93,7 +93,7 @@ namespace Puc.Negocios_C
             }
             return lResult;
         }
-    
+
         public string Excluir(Int64 id)
         {
             string lResult = "";
@@ -112,7 +112,7 @@ namespace Puc.Negocios_C
             }
             return lResult;
         }
-        public string Atualizar(Int64 id, string projeto = null, string historico = null, double? receita = null, double? despesa = null, int? rubrica = null, string codbanco = null, string tipo_lancamento = null, string fatura = null, int? lote = null, DateTime? data=null)
+        public string Atualizar(Int64 id, string projeto = null, string historico = null, double? receita = null, double? despesa = null, int? rubrica = null, string codbanco = null, string tipo_lancamento = null, string fatura = null, int? lote = null, DateTime? data = null)
         {
             string lResult = "";
             #region Preparação dos parametros
@@ -121,8 +121,9 @@ namespace Puc.Negocios_C
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("data", data));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("projeto", projeto));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("historico", historico));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("despesa", despesa));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("receita", receita));
-            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("rubrica", despesa));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("rubrica", rubrica));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("banco", codbanco));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("lote", lote));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("fatura", fatura));
@@ -206,7 +207,14 @@ namespace Puc.Negocios_C
         public string ListarSaldoConta(string conta, string data = default(string))
         {
             string lResult = "";
-            conta = conta.Substring(0, conta.Length - conta.IndexOf("."));
+            try
+            {
+                conta = conta.Substring(0, conta.Length - conta.IndexOf("."));
+            }
+            catch
+            {
+                //conta = conta;
+            }
             #region Preparação dos parametros
             banco.parametros.Clear();
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("conta", conta));
