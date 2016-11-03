@@ -27,11 +27,11 @@ Public Class projetoNegocios
         End If
         Return lResult
     End Function
-    Public Function GetProjetosIncluir(projeto As string, nome as string, descricao As String, inicio As Date, coordenador As Integer, contaPrincipal As String, tipo_Projeto As string) As string
+    Public Function GetProjetosIncluir(nome As String, descricao As String, inicio As Date, coordenador As Integer, contaPrincipal As String, tipo_Projeto As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
-        banco.parametros.Clear
-        banco.parametros.Add(New SqlParameter("projeto", projeto))
+        banco.parametros.Clear()
+        banco.parametros.Add(New SqlParameter("projeto", ""))
         banco.parametros.Add(New SqlParameter("nome", nome))
         banco.parametros.Add(New SqlParameter("descricao", descricao))
         banco.parametros.Add(New SqlParameter("inicio", inicio))

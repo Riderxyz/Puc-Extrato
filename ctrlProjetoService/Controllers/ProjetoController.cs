@@ -48,11 +48,11 @@ namespace ctrlProjetoService.Controllers
         }
 
         [EnableCors("*", "*", "*")]
-        [System.Web.Http.Route("api/projetos/GetProjetosIncluir/codprojeto/{codprojeto}/nome/{nome}/descricao/{descricao}/inicio/{inicio}/coordenador/{coordenador}/contaPrincipal/{contaPrincipal}/tipo_Projeto/{tipo_Projeto}/")]
-        public IEnumerable<string> GetProjetosIncluir(string codprojeto, string nome, string descricao, DateTime inicio, int coordenador, string contaPrincipal, string tipo_Projeto)
+        [System.Web.Http.Route("api/projetos/GetProjetosIncluir/nome/{nome}/descricao/{descricao}/inicio/{inicio}/coordenador/{coordenador}/contaPrincipal/{contaPrincipal}/tipo_Projeto/{tipo_Projeto}/")]
+        public IEnumerable<string> GetProjetosIncluir(string nome, string descricao, DateTime inicio, int coordenador, string contaPrincipal, string tipo_Projeto)
         {
             projetoNegocios projeto = new projetoNegocios();
-            yield return projeto.GetProjetosIncluir(codprojeto, nome, descricao, inicio, coordenador, contaPrincipal, tipo_Projeto);
+            yield return projeto.GetProjetosIncluir(nome, descricao, inicio, coordenador, contaPrincipal, tipo_Projeto);
         }
         // GET: api/Projeto 
         public IEnumerable<string> Get()

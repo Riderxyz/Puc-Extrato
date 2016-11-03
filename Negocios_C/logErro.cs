@@ -6,7 +6,7 @@ namespace Puc.Negocios_C
 
     public class logErro
     {
-        Negocio.clBanco banco = new clBanco();
+        Negocio.clBanco banco = new clBanco("FPLF_DES");
         public void GravarLog(Exception ex)
         {
 

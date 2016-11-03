@@ -1,15 +1,32 @@
-﻿    
+﻿
 Imports System.Text
 Imports System.Data.SqlClient
 Imports System.Configuration
 Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Serialization
+Imports System.Collections.Specialized
 
 Public Class clBanco
+#Region "Inicialização"
+    Public Sub New(Optional ByVal nomeBanco As string = "FPLF_DES")
+        NomeDB = nomeBanco
+    End Sub
+
+
+#End Region
+
 #Region "Propriedades"
+
     Public Property TipoConexao As Integer = CType(ConfigurationSettings.AppSettings("TipoConexao"), Integer)
     Public Property TipoAmbiente As Integer = 0
-    Public Shared ReadOnly Property ConectionString As String
+    Public property Catalogo As String = ""
+    Public property NomeDB As string
+    Public function GetDbName(db as string) as string
+        Dim appSettings As NameValueCollection = System.Configuration.ConfigurationManager.AppSettings
+        Return appSettings.Get(db)
+    End function
+
+    Public ReadOnly Property ConectionString As String
         Get
             'Dim appSettings As NameValueCollection = System.Configuration.ConfigurationManager.AppSettings
             'Dim ConexaoAtiva As String = appSettings.Get("ConexaoAtiva")
@@ -24,7 +41,9 @@ Public Class clBanco
             '    conexao = ""
             'End If
             'Return ConfigurationSettings.AppSettings.Set   Manager.ConnectionStrings("Plantao2014ConnectionString").ConnectionString
-            Return System.Configuration.ConfigurationManager.ConnectionStrings("FPLFConnection").ConnectionString
+            Dim conf As String = System.Configuration.ConfigurationManager.ConnectionStrings("FPLFConnection").ConnectionString
+            Dim schemaName As String = GetDbName(Nomedb)
+            Return conf.Replace("NOME_DO_BANCO", schemaName)
         End Get
     End Property
     Public Property Comando As StringBuilder
@@ -36,6 +55,7 @@ Public Class clBanco
     Public Property tabela As System.Data.DataTable
     Public Property Conexao As SqlConnection
     Public Property OraCommand As SqlCommand
+
 
 #End Region
 
@@ -60,9 +80,9 @@ Public Class clBanco
         Dim result As Integer = -1
         If (comando <> "") Then
             Conexao = New SqlConnection(ConectionString)
-            OraCOmmand = New SqlCommand(comando, Conexao)
+            OraCommand = New SqlCommand(comando, Conexao)
             Conexao.Open()
-            result = OraCOmmand.ExecuteNonQuery()
+            result = OraCommand.ExecuteNonQuery()
             ' log Logging.Log.listLog.Add(New LogEvent.baseLog())
         Else
             result = -1
@@ -74,7 +94,7 @@ Public Class clBanco
     ''' </summary>
     ''' <param name="comando">Comando a ser executado</param>
 
-    Public sub ExecuteAndReturnData(comando As String, optional tablename As String = "tabela")
+    Public Sub ExecuteAndReturnData(comando As String, Optional tablename As String = "tabela")
         If (comando <> "") Then
             Dim reader As SqlDataReader
             Conexao = New SqlConnection(ConectionString)
@@ -84,18 +104,18 @@ Public Class clBanco
                     OraCommand.Parameters.Add(p)
                 Next
             End If
-            OraCOmmand.CommandType = CommandType.StoredProcedure
+            OraCommand.CommandType = CommandType.StoredProcedure
             Conexao.Open()
-            reader = OraCOmmand.ExecuteReader()
-            ds = New DataSet 
-            tabela = New DataTable 
-            tabela.TableName = tablename 
+            reader = OraCommand.ExecuteReader()
+            ds = New DataSet
+            tabela = New DataTable
+            tabela.TableName = tablename
             tabela.Load(reader)
             ds.Tables.Add(tabela)
             parametros.Clear  ' log Logging.Log.listLog.Add(New LogEvent.baseLog())
         End If
 
-    End sub
+    End Sub
 
     Public Function CarregarTabela() As Boolean
 
@@ -113,16 +133,16 @@ Public Class clBanco
             Return False
         End If
     End Function
-    <System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")> Public Function CarregarTabela(comando As String, optional tablename As String ="tab1") As Boolean
+    <System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")> Public Function CarregarTabela(comando As String, Optional tablename As String = "tab1") As Boolean
         If comando <> "" Then
             Dim result As Integer = -1
             If (comando <> "") Then
                 Conexao = New SqlConnection(ConectionString)
-                OraCOmmand = New SqlCommand(comando, Conexao)
+                OraCommand = New SqlCommand(comando, Conexao)
                 adapter = New SqlDataAdapter(comando, Conexao)
                 ds = New DataSet
                 Try
-                    adapter.Fill(ds, tablename )
+                    adapter.Fill(ds, tablename)
                     tabela = ds.Tables(0)
                     result = 0
                 Catch ex As Exception
@@ -159,7 +179,7 @@ Public Class clBanco
             Dim result As Integer = -1
             If (comando <> "") Then
                 Conexao = New SqlConnection(ConectionString)
-                OraCOmmand = New SqlCommand(comando, Conexao)
+                OraCommand = New SqlCommand(comando, Conexao)
                 adapter = New SqlDataAdapter(comando, Conexao)
                 ds = New DataSet
                 Try
@@ -200,7 +220,7 @@ Public Class clBanco
 #End Region
 
 #Region "Check Null"
-    public Function GetNullable(Of T)(dataobj As Object) As T
+    Public Function GetNullable(Of T)(dataobj As Object) As T
         If Convert.IsDBNull(dataobj) Then
             Return Nothing
         Else

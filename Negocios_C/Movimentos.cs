@@ -234,7 +234,7 @@ namespace Puc.Negocios_C
             }
             return lResult;
 
-            return lResult;
+
         }
     }
 }
