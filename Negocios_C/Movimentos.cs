@@ -79,7 +79,7 @@ namespace Puc.Negocios_C
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("banco", codbanco));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("lote", lote));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("rubrica", rubrica));
-            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("fatura", codbanco));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("fatura", fatura));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("tipo_lancamento", tipo_lancamento));
             #endregion
 
