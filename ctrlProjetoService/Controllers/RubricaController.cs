@@ -9,66 +9,44 @@ using Cors.ConfigProfiles;
 
 namespace ctrlProjetoService.Controllers
 {
+    [RoutePrefix("Rubrica")]
     public class RubricaController : ApiController
     {
         [EnableCors("*", "*", "*")]
-        [Route("api/rubrica/GetRubricaLista/nome/{nome?}")]
-        public IEnumerable<string> GetRubricaLista(string nome = "")
+        [Route("Listar")]
+        [HttpGet]
+        public IEnumerable<string> Listar(string nome = "")
         {
            rubricaNegocio rubrica = new rubricaNegocio();
             yield return rubrica.GetListaRubricas(nome);
         }
 
         [EnableCors("*", "*", "*")]
-        [Route("api/rubrica/GetRubricaIncluir/Numrubrica/{Numrubrica}/nome/{nome}/tipo/{tipo}")]
-        public IEnumerable<string> GetRubricaIncluir(int Numrubrica, string nome, string tipo)
+        [Route("Incluir")]
+        [HttpGet]
+        public IEnumerable<string> Incluir(int Numrubrica, string nome, string tipo)
         {
             rubricaNegocio rubrica = new rubricaNegocio();
             yield return rubrica.GetRubricasIncluir(Numrubrica, nome, tipo);
         }
 
         [EnableCors("*", "*", "*")]
-        [Route("api/rubrica/GetRubricaAtualizar/Numrubrica/{Numrubrica}/nome/{nome}/tipo/{tipo}")]
-        public IEnumerable<string> GetRubricaAtualizar(Int32 Numrubrica, string nome, string tipo)
+        [Route("Atualizar")]
+        [HttpGet]
+        public IEnumerable<string> Atualizar(Int32 Numrubrica, string nome, string tipo)
         {
             rubricaNegocio rubrica = new rubricaNegocio();
             yield return rubrica.GetRubricasAtualizar(Numrubrica, nome, tipo);
         }
 
         [EnableCors("*", "*", "*")]
-        [Route("api/rubrica/GetRubricaExcluir/Numrubrica/{Numrubrica}")]
-        public IEnumerable<string> GetRubricaExcluir(Int32 Numrubrica)
+        [Route("Excluir")]
+        [HttpGet]
+        public IEnumerable<string> Excluir(Int32 Numrubrica)
         {
             rubricaNegocio rubrica = new rubricaNegocio();
             yield return rubrica.GetRubricasExcluir(Numrubrica);
         }
 
-
-        // GET: api/Rubrica
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET: api/Rubrica/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST: api/Rubrica
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT: api/Rubrica/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Rubrica/5
-        public void Delete(int id)
-        {
-        }
     }
 }

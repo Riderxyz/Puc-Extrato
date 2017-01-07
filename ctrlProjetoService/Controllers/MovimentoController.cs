@@ -11,8 +11,18 @@ namespace ctrlProjetoService.Controllers
     [RoutePrefix ("Movimentos")]
     public class MovimentoController : ApiController
     {
-        // GET: api/Movimento
-        //public IEnumerable<string> ListarMovimentoPorPorProjeto(string projeto = default(string), string conta = default(string), string historico = default(string), int? coordenador = default(int), int? rubrica = default(int), DateTime? dataInicio = null, DateTime? dataFim = null)
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("ListarPagamentos")]
+        public IEnumerable<string> ListarPagamentos(string lote , string dataFim)
+        {
+            if (dataFim.Length < 8)
+                dataFim = null;
+
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.ListarPagamentos(lote, dataFim);
+        }
         [EnableCors("*", "*", "*")]
         [HttpGet]
         [Route("ListarMovimentoPorProjeto")]
@@ -65,5 +75,14 @@ namespace ctrlProjetoService.Controllers
             Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
             yield return movimento.ListarSaldoConta(Conta, data: dataFim);
         }
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("AtualizarCampoGenerico")]
+        public IEnumerable<string> AtualizarCampoGenerico(string campo, int id, string valor)
+        {
+            Negocio_C.NegociosGenericos gen = new Negocio_C.NegociosGenericos();
+            yield return gen.AtualizarCamposTabela("movimentos", campo, id, valor);
+        }
+
     }
 }

@@ -34,7 +34,7 @@ namespace ctrlProjetoService.Controllers
         [EnableCors("*", "*", "*")]
         [HttpGet]
         [Route("Incluir")]
-        public IEnumerable<string> Incluir(string nome, string email?)
+        public IEnumerable<string> Incluir(string nome, string email)
         {
             coordenadorNegocio coordenador = new coordenadorNegocio();
             yield return coordenador.GetCoordenadorIncluir(nome, email);

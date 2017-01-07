@@ -43,6 +43,7 @@
     <Compile Include="Empresas.cs" />
     <Compile Include="logErro.cs" />
     <Compile Include="Movimentos.cs" />
+    <Compile Include="NegociosGenericos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SegurancaNegocios.cs" />
   </ItemGroup>

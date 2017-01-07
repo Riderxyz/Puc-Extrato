@@ -9,19 +9,22 @@ using Cors.ConfigProfiles;
 
 namespace ctrlProjetoService.Controllers
 {
+    [RoutePrefix("planocontas")]
     public class ContasController : ApiController
     {
         [EnableCors("*", "*", "*")]
-        [Route("api/contas/GetContaLista/nome/{nome?}")]
-        public IEnumerable<string> GetContaLista(string nome = "")
+        [Route("Listar")]
+        [HttpGet]
+        public IEnumerable<string> Listar(string nome = "")
         {
             contaNegocio conta = new contaNegocio();
             yield return conta.GetContasLista(nome);
         }
 
         [EnableCors("*", "*", "*")]
-        [Route("api/contas/GetContaExcluir/NumConta/{NumConta}")]
-        public IEnumerable<string> GetContaExcluir(string NumConta)
+        [Route("Excluir")]
+        [HttpGet]
+        public IEnumerable<string> Excluir(string NumConta)
         {
             contaNegocio conta = new contaNegocio();
             yield return conta.GetContasExcluir(NumConta);
@@ -29,45 +32,21 @@ namespace ctrlProjetoService.Controllers
 
 
         [EnableCors("*", "*", "*")]
-        [Route("api/contas/GetContaIncluir/NumConta/{NumConta}/Descricao/{Descricao}")]
-        public IEnumerable<string> GetContaIncluir(string NumConta, string Descricao)
+        [Route("Incluir")]
+        [HttpGet]
+        public IEnumerable<string> Incluir(string NumConta, string Descricao)
         {
             contaNegocio conta = new contaNegocio();
             yield return conta.GetContasIncluir(NumConta, Descricao);
         }
 
         [EnableCors("*", "*", "*")]
-        [Route("api/contas/GetContaAtualizar/NumConta/{NumConta}/Descricao/{Descricao}")]
-        public IEnumerable<string> GetContaAtualizar(string NumConta, string Descricao)
+        [Route("Atualizar")]
+        [HttpGet]
+        public IEnumerable<string> Atualizar(string NumConta, string Descricao)
         {
             contaNegocio conta = new contaNegocio();
             yield return conta.GetContasAtualizar(NumConta, Descricao);
-        }
-        // GET: api/Contas
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET: api/Contas/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST: api/Contas
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT: api/Contas/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Contas/5
-        public void Delete(int id)
-        {
         }
     }
 }

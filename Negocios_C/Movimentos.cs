@@ -12,6 +12,24 @@ namespace Puc.Negocios_C
     {
         Puc.Negocios_C.logErro log = new logErro();
         Negocio.clBanco banco = new clBanco();
+        public string ListarPagamentos(string lote, string data)
+        {
+            string lResult = "";
+            banco.parametros.Clear();
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("lote", lote));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataInicio", data));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataFim", data));
+            banco.ExecuteAndReturnData("sp_CtrlProjetos_MovimentosLista", "tabmovimento");
+            if (banco.tabela != null)
+            {
+                if (banco.tabela.Rows.Count > 0)
+                {
+                    lResult = banco.GetJsonTabela();
+                }
+            }
+            return lResult;
+        }
+
         public string Listar(string projeto = default(string), string conta = default(string), string historico = default(string), int? coordenador = default(int), int? rubrica = default(int), string dataInicio = default(string), string dataFim = default(string))
         {
             string lResult = "";
@@ -46,15 +64,6 @@ namespace Puc.Negocios_C
                 banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataFim", dataFim));
             }
             #endregion
-            //try
-            //{
-            //    int a = 1;
-            //    a = a / 0;
-            //}
-            //catch (Exception ex)
-            //{
-            //    log.GravarLog(ex);
-            //}
 
             banco.ExecuteAndReturnData("sp_CtrlProjetos_MovimentosLista", "tabmovimento");
             if (banco.tabela != null)
@@ -66,6 +75,7 @@ namespace Puc.Negocios_C
             }
             return lResult;
         }
+
         public string Incluir(DateTime data, string projeto, string historico, double receita, double despesa, int rubrica, string codbanco, string tipo_lancamento = default(string), string fatura = default(string), int? lote = -1)
         {
             string lResult = "";
