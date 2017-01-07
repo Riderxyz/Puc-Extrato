@@ -8,14 +8,27 @@ using System.Web.Http;
 
 namespace ctrlProjetoService.Controllers
 {
-    [RoutePrefix ("Movimentos")]
+    [RoutePrefix("Movimentos")]
     public class MovimentoController : ApiController
     {
+
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("GerarListagemPagamentos")]
+        public IEnumerable<string> GerarListagemPagamentos(string lote, string dataFim)
+        {
+            if (dataFim.Length < 8)
+                dataFim = null;
+
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.GerarListagemPagamentos(lote, dataFim);
+        }
 
         [EnableCors("*", "*", "*")]
         [HttpGet]
         [Route("ListarPagamentos")]
-        public IEnumerable<string> ListarPagamentos(string lote , string dataFim)
+        public IEnumerable<string> ListarPagamentos(string lote, string dataFim)
         {
             if (dataFim.Length < 8)
                 dataFim = null;
@@ -51,7 +64,7 @@ namespace ctrlProjetoService.Controllers
         [EnableCors("*", "*", "*")]
         [HttpGet]
         [Route("Atualizar")]
-        public IEnumerable<string> Atualizar(Int64 id, string projeto, string historico, double? receita=null, double? despesa=null, int? rubrica=null, string codbanco = default(string), string tipo_lancamento = default(string), string fatura = default(string), int? lote = -1, DateTime? data = null)
+        public IEnumerable<string> Atualizar(Int64 id, string projeto, string historico, double? receita = null, double? despesa = null, int? rubrica = null, string codbanco = default(string), string tipo_lancamento = default(string), string fatura = default(string), int? lote = -1, DateTime? data = null)
         {
             Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
             yield return movimento.Atualizar(id, projeto, historico, receita, despesa, rubrica, codbanco, tipo_lancamento, fatura, lote, data);

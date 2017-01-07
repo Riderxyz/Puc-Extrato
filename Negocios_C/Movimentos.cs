@@ -1,9 +1,12 @@
 ﻿using System;
+using NPOI.HSSF.Model;
+using NPOI.HSSF.UserModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Negocio;
+using System.IO;
 
 namespace Puc.Negocios_C
 {
@@ -12,6 +15,25 @@ namespace Puc.Negocios_C
     {
         Puc.Negocios_C.logErro log = new logErro();
         Negocio.clBanco banco = new clBanco();
+
+        #region Metodos de relatórios
+        public string GerarListagemPagamentos(string lote, string data)
+        {
+            HSSFWorkbook wb;
+            HSSFSheet sh;
+            
+            using (FileStream file = new FileStream(System.Configuration.ConfigurationManager.AppSettings.Get("pathModeloPagamento"), FileMode.Open, FileAccess.Read))
+            {
+                wb = new HSSFWorkbook(file);
+                file.Close();
+            }
+            ListarPagamentos(lote, data);
+            return "";
+        }
+        #endregion
+
+
+            #region Modulos de consulta e CRUD
         public string ListarPagamentos(string lote, string data)
         {
             string lResult = "";
@@ -247,4 +269,5 @@ namespace Puc.Negocios_C
 
         }
     }
+    #endregion
 }
