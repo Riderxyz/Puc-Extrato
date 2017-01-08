@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Negocio;
 using System.IO;
+using System.Data;
 
 namespace Puc.Negocios_C
 {
@@ -19,15 +20,35 @@ namespace Puc.Negocios_C
         #region Metodos de relatórios
         public string GerarListagemPagamentos(string lote, string data)
         {
+            int proj;
+            int grupo;
+            int linha;
+            #region Abertura do arquivo e carga dos dados
             HSSFWorkbook wb;
             HSSFSheet sh;
-            
-            using (FileStream file = new FileStream(System.Configuration.ConfigurationManager.AppSettings.Get("pathModeloPagamento"), FileMode.Open, FileAccess.Read))
+            try
             {
-                wb = new HSSFWorkbook(file);
-                file.Close();
+                using (FileStream file = new FileStream(System.Configuration.ConfigurationManager.AppSettings.Get("pathModeloPagamento"), FileMode.Open, FileAccess.Read))
+                {
+                    wb = new HSSFWorkbook(file);
+                    file.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception ("Erro ao abrir o arquivo de modelo. Processo encerrado. Erro "+ex.Message)
             }
             ListarPagamentos(lote, data);
+
+            #endregion
+            proj = Convert.ToInt32(banco.tabela.Rows[9].["projeto"]);
+            grupo = Convert.ToInt32(banco.tabela.Rows[9].["tipo_projeto"]);
+            linha = 8;
+            foreach (DataRow r in banco.tabela.Rows )
+            {
+
+            }
+
             return "";
         }
         #endregion
