@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Negocio;
 using System.IO;
 using System.Data;
+using System.Web;
+using NPOI.SS.UserModel;
 
 namespace Puc.Negocios_C
 {
@@ -21,40 +23,185 @@ namespace Puc.Negocios_C
         public string GerarListagemPagamentos(string lote, string data)
         {
             int proj;
-            int grupo;
-            int linha;
+            string grupo;
+            int numlinha;
+            Double SaldoProjeto;
+            Double SaldoGrupo;
             #region Abertura do arquivo e carga dos dados
             HSSFWorkbook wb;
             HSSFSheet sh;
             try
             {
-                using (FileStream file = new FileStream(System.Configuration.ConfigurationManager.AppSettings.Get("pathModeloPagamento"), FileMode.Open, FileAccess.Read))
+                string x = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings.Get("pathModeloPagamento"));
+                using (FileStream file = new FileStream(x, FileMode.Open, FileAccess.Read))
                 {
                     wb = new HSSFWorkbook(file);
                     file.Close();
+                    sh = (HSSFSheet)wb.GetSheet("pagamentos");
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception ("Erro ao abrir o arquivo de modelo. Processo encerrado. Erro "+ex.Message)
+                throw new Exception("Erro ao abrir o arquivo de modelo. Processo encerrado. Erro " + ex.Message);
             }
             ListarPagamentos(lote, data);
 
             #endregion
-            proj = Convert.ToInt32(banco.tabela.Rows[9].["projeto"]);
-            grupo = Convert.ToInt32(banco.tabela.Rows[9].["tipo_projeto"]);
-            linha = 8;
-            foreach (DataRow r in banco.tabela.Rows )
+
+            sh.GetRow(2).GetCell(1).SetCellValue("Data: " + Convert.ToDateTime(data).ToString("dd/MM/yyyy"));
+            sh.GetRow(3).GetCell(1).SetCellValue("Lote: " + lote);
+            sh.GetRow(3).GetCell(3).SetCellValue(DateTime.Now.ToString("dd/MM/yyyy hh:mm"));
+            #region stilos
+            HSSFFont hFontNormal = (HSSFFont)wb.CreateFont();
+
+            hFontNormal.FontHeightInPoints = 11;
+            hFontNormal.FontName = "Calibri";
+            hFontNormal.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.None;
+
+            HSSFFont hFontBold = (HSSFFont)wb.CreateFont();
+
+            hFontBold.FontHeightInPoints = 12;
+            hFontBold.FontName = "Calibri";
+            hFontBold.Boldweight = (short)FontBoldWeight.Bold;
+
+            ICellStyle cellCurrencyStyle = wb.CreateCellStyle();
+            cellCurrencyStyle.DataFormat = wb.CreateDataFormat().GetFormat("$#,##0.00");
+
+            ICellStyle cellCurrencyStyleBold = wb.CreateCellStyle();
+            cellCurrencyStyleBold.DataFormat = wb.CreateDataFormat().GetFormat("$#,##0.00");
+            cellCurrencyStyleBold.VerticalAlignment = VerticalAlignment.Center;
+            cellCurrencyStyleBold.SetFont(hFontBold);
+            cellCurrencyStyleBold.BorderBottom = BorderStyle.Medium;
+            #endregion
+            proj = Convert.ToInt32(banco.tabela.Rows[0]["projeto"]);
+            grupo = "xx";
+            SaldoGrupo = 0;
+            SaldoProjeto = 0;
+            numlinha = 6;
+            foreach (DataRow r in banco.tabela.Rows)
             {
+                if (proj != Convert.ToInt32(r["projeto"]))
+                {
+                    cabecalhoprojeto(ref sh, ref numlinha, SaldoProjeto, cellCurrencyStyleBold);
+                    SaldoProjeto = 0;
+                    //var linhar = sh.CreateRow(numlinha);
+                    //linhar.HeightInPoints = 25;
+                    //NPOI.SS.Util.CellRangeAddress cra = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
+                    //sh.AddMergedRegion(cra);
+                    //linhar.CreateCell(1).SetCellValue(SaldoProjeto);
+                    //linhar.GetCell(1).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
+                    //linhar.GetCell(1).CellStyle = cellCurrencyStyleBold;
+                    //for (int i = 2; i <= 4; i++)
+                    //{
+                    //    linhar.CreateCell(i);
+                    //    linhar.GetCell(i).CellStyle = cellCurrencyStyleBold;
+                    //}
+                    //proj = Convert.ToInt32(r["projeto"]);
+                    //SaldoProjeto = 0;
+                    //numlinha++;
+                }
+                if (grupo != r["tipo_projeto"].ToString())
+                {
+                    var linhar = sh.CreateRow(numlinha);
+                    linhar.HeightInPoints = 25;
+                    NPOI.SS.Util.CellRangeAddress cra = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
+                    sh.AddMergedRegion(cra);
+                    linhar.CreateCell(1).SetCellValue(r["nometipoprojeto"].ToString().ToUpper());
+                    linhar.GetCell(1).SetCellType(NPOI.SS.UserModel.CellType.String);
+                    linhar.GetCell(1).CellStyle = cellCurrencyStyleBold;
+                    //linhar.GetCell(1).CellStyle.Alignment = HorizontalAlignment.Center;
+                    for (int i = 2; i <= 4; i++)
+                    {
+                        linhar.CreateCell(i);
+                        linhar.GetCell(i).CellStyle = cellCurrencyStyleBold;
+                    }
+                    SaldoGrupo = 0;
+                    numlinha++;
+                    grupo = r["tipo_projeto"].ToString();
+                }
+                var linha = sh.CreateRow(numlinha);
+                linha.CreateCell(1).SetCellValue(r["nomeprojeto"].ToString());
+                linha.GetCell(1).SetCellType(NPOI.SS.UserModel.CellType.String);
+
+                linha.CreateCell(2).SetCellValue(r["historico"].ToString());
+                linha.GetCell(2).CellStyle = cellCurrencyStyle;
+
+                linha.CreateCell(3).SetCellValue(r["banco"].ToString());
+                linha.GetCell(3).SetCellType(NPOI.SS.UserModel.CellType.String);
+
+                linha.CreateCell(4).SetCellValue(Convert.ToDouble(r["despesa"].ToString()));
+                linha.GetCell(4).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
+                linha.GetCell(4).CellStyle = cellCurrencyStyle;
+                for (int i = 1; i <= 4; i++)
+                {
+                    linha.GetCell(i).CellStyle.SetFont(hFontNormal);
+                }
+                numlinha++;
+                SaldoProjeto += Convert.ToDouble(r["despesa"]);
+                SaldoGrupo += Convert.ToDouble(r["despesa"]);
 
             }
-
+            if (SaldoProjeto != 0)
+            {
+                cabecalhoprojeto(ref sh, ref numlinha, SaldoProjeto, cellCurrencyStyleBold);
+            }
+            ExportarArquivo(wb, lote, Convert.ToDateTime(data));
             return "";
+        }
+
+        void cabecalhoprojeto(ref HSSFSheet sh, ref int numlinha, double SaldoProjeto, ICellStyle cellCurrencyStyleBold)
+        {
+            var linhar = sh.CreateRow(numlinha);
+            linhar.HeightInPoints = 25;
+            NPOI.SS.Util.CellRangeAddress cra = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
+            sh.AddMergedRegion(cra);
+            linhar.CreateCell(1).SetCellValue(SaldoProjeto);
+            linhar.GetCell(1).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
+            linhar.GetCell(1).CellStyle = cellCurrencyStyleBold;
+           // linhar.GetCell(1).CellStyle.Alignment = HorizontalAlignment.Right;
+            for (int i = 2; i <= 4; i++)
+            {
+                linhar.CreateCell(i);
+                linhar.GetCell(i).CellStyle = cellCurrencyStyleBold;
+                //linhar.GetCell(i).CellStyle.Alignment = HorizontalAlignment.Right;
+            }
+            numlinha++;
+        }
+
+        void ExportarArquivo(HSSFWorkbook wb, string lote, DateTime data)
+        {
+            MemoryStream memoryStream = new MemoryStream();
+            string fileName = "~/arquivosgerados/Pagamento_" + lote + "_" + data.ToString("dd-MM-yyyy") + ".xls";
+
+            wb.Write(memoryStream);
+            memoryStream.Flush();
+
+            try
+            {
+                HttpResponse response = HttpContext.Current.Response;
+                response.ClearContent();
+                //response.ClearHeaders();
+                response.Buffer = true;
+                response.ContentType = "application/vnd.ms-excel";
+                response.AddHeader("Content-Length", memoryStream.Length.ToString());
+                response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", fileName));
+                response.BinaryWrite(memoryStream.GetBuffer());
+                response.Flush();
+                response.End();
+                // Do nothing, error expected due to Flush();
+                // return "Arquivo Gerado com êxito";
+            }
+            catch
+            {
+                //return "Erro na geração do arquivo!";
+            }
+
+
         }
         #endregion
 
 
-            #region Modulos de consulta e CRUD
+        #region Modulos de consulta e CRUD
         public string ListarPagamentos(string lote, string data)
         {
             string lResult = "";
@@ -62,7 +209,7 @@ namespace Puc.Negocios_C
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("lote", lote));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataInicio", data));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataFim", data));
-            banco.ExecuteAndReturnData("sp_CtrlProjetos_MovimentosLista", "tabmovimento");
+            banco.ExecuteAndReturnData("sp_CtrlProjetos_MovimentosListaPagamentos", "tabmovimento");
             if (banco.tabela != null)
             {
                 if (banco.tabela.Rows.Count > 0)
