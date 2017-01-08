@@ -19,6 +19,57 @@ namespace Puc.Negocios_C
         Puc.Negocios_C.logErro log = new logErro();
         Negocio.clBanco banco = new clBanco();
 
+        HSSFFont FonteBold(ref HSSFSheet sh, ref HSSFWorkbook wb)
+        {
+            HSSFFont hFontNormal = (HSSFFont)wb.CreateFont();
+
+            hFontNormal.FontHeightInPoints = 11;
+            hFontNormal.FontName = "Calibri";
+            hFontNormal.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.None;
+            return hFontNormal;
+        }
+        HSSFFont FonteCabecalho(ref HSSFSheet sh, ref HSSFWorkbook wb, short tamanho = 12)
+        {
+            HSSFFont hFontNormal = (HSSFFont)wb.CreateFont();
+
+            hFontNormal.FontHeightInPoints = tamanho;
+            hFontNormal.FontName = "Calibri";
+            hFontNormal.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.Bold;
+            return hFontNormal;
+        }
+
+        HSSFFont FontePadrao(ref HSSFSheet sh, ref HSSFWorkbook wb, short tamanho = 11)
+        {
+            HSSFFont hFontNormal = (HSSFFont)wb.CreateFont();
+
+            hFontNormal.FontHeightInPoints = tamanho;
+            hFontNormal.FontName = "Calibri";
+            hFontNormal.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.Normal;
+            return hFontNormal;
+        }
+
+        ICellStyle estiloBold(ref HSSFSheet sh, ref HSSFWorkbook wb, Boolean borda = true)
+        {
+            ICellStyle cellCurrencyStyleBold = wb.CreateCellStyle();
+            cellCurrencyStyleBold.DataFormat = wb.CreateDataFormat().GetFormat("$#,##0.00");
+            cellCurrencyStyleBold.VerticalAlignment = VerticalAlignment.Center;
+            cellCurrencyStyleBold.SetFont(FonteBold(ref sh, ref wb));
+            if (borda)
+                cellCurrencyStyleBold.BorderBottom = BorderStyle.Medium;
+            return cellCurrencyStyleBold;
+        }
+
+        ICellStyle estiloPadrao(ref HSSFSheet sh, ref HSSFWorkbook wb, Boolean borda = true)
+        {
+            ICellStyle cellCurrencyStyleBold = wb.CreateCellStyle();
+            cellCurrencyStyleBold.VerticalAlignment = VerticalAlignment.Center;
+            cellCurrencyStyleBold.SetFont(FonteBold(ref sh, ref wb));
+            if (borda)
+                cellCurrencyStyleBold.BorderBottom = BorderStyle.Medium;
+            return cellCurrencyStyleBold;
+        }
+
+
         #region Metodos de relatórios
         public string GerarListagemPagamentos(string lote, string data)
         {
@@ -84,21 +135,6 @@ namespace Puc.Negocios_C
                 {
                     cabecalhoprojeto(ref sh, ref numlinha, SaldoProjeto, cellCurrencyStyleBold);
                     SaldoProjeto = 0;
-                    //var linhar = sh.CreateRow(numlinha);
-                    //linhar.HeightInPoints = 25;
-                    //NPOI.SS.Util.CellRangeAddress cra = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
-                    //sh.AddMergedRegion(cra);
-                    //linhar.CreateCell(1).SetCellValue(SaldoProjeto);
-                    //linhar.GetCell(1).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
-                    //linhar.GetCell(1).CellStyle = cellCurrencyStyleBold;
-                    //for (int i = 2; i <= 4; i++)
-                    //{
-                    //    linhar.CreateCell(i);
-                    //    linhar.GetCell(i).CellStyle = cellCurrencyStyleBold;
-                    //}
-                    //proj = Convert.ToInt32(r["projeto"]);
-                    //SaldoProjeto = 0;
-                    //numlinha++;
                 }
                 if (grupo != r["tipo_projeto"].ToString())
                 {
@@ -161,7 +197,7 @@ namespace Puc.Negocios_C
             linhar.CreateCell(1).SetCellValue(SaldoProjeto);
             linhar.GetCell(1).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
             linhar.GetCell(1).CellStyle = cellCurrencyStyleBold;
-           // linhar.GetCell(1).CellStyle.Alignment = HorizontalAlignment.Right;
+            // linhar.GetCell(1).CellStyle.Alignment = HorizontalAlignment.Right;
             for (int i = 2; i <= 4; i++)
             {
                 linhar.CreateCell(i);
@@ -204,6 +240,90 @@ namespace Puc.Negocios_C
         }
         #endregion
 
+        #region Extratos de Projetos
+
+        void CabecalhoExtrato(ref HSSFSheet sh, ref HSSFWorkbook wb, ref int numlinha, DataRow r, DateTime dataInicio, DateTime dataFim)
+        {
+            sh.CreateRow(0).CreateCell(0).SetCellValue("Fundação Padre Leonel Franca");
+            sh.CreateRow(0).GetCell(0).CellStyle = estiloBold(ref sh, ref wb, false);
+            sh.CreateRow(0).GetCell(0).CellStyle.SetFont(FonteCabecalho(ref sh, ref wb,14));
+            sh.CreateRow(0).CreateCell(3).SetCellValue("Extrato de Projetos");
+            sh.CreateRow(0).GetCell(3).CellStyle.SetFont(FonteCabecalho(ref sh, ref wb));
+            sh.CreateRow(1).CreateCell(0).SetCellValue("Projeto : " + r["nomeprojeto"].ToString());
+            sh.CreateRow(0).GetCell(0).CellStyle.SetFont(FonteCabecalho(ref sh, ref wb));
+            sh.CreateRow(1).CreateCell(2).SetCellValue("de: : " + dataInicio.ToString("dd/MM/yyyy") + " a " + dataFim.ToString("dd/MM/yyyy"));
+            sh.CreateRow(1).GetCell(2).CellStyle.SetFont(FonteCabecalho(ref sh, ref wb));
+            sh.CreateRow(2).CreateCell(0).SetCellValue("Coordenador: " + r["nomecoordenador"].ToString());
+            sh.CreateRow(2).GetCell(0).CellStyle.SetFont(FonteCabecalho(ref sh, ref wb));
+            sh.CreateRow(4).CreateCell(0).SetCellValue("Data");
+            sh.CreateRow(4).GetCell(0).CellStyle.SetFont(FonteBold(ref sh, ref wb));
+            sh.CreateRow(4).CreateCell(1).SetCellValue("Fatura");
+            sh.CreateRow(4).GetCell(1).CellStyle.SetFont(FonteBold(ref sh, ref wb));
+            sh.CreateRow(4).CreateCell(2).SetCellValue("Histórico");
+            sh.CreateRow(4).GetCell(2).CellStyle.SetFont(FonteBold(ref sh, ref wb));
+            sh.CreateRow(4).CreateCell(3).SetCellValue("Receita");
+            sh.CreateRow(4).GetCell(3).CellStyle.SetFont(FonteBold(ref sh, ref wb));
+            sh.CreateRow(4).CreateCell(4).SetCellValue("Despesa");
+            sh.CreateRow(4).GetCell(4).CellStyle.SetFont(FonteBold(ref sh, ref wb));
+            sh.CreateRow(4).CreateCell(5).SetCellValue("Saldo");
+            sh.SetColumnWidth(0, 12);
+            sh.SetColumnWidth(1, 12);
+            sh.SetColumnWidth(2, 47);
+            sh.SetColumnWidth(2, 13);
+            sh.SetColumnWidth(2, 13);
+            sh.SetColumnWidth(2, 13);
+        }
+        public string GerarListagemExtrato(int idprojeto, string dataInicio, string dataFim)
+        {
+            int numlinha=0;
+            Double SaldoProjeto;
+            Double SaldoGrupo;
+            HSSFWorkbook wb = new HSSFWorkbook();
+            wb.CreateSheet("Extrato");
+            HSSFSheet sh = (HSSFSheet)wb.GetSheet("pagamentos");
+
+            ListarExtratoProjeto(idprojeto, dataInicio, dataFim);
+            CabecalhoExtrato(ref sh, ref wb, ref numlinha, banco.tabela.Rows[0], Convert.ToDateTime(dataInicio), Convert.ToDateTime(dataFim));
+            numlinha = 6;
+
+            SaldoProjeto = 0;
+            numlinha = 6;
+            foreach (DataRow r in banco.tabela.Rows)
+            {
+                var linha = sh.CreateRow(numlinha);
+                linha.CreateCell(1).SetCellValue(Convert.ToDateTime(r["data"].ToString()).ToString("dd/MM/yyyy"));
+                linha.GetCell(1).SetCellType(NPOI.SS.UserModel.CellType.String);
+
+                linha.CreateCell(2).SetCellValue(r["fatura"].ToString());
+                linha.GetCell(2).CellStyle = cellCurrencyStyle;
+
+                linha.CreateCell(3).SetCellValue(r["banco"].ToString());
+                linha.GetCell(3).SetCellType(NPOI.SS.UserModel.CellType.String);
+
+                linha.CreateCell(4).SetCellValue(Convert.ToDouble(r["despesa"].ToString()));
+                linha.GetCell(4).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
+                linha.GetCell(4).CellStyle = cellCurrencyStyle;
+                for (int i = 1; i <= 4; i++)
+                {
+                    linha.GetCell(i).CellStyle.SetFont(hFontNormal);
+                }
+                numlinha++;
+                SaldoProjeto += Convert.ToDouble(r["despesa"]);
+                SaldoGrupo += Convert.ToDouble(r["despesa"]);
+
+            }
+            if (SaldoProjeto != 0)
+            {
+                cabecalhoprojeto(ref sh, ref numlinha, SaldoProjeto, cellCurrencyStyleBold);
+            }
+
+            wb.SetPrintArea(0, 1, 4, 1, numlinha);
+
+            ExportarArquivo(wb, lote, Convert.ToDateTime(data));
+            return "";
+        }
+
+        #endregion
 
         #region Modulos de consulta e CRUD
         public string ListarPagamentos(string lote, string data)
@@ -214,6 +334,24 @@ namespace Puc.Negocios_C
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataInicio", data));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataFim", data));
             banco.ExecuteAndReturnData("sp_CtrlProjetos_MovimentosListaPagamentos", "tabmovimento");
+            if (banco.tabela != null)
+            {
+                if (banco.tabela.Rows.Count > 0)
+                {
+                    lResult = banco.GetJsonTabela();
+                }
+            }
+            return lResult;
+        }
+
+        public string ListarExtratoProjeto(int idProjeto, string dataInicio, string dataFim)
+        {
+            string lResult = "";
+            banco.parametros.Clear();
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("projeto", idProjeto));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataInicio", Convert.ToDateTime(dataInicio).ToString("yyyy-MM-dd")));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataFim", Convert.ToDateTime(dataFim).ToString("yyyy-MM-dd")));
+            banco.ExecuteAndReturnData("sp_CtrlProjetos_MovimentosLista", "tabmovimento");
             if (banco.tabela != null)
             {
                 if (banco.tabela.Rows.Count > 0)
