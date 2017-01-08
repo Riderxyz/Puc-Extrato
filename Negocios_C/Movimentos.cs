@@ -145,6 +145,9 @@ namespace Puc.Negocios_C
             {
                 cabecalhoprojeto(ref sh, ref numlinha, SaldoProjeto, cellCurrencyStyleBold);
             }
+
+            wb.SetPrintArea(0, 1, 4, 1, numlinha);
+
             ExportarArquivo(wb, lote, Convert.ToDateTime(data));
             return "";
         }
