@@ -174,7 +174,8 @@ namespace Puc.Negocios_C
         void ExportarArquivo(HSSFWorkbook wb, string lote, DateTime data)
         {
             MemoryStream memoryStream = new MemoryStream();
-            string fileName = "~/arquivosgerados/Pagamento_" + lote + "_" + data.ToString("dd-MM-yyyy") + ".xls";
+            //string fileName = HttpContext.Current.Server.MapPath("~/arquivosgerados/Pagamento_" + lote + "_" + data.ToString("dd-MM-yyyy") + ".xls"); ;
+            string fileName = "Pagamento_Lote " + lote + " de " + data.ToString("dd-MM-yyyy") + ".xls";
 
             wb.Write(memoryStream);
             memoryStream.Flush();
