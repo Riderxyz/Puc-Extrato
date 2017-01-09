@@ -12,7 +12,17 @@ namespace ctrlProjetoService.Controllers
     public class MovimentoController : ApiController
     {
 
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("GerarListagemExtrato")]
+        public IEnumerable<string> GerarListagemExtrato(int idprojeto, string dataInicio, string dataFim)
+        {
+            if (dataFim.Length < 8)
+                dataFim = null;
 
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.GerarListagemExtrato( idprojeto,  dataInicio,  dataFim);
+        }
         [EnableCors("*", "*", "*")]
         [HttpGet]
         [Route("GerarListagemPagamentos")]

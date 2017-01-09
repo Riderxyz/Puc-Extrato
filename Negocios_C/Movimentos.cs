@@ -19,13 +19,13 @@ namespace Puc.Negocios_C
         Puc.Negocios_C.logErro log = new logErro();
         Negocio.clBanco banco = new clBanco();
 
-        HSSFFont FonteBold(ref HSSFSheet sh, ref HSSFWorkbook wb)
+        HSSFFont FonteBold(ref HSSFSheet sh, ref HSSFWorkbook wb, short tamanho = 12)
         {
             HSSFFont hFontNormal = (HSSFFont)wb.CreateFont();
 
-            hFontNormal.FontHeightInPoints = 11;
+            hFontNormal.FontHeightInPoints = tamanho;
             hFontNormal.FontName = "Calibri";
-            hFontNormal.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.None;
+            hFontNormal.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.Bold;
             return hFontNormal;
         }
         HSSFFont FonteCabecalho(ref HSSFSheet sh, ref HSSFWorkbook wb, short tamanho = 12)
@@ -37,7 +37,6 @@ namespace Puc.Negocios_C
             hFontNormal.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.Bold;
             return hFontNormal;
         }
-
         HSSFFont FontePadrao(ref HSSFSheet sh, ref HSSFWorkbook wb, short tamanho = 11)
         {
             HSSFFont hFontNormal = (HSSFFont)wb.CreateFont();
@@ -47,23 +46,35 @@ namespace Puc.Negocios_C
             hFontNormal.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.Normal;
             return hFontNormal;
         }
-
-        ICellStyle estiloBold(ref HSSFSheet sh, ref HSSFWorkbook wb, Boolean borda = true)
+        ICellStyle estiloBold(ref HSSFSheet sh, ref HSSFWorkbook wb, Boolean borda = true, int tamanho = 12, bool currency = false)
         {
             ICellStyle cellCurrencyStyleBold = wb.CreateCellStyle();
-            cellCurrencyStyleBold.DataFormat = wb.CreateDataFormat().GetFormat("$#,##0.00");
+            if (currency)
+                cellCurrencyStyleBold.DataFormat = wb.CreateDataFormat().GetFormat("$#,##0.00");
             cellCurrencyStyleBold.VerticalAlignment = VerticalAlignment.Center;
             cellCurrencyStyleBold.SetFont(FonteBold(ref sh, ref wb));
             if (borda)
                 cellCurrencyStyleBold.BorderBottom = BorderStyle.Medium;
             return cellCurrencyStyleBold;
         }
-
-        ICellStyle estiloPadrao(ref HSSFSheet sh, ref HSSFWorkbook wb, Boolean borda = true)
+        ICellStyle estiloPadrao(ref HSSFSheet sh, ref HSSFWorkbook wb, Boolean borda = true, short tamanho = 12, bool currency = false)
         {
             ICellStyle cellCurrencyStyleBold = wb.CreateCellStyle();
             cellCurrencyStyleBold.VerticalAlignment = VerticalAlignment.Center;
-            cellCurrencyStyleBold.SetFont(FonteBold(ref sh, ref wb));
+            if (currency)
+                cellCurrencyStyleBold.DataFormat = wb.CreateDataFormat().GetFormat("$#,##0.00");
+            cellCurrencyStyleBold.SetFont(FontePadrao (ref sh, ref wb, tamanho));
+            if (borda)
+                cellCurrencyStyleBold.BorderBottom = BorderStyle.Medium;
+            return cellCurrencyStyleBold;
+        }
+        ICellStyle estiloCabecalho(ref HSSFSheet sh, ref HSSFWorkbook wb, Boolean borda = true, short tamanho = 16, bool currency = false)
+        {
+            ICellStyle cellCurrencyStyleBold = wb.CreateCellStyle();
+            cellCurrencyStyleBold.VerticalAlignment = VerticalAlignment.Center;
+            if (currency)
+                cellCurrencyStyleBold.DataFormat = wb.CreateDataFormat().GetFormat("$#,##0.00");
+            cellCurrencyStyleBold.SetFont(FonteCabecalho(ref sh, ref wb, tamanho));
             if (borda)
                 cellCurrencyStyleBold.BorderBottom = BorderStyle.Medium;
             return cellCurrencyStyleBold;
@@ -184,7 +195,7 @@ namespace Puc.Negocios_C
 
             wb.SetPrintArea(0, 1, 4, 1, numlinha);
 
-            ExportarArquivo(wb, lote, Convert.ToDateTime(data));
+            ExportarArquivo(wb, "Pagamento_Lote " + lote + " de " + Convert.ToDateTime(data).ToString("dd-MM-yyyy") + ".xls");
             return "";
         }
 
@@ -207,11 +218,11 @@ namespace Puc.Negocios_C
             numlinha++;
         }
 
-        void ExportarArquivo(HSSFWorkbook wb, string lote, DateTime data)
+        void ExportarArquivo(HSSFWorkbook wb, string nomearquivo)
         {
             MemoryStream memoryStream = new MemoryStream();
             //string fileName = HttpContext.Current.Server.MapPath("~/arquivosgerados/Pagamento_" + lote + "_" + data.ToString("dd-MM-yyyy") + ".xls"); ;
-            string fileName = "Pagamento_Lote " + lote + " de " + data.ToString("dd-MM-yyyy") + ".xls";
+            //string fileName = "Pagamento_Lote " + lote + " de " + data.ToString("dd-MM-yyyy") + ".xls";
 
             wb.Write(memoryStream);
             memoryStream.Flush();
@@ -224,7 +235,7 @@ namespace Puc.Negocios_C
                 response.Buffer = true;
                 response.ContentType = "application/vnd.ms-excel";
                 response.AddHeader("Content-Length", memoryStream.Length.ToString());
-                response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", fileName));
+                response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", nomearquivo));
                 response.BinaryWrite(memoryStream.GetBuffer());
                 response.Flush();
                 response.End();
@@ -244,82 +255,127 @@ namespace Puc.Negocios_C
 
         void CabecalhoExtrato(ref HSSFSheet sh, ref HSSFWorkbook wb, ref int numlinha, DataRow r, DateTime dataInicio, DateTime dataFim)
         {
-            sh.CreateRow(0).CreateCell(0).SetCellValue("Fundação Padre Leonel Franca");
-            sh.CreateRow(0).GetCell(0).CellStyle = estiloBold(ref sh, ref wb, false);
-            sh.CreateRow(0).GetCell(0).CellStyle.SetFont(FonteCabecalho(ref sh, ref wb,14));
-            sh.CreateRow(0).CreateCell(3).SetCellValue("Extrato de Projetos");
-            sh.CreateRow(0).GetCell(3).CellStyle.SetFont(FonteCabecalho(ref sh, ref wb));
-            sh.CreateRow(1).CreateCell(0).SetCellValue("Projeto : " + r["nomeprojeto"].ToString());
-            sh.CreateRow(0).GetCell(0).CellStyle.SetFont(FonteCabecalho(ref sh, ref wb));
-            sh.CreateRow(1).CreateCell(2).SetCellValue("de: : " + dataInicio.ToString("dd/MM/yyyy") + " a " + dataFim.ToString("dd/MM/yyyy"));
-            sh.CreateRow(1).GetCell(2).CellStyle.SetFont(FonteCabecalho(ref sh, ref wb));
-            sh.CreateRow(2).CreateCell(0).SetCellValue("Coordenador: " + r["nomecoordenador"].ToString());
-            sh.CreateRow(2).GetCell(0).CellStyle.SetFont(FonteCabecalho(ref sh, ref wb));
-            sh.CreateRow(4).CreateCell(0).SetCellValue("Data");
-            sh.CreateRow(4).GetCell(0).CellStyle.SetFont(FonteBold(ref sh, ref wb));
-            sh.CreateRow(4).CreateCell(1).SetCellValue("Fatura");
-            sh.CreateRow(4).GetCell(1).CellStyle.SetFont(FonteBold(ref sh, ref wb));
-            sh.CreateRow(4).CreateCell(2).SetCellValue("Histórico");
-            sh.CreateRow(4).GetCell(2).CellStyle.SetFont(FonteBold(ref sh, ref wb));
-            sh.CreateRow(4).CreateCell(3).SetCellValue("Receita");
-            sh.CreateRow(4).GetCell(3).CellStyle.SetFont(FonteBold(ref sh, ref wb));
-            sh.CreateRow(4).CreateCell(4).SetCellValue("Despesa");
-            sh.CreateRow(4).GetCell(4).CellStyle.SetFont(FonteBold(ref sh, ref wb));
-            sh.CreateRow(4).CreateCell(5).SetCellValue("Saldo");
-            sh.SetColumnWidth(0, 12);
-            sh.SetColumnWidth(1, 12);
-            sh.SetColumnWidth(2, 47);
-            sh.SetColumnWidth(2, 13);
-            sh.SetColumnWidth(2, 13);
-            sh.SetColumnWidth(2, 13);
+            sh.CreateRow(numlinha).CreateCell(0).SetCellValue("Fundação Padre Leonel Franca");
+            sh.GetRow(numlinha).GetCell(0).CellStyle = estiloCabecalho(ref sh, ref wb, false,tamanho:17);
+
+            sh.GetRow(numlinha).CreateCell(3).SetCellValue("Extrato de Projetos");
+            sh.GetRow(numlinha).GetCell(3).CellStyle.SetFont(FonteCabecalho(ref sh, ref wb));
+            //sh.GetRow(numlinha).GetCell(0).CellStyle.SetFont(FonteCabecalho(ref sh, ref wb));
+            numlinha++;
+            sh.CreateRow(numlinha).CreateCell(0).SetCellValue("Projeto : " + r["nomeprojeto"].ToString());
+            sh.GetRow(numlinha).GetCell(0).CellStyle = estiloPadrao(ref sh, ref wb, false);
+
+            sh.GetRow(numlinha).CreateCell(3).SetCellValue("de: : " + dataInicio.ToString("dd/MM/yyyy") + " a " + dataFim.ToString("dd/MM/yyyy"));
+            sh.GetRow(numlinha).GetCell(3).CellStyle = estiloPadrao(ref sh, ref wb, false);
+            numlinha++;
+
+            sh.CreateRow(numlinha).CreateCell(0).SetCellValue("Coordenador: " + r["nomecoordenador"].ToString());
+            sh.GetRow(numlinha).GetCell(0).CellStyle = estiloPadrao(ref sh, ref wb, false);
+            numlinha += 2;
+            sh.CreateRow(numlinha).CreateCell(0).SetCellValue("Data");
+            sh.GetRow(numlinha).GetCell(0).CellStyle = estiloBold(ref sh, ref wb, false);
+
+            sh.GetRow(numlinha).CreateCell(1).SetCellValue("Fatura");
+            sh.GetRow(numlinha).GetCell(1).CellStyle = estiloBold(ref sh, ref wb, false);
+
+            sh.GetRow(numlinha).CreateCell(2).SetCellValue("Histórico");
+            sh.GetRow(numlinha).GetCell(2).CellStyle = estiloBold(ref sh, ref wb, false);
+
+            sh.GetRow(numlinha).CreateCell(3).SetCellValue("Receita");
+            sh.GetRow(numlinha).GetCell(3).CellStyle = estiloBold(ref sh, ref wb, false);
+
+            sh.GetRow(numlinha).CreateCell(4).SetCellValue("Despesa");
+            sh.GetRow(numlinha).GetCell(4).CellStyle = estiloBold(ref sh, ref wb, false);
+
+            sh.GetRow(numlinha).CreateCell(5).SetCellValue("Saldo");
+            sh.GetRow(numlinha).GetCell(5).CellStyle = estiloBold(ref sh, ref wb, false);
+
+            numlinha++;
         }
         public string GerarListagemExtrato(int idprojeto, string dataInicio, string dataFim)
         {
-            int numlinha=0;
+            int numlinha = 0;
             Double SaldoProjeto;
-            Double SaldoGrupo;
-            HSSFWorkbook wb = new HSSFWorkbook();
-            wb.CreateSheet("Extrato");
-            HSSFSheet sh = (HSSFSheet)wb.GetSheet("pagamentos");
+            int linhasporpagina = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings.Get("qtd_linhas_extrato_por_pagina"));
+            
+            HSSFWorkbook wb;// = new HSSFWorkbook();
+            //wb.CreateSheet("Extrato");
+            HSSFSheet sh;// = (HSSFSheet)wb.GetSheet("Extrato");
+            try
+            {
+                string x = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings.Get("pathModeloExtratos"));
+                using (FileStream file = new FileStream(x, FileMode.Open, FileAccess.Read))
+                {
+                    wb = new HSSFWorkbook(file);
+                    file.Close();
+                    sh = (HSSFSheet)wb.GetSheet("extrato");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao abrir o arquivo de modelo. Processo encerrado. Erro " + ex.Message);
+            }
+
+
+            sh.DisplayGridlines = false;
+            sh.SetColumnWidth(0, 3000);
+            sh.SetColumnWidth(1, 3000);
+            sh.SetColumnWidth(2, 12000);
+            sh.SetColumnWidth(3, 3500);
+            sh.SetColumnWidth(4, 3500);
+            sh.SetColumnWidth(5, 3500);
+
 
             ListarExtratoProjeto(idprojeto, dataInicio, dataFim);
             CabecalhoExtrato(ref sh, ref wb, ref numlinha, banco.tabela.Rows[0], Convert.ToDateTime(dataInicio), Convert.ToDateTime(dataFim));
-            numlinha = 6;
+
 
             SaldoProjeto = 0;
-            numlinha = 6;
             foreach (DataRow r in banco.tabela.Rows)
             {
+                SaldoProjeto -= Convert.ToDouble(r["despesa"].ToString());
+                SaldoProjeto += Convert.ToDouble(r["receita"].ToString());
+                var p = numlinha % linhasporpagina;
+                if (p == 0)
+                {
+                    sh.SetRowBreak(numlinha);
+                    numlinha++;
+                    CabecalhoExtrato(ref sh, ref wb, ref numlinha, banco.tabela.Rows[0], Convert.ToDateTime(dataInicio), Convert.ToDateTime(dataFim));
+                }
                 var linha = sh.CreateRow(numlinha);
-                linha.CreateCell(1).SetCellValue(Convert.ToDateTime(r["data"].ToString()).ToString("dd/MM/yyyy"));
-                linha.GetCell(1).SetCellType(NPOI.SS.UserModel.CellType.String);
+                linha.CreateCell(0).SetCellValue(Convert.ToDateTime(r["data"].ToString()).ToString("dd/MM/yyyy"));
+                linha.GetCell(0).SetCellType(NPOI.SS.UserModel.CellType.String);
+                linha.GetCell(0).CellStyle = estiloPadrao(ref sh, ref wb, false);
 
-                linha.CreateCell(2).SetCellValue(r["fatura"].ToString());
-                linha.GetCell(2).CellStyle = cellCurrencyStyle;
+                linha.CreateCell(1).SetCellValue(r["fatura"].ToString());
+                linha.GetCell(0).SetCellType(NPOI.SS.UserModel.CellType.String);
+                linha.GetCell(1).CellStyle = estiloPadrao(ref sh, ref wb, false);
 
-                linha.CreateCell(3).SetCellValue(r["banco"].ToString());
-                linha.GetCell(3).SetCellType(NPOI.SS.UserModel.CellType.String);
+                linha.CreateCell(2).SetCellValue(r["historico"].ToString());
+                linha.GetCell(2).SetCellType(NPOI.SS.UserModel.CellType.String);
+                linha.GetCell(2).CellStyle = estiloPadrao(ref sh, ref wb, false);
+
+                linha.CreateCell(3).SetCellValue(Convert.ToDouble(r["receita"].ToString()));
+                linha.GetCell(3).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
+                linha.GetCell(3).CellStyle = estiloPadrao(ref sh, ref wb, false);
 
                 linha.CreateCell(4).SetCellValue(Convert.ToDouble(r["despesa"].ToString()));
                 linha.GetCell(4).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
-                linha.GetCell(4).CellStyle = cellCurrencyStyle;
-                for (int i = 1; i <= 4; i++)
-                {
-                    linha.GetCell(i).CellStyle.SetFont(hFontNormal);
-                }
+                linha.GetCell(4).CellStyle = estiloPadrao(ref sh, ref wb, false);
+
+                linha.CreateCell(5).SetCellValue(SaldoProjeto);
+                linha.GetCell(5).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
+                linha.GetCell(5).CellStyle = estiloPadrao(ref sh, ref wb, false);
+
                 numlinha++;
-                SaldoProjeto += Convert.ToDouble(r["despesa"]);
-                SaldoGrupo += Convert.ToDouble(r["despesa"]);
 
             }
-            if (SaldoProjeto != 0)
-            {
-                cabecalhoprojeto(ref sh, ref numlinha, SaldoProjeto, cellCurrencyStyleBold);
-            }
 
-            wb.SetPrintArea(0, 1, 4, 1, numlinha);
+            wb.SetPrintArea(0, 0, 5, 0, numlinha);
+            //sh.PrintSetup.PaperSize = (short)PaperSize.A4;
+            sh.FitToPage = false;// RowBreak(8);
 
-            ExportarArquivo(wb, lote, Convert.ToDateTime(data));
+            ExportarArquivo(wb, "Extrato.xls");
             return "";
         }
 
