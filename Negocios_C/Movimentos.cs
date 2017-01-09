@@ -142,10 +142,11 @@ namespace Puc.Negocios_C
             numlinha = 6;
             foreach (DataRow r in banco.tabela.Rows)
             {
-                if (proj != Convert.ToInt32(r["projeto"]))
+                if (proj != Convert.ToInt32(r["projeto"].ToString()))
                 {
                     cabecalhoprojeto(ref sh, ref numlinha, SaldoProjeto, cellCurrencyStyleBold);
                     SaldoProjeto = 0;
+                    proj = Convert.ToInt32(r["projeto"].ToString());
                 }
                 if (grupo != r["tipo_projeto"].ToString())
                 {
