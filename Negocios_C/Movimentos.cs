@@ -389,6 +389,7 @@ namespace Puc.Negocios_C
         {
             int numlinha = 0;
             Double SaldoProjeto;
+            String _conta = "";
             int linhasporpagina = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings.Get("qtd_linhas_extrato_por_pagina"));
 
             HSSFWorkbook wb;// = new HSSFWorkbook();
@@ -414,14 +415,16 @@ namespace Puc.Negocios_C
 
             SaldoProjeto = 0;
             numlinha = 4;
+            _conta = "";
             foreach (DataRow r in banco.tabela.Rows)
             {
                 SaldoProjeto -= Convert.ToDouble(r["despesa"].ToString());
                 SaldoProjeto += Convert.ToDouble(r["receita"].ToString());
                 var p = numlinha % linhasporpagina;
-                if ((p == 0) | (numlinha ==4))
+                if (_conta != r["conta"].ToString())
                 {
                     sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim()+" - "+ r["descricao"].ToString().Trim());
+                    _conta = r["conta"].ToString();
                     numlinha++;
                 }
                 //var linha = sh.CreateRow(numlinha);
