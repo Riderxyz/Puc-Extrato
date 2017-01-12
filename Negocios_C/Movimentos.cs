@@ -19,10 +19,11 @@ namespace Puc.Negocios_C
         Puc.Negocios_C.logErro log = new logErro();
         Negocio.clBanco banco = new clBanco();
 
+        #region Estilos
+        HSSFFont hFontNormal;
+        ICellStyle cellCurrencyStyleBold;
         HSSFFont FonteBold(ref HSSFSheet sh, ref HSSFWorkbook wb, short tamanho = 12)
         {
-            HSSFFont hFontNormal = (HSSFFont)wb.CreateFont();
-
             hFontNormal.FontHeightInPoints = tamanho;
             hFontNormal.FontName = "Calibri";
             hFontNormal.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.Bold;
@@ -30,7 +31,7 @@ namespace Puc.Negocios_C
         }
         HSSFFont FonteCabecalho(ref HSSFSheet sh, ref HSSFWorkbook wb, short tamanho = 12)
         {
-            HSSFFont hFontNormal = (HSSFFont)wb.CreateFont();
+           // HSSFFont hFontNormal = (HSSFFont)wb.CreateFont();
 
             hFontNormal.FontHeightInPoints = tamanho;
             hFontNormal.FontName = "Calibri";
@@ -39,7 +40,7 @@ namespace Puc.Negocios_C
         }
         HSSFFont FontePadrao(ref HSSFSheet sh, ref HSSFWorkbook wb, short tamanho = 11)
         {
-            HSSFFont hFontNormal = (HSSFFont)wb.CreateFont();
+           // HSSFFont hFontNormal = (HSSFFont)wb.CreateFont();
 
             hFontNormal.FontHeightInPoints = tamanho;
             hFontNormal.FontName = "Calibri";
@@ -48,7 +49,7 @@ namespace Puc.Negocios_C
         }
         ICellStyle estiloBold(ref HSSFSheet sh, ref HSSFWorkbook wb, Boolean borda = true, int tamanho = 12, bool currency = false)
         {
-            ICellStyle cellCurrencyStyleBold = wb.CreateCellStyle();
+            
             if (currency)
                 cellCurrencyStyleBold.DataFormat = wb.CreateDataFormat().GetFormat("$#,##0.00");
             cellCurrencyStyleBold.VerticalAlignment = VerticalAlignment.Center;
@@ -59,7 +60,7 @@ namespace Puc.Negocios_C
         }
         ICellStyle estiloPadrao(ref HSSFSheet sh, ref HSSFWorkbook wb, Boolean borda = true, short tamanho = 12, bool currency = false)
         {
-            ICellStyle cellCurrencyStyleBold = wb.CreateCellStyle();
+           // ICellStyle cellCurrencyStyleBold = wb.CreateCellStyle();
             cellCurrencyStyleBold.VerticalAlignment = VerticalAlignment.Center;
             if (currency)
                 cellCurrencyStyleBold.DataFormat = wb.CreateDataFormat().GetFormat("$#,##0.00");
@@ -70,7 +71,7 @@ namespace Puc.Negocios_C
         }
         ICellStyle estiloCabecalho(ref HSSFSheet sh, ref HSSFWorkbook wb, Boolean borda = true, short tamanho = 16, bool currency = false)
         {
-            ICellStyle cellCurrencyStyleBold = wb.CreateCellStyle();
+           // ICellStyle cellCurrencyStyleBold = wb.CreateCellStyle();
             cellCurrencyStyleBold.VerticalAlignment = VerticalAlignment.Center;
             if (currency)
                 cellCurrencyStyleBold.DataFormat = wb.CreateDataFormat().GetFormat("$#,##0.00");
@@ -79,7 +80,7 @@ namespace Puc.Negocios_C
                 cellCurrencyStyleBold.BorderBottom = BorderStyle.Medium;
             return cellCurrencyStyleBold;
         }
-
+        #endregion
 
         #region Metodos de relatórios
         public string GerarListagemPagamentos(string lote, string data)
@@ -302,6 +303,7 @@ namespace Puc.Negocios_C
             HSSFWorkbook wb;// = new HSSFWorkbook();
             //wb.CreateSheet("Extrato");
             HSSFSheet sh;// = (HSSFSheet)wb.GetSheet("Extrato");
+
             try
             {
                 string x = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings.Get("pathModeloExtratos"));
@@ -317,6 +319,8 @@ namespace Puc.Negocios_C
                 throw new Exception("Erro ao abrir o arquivo de modelo. Processo encerrado. Erro " + ex.Message);
             }
 
+            hFontNormal = (HSSFFont)wb.CreateFont();
+            cellCurrencyStyleBold = wb.CreateCellStyle();
 
             sh.DisplayGridlines = false;
             sh.SetColumnWidth(0, 3000);
@@ -380,9 +384,90 @@ namespace Puc.Negocios_C
             return "";
         }
 
+
+        public string GerarExcelSaldoProjeto(string conta, string data)
+        {
+            int numlinha = 0;
+            Double SaldoProjeto;
+            int linhasporpagina = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings.Get("qtd_linhas_extrato_por_pagina"));
+
+            HSSFWorkbook wb;// = new HSSFWorkbook();
+            //wb.CreateSheet("Extrato");
+            HSSFSheet sh;// = (HSSFSheet)wb.GetSheet("Extrato");
+//            sh.rep
+            try
+            {
+                string x = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings.Get("pathModeloSaldoProjetos"));
+                using (FileStream file = new FileStream(x, FileMode.Open, FileAccess.Read))
+                {
+                    wb = new HSSFWorkbook(file);
+                    file.Close();
+                    sh = (HSSFSheet)wb.GetSheetAt(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao abrir o arquivo de modelo. Processo encerrado. Erro " + ex.Message);
+            }
+
+            ListarSaldosProjetos(conta, data);
+
+            SaldoProjeto = 0;
+            numlinha = 4;
+            foreach (DataRow r in banco.tabela.Rows)
+            {
+                SaldoProjeto -= Convert.ToDouble(r["despesa"].ToString());
+                SaldoProjeto += Convert.ToDouble(r["receita"].ToString());
+                var p = numlinha % linhasporpagina;
+                if ((p == 0) | (numlinha ==4))
+                {
+                    sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim()+" - "+ r["descricao"].ToString().Trim());
+                    numlinha++;
+                }
+                //var linha = sh.CreateRow(numlinha);
+                try
+                {
+                    sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nome"].ToString());
+                    sh.GetRow(numlinha).GetCell(1).SetCellValue(Convert.ToDouble(r["saldo"].ToString()));
+                }
+                catch
+                {
+
+                }
+                numlinha++;
+            }
+
+            wb.SetPrintArea(0, 0, 2, 0, numlinha);
+            //sh.PrintSetup.PaperSize = (short)PaperSize.A4;
+            sh.FitToPage = false;// RowBreak(8);
+
+            ExportarArquivo(wb, "Extrato.xls");
+            return "";
+        }
+
+
         #endregion
 
         #region Modulos de consulta e CRUD
+
+        public string ListarSaldosProjetos(string conta, string data)
+        {
+            string lResult = "";
+
+            banco.parametros.Clear();
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("data", data));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("conta", conta));
+            banco.ExecuteAndReturnData("sp_CtrlProjetos_ListarSaldosProjetos", "tabela");
+            if (banco.tabela != null)
+            {
+                if (banco.tabela.Rows.Count > 0)
+                {
+                    lResult = banco.GetJsonTabela();
+                }
+            }
+            return lResult;
+        }
+
         public string ListarPagamentosPorAno(int ano)
         {
             string lResult = "";
