@@ -11,17 +11,24 @@ namespace ctrlProjetoService.Controllers
     [RoutePrefix("Movimentos")]
     public class MovimentoController : ApiController
     {
-
         [EnableCors("*", "*", "*")]
         [HttpGet]
-        [Route("GerarListagemExtrato")]
-        public IEnumerable<string> GerarListagemExtrato(int idprojeto, string dataInicio, string dataFim)
+        [Route("ListarExtratoProjeto")]
+        public IEnumerable<string> ListarExtratoProjeto(string CodigoProjeto, string dataInicio, string dataFim)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.Listar(CodigoProjeto, dataInicio:dataInicio, dataFim: dataFim);
+        }
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("GerarExcelExtrato")]
+        public IEnumerable<string> GerarExcelExtrato(int idprojeto, string dataInicio, string dataFim)
         {
             if (dataFim.Length < 8)
                 dataFim = null;
 
             Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
-            yield return movimento.GerarListagemExtrato( idprojeto,  dataInicio,  dataFim);
+            yield return movimento.GerarExcelExtrato( idprojeto,  dataInicio,  dataFim);
         }
         [EnableCors("*", "*", "*")]
         [HttpGet]
@@ -46,6 +53,30 @@ namespace ctrlProjetoService.Controllers
             Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
             yield return movimento.ListarPagamentos(lote, dataFim);
         }
+
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("ListarPagamentosPorAno")]
+        public IEnumerable<string> ListarPagamentosPorAno(int ano)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.ListarPagamentosPorAno(ano);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("ListarMovimentosPorRubrica")]
+        public IEnumerable<string> ListarMovimentosPorRubrica(int rubrica, string dtInicio, string dtFim, int projeto = -1)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            if (projeto != -1)
+                yield return movimento.Listar(projeto: projeto.ToString(), dataInicio: dtInicio, dataFim: dtFim, rubrica: rubrica);
+            else
+                yield return movimento.Listar(dataInicio: dtInicio, dataFim: dtFim, rubrica: rubrica);
+        }
+
+
         [EnableCors("*", "*", "*")]
         [HttpGet]
         [Route("ListarMovimentoPorProjeto")]
@@ -98,6 +129,7 @@ namespace ctrlProjetoService.Controllers
             Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
             yield return movimento.ListarSaldoConta(Conta, data: dataFim);
         }
+
         [EnableCors("*", "*", "*")]
         [HttpGet]
         [Route("AtualizarCampoGenerico")]

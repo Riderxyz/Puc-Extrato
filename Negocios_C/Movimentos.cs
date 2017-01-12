@@ -293,7 +293,7 @@ namespace Puc.Negocios_C
 
             numlinha++;
         }
-        public string GerarListagemExtrato(int idprojeto, string dataInicio, string dataFim)
+        public string GerarExcelExtrato(int idprojeto, string dataInicio, string dataFim)
         {
             int numlinha = 0;
             Double SaldoProjeto;
@@ -383,6 +383,27 @@ namespace Puc.Negocios_C
         #endregion
 
         #region Modulos de consulta e CRUD
+        public string ListarPagamentosPorAno(int ano)
+        {
+            string lResult = "";
+
+            DateTime dtInicio = new DateTime(ano, 1, 1);
+            DateTime dtFim = new DateTime(ano, 12, 31);
+
+            banco.parametros.Clear();
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataInicio", dtInicio ));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataFim", dtFim));
+            banco.ExecuteAndReturnData("sp_CtrlProjetos_MovimentosListaPagamentos", "tabela");
+            if (banco.tabela != null)
+            {
+                if (banco.tabela.Rows.Count > 0)
+                {
+                    lResult = banco.GetJsonTabela();
+                }
+            }
+            return lResult;
+        }
+
         public string ListarPagamentos(string lote, string data)
         {
             string lResult = "";
@@ -408,7 +429,7 @@ namespace Puc.Negocios_C
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("projeto", idProjeto));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataInicio", Convert.ToDateTime(dataInicio).ToString("yyyy-MM-dd")));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataFim", Convert.ToDateTime(dataFim).ToString("yyyy-MM-dd")));
-            banco.ExecuteAndReturnData("sp_CtrlProjetos_MovimentosLista", "tabmovimento");
+            banco.ExecuteAndReturnData("[sp_CtrlProjetos_MovimentosListaExtrato]", "tabmovimento");
             if (banco.tabela != null)
             {
                 if (banco.tabela.Rows.Count > 0)
