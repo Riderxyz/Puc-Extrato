@@ -23,6 +23,15 @@ namespace ctrlProjetoService.Controllers
 
         [EnableCors("*", "*", "*")]
         [HttpGet]
+        [Route("ListarSaldosRubricas")]
+        public IEnumerable<string> ListarSaldosRubricas(string data, string conta, int projeto)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.ListarSaldosProjetosRubricas(conta: conta, data: data, projeto: projeto);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
         [Route("ListarSaldosProjetos")]
         public IEnumerable<string> ListarSaldosProjetos(string Conta, string data)
         {
@@ -85,8 +94,8 @@ namespace ctrlProjetoService.Controllers
 
         [EnableCors("*", "*", "*")]
         [HttpGet]
-        [Route("ListarMovimentosPorRubrica")]
-        public IEnumerable<string> ListarMovimentosPorRubrica(int rubrica, string dtInicio, string dtFim, int projeto = -1)
+        [Route("ListarExtratoPorRubrica")]
+        public IEnumerable<string> ListarExtratoPorRubrica(int rubrica, string dtInicio, string dtFim, int projeto = -1)
         {
             Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
             if (projeto != -1)

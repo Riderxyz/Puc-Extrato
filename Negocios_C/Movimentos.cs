@@ -452,7 +452,24 @@ namespace Puc.Negocios_C
         #endregion
 
         #region Modulos de consulta e CRUD
+        public string ListarSaldosProjetosRubricas( string data, string conta, int projeto)
+        {
+            string lResult = "";
 
+            banco.parametros.Clear();
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("data", data));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("conta", conta));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("projeto", projeto));
+            banco.ExecuteAndReturnData("sp_CtrlProjetos_ListarSaldosProjetosRubricas", "tabela");
+            if (banco.tabela != null)
+            {
+                if (banco.tabela.Rows.Count > 0)
+                {
+                    lResult = banco.GetJsonTabela();
+                }
+            }
+            return lResult;
+        }
         public string ListarSaldosProjetos(string conta, string data)
         {
             string lResult = "";
@@ -470,6 +487,7 @@ namespace Puc.Negocios_C
             }
             return lResult;
         }
+
 
         public string ListarPagamentosPorAno(int ano)
         {
