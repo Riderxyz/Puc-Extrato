@@ -69,6 +69,7 @@
     <Compile Include="NegociosGenericos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SegurancaNegocios.cs" />
+    <Compile Include="Usuarios.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Negocio\Negocio.vbproj">

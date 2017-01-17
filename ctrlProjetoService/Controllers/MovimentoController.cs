@@ -11,14 +11,14 @@ namespace ctrlProjetoService.Controllers
     [RoutePrefix("Movimentos")]
     public class MovimentoController : ApiController
     {
-        
+
         [EnableCors("*", "*", "*")]
         [HttpGet]
         [Route("GerarExcelSaldoProjeto")]
         public IEnumerable<string> GerarExcelSaldoProjeto(string Conta, string data)
         {
             Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
-            yield return movimento.GerarExcelSaldoProjeto( Conta,  data);
+            yield return movimento.GerarExcelSaldoProjeto(Conta, data);
         }
 
         [EnableCors("*", "*", "*")]
@@ -28,6 +28,15 @@ namespace ctrlProjetoService.Controllers
         {
             Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
             yield return movimento.ListarSaldosProjetosRubricas(conta: conta, data: data, projeto: projeto);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("SaldosProjeto")]
+        public IEnumerable<string> SaldosProjeto(string data, int projeto)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.SaldosProjeto(data: data, projeto: projeto);
         }
 
         [EnableCors("*", "*", "*")]
@@ -45,7 +54,7 @@ namespace ctrlProjetoService.Controllers
         public IEnumerable<string> ListarExtratoProjeto(string CodigoProjeto, string dataInicio, string dataFim)
         {
             Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
-            yield return movimento.Listar(CodigoProjeto, dataInicio:dataInicio, dataFim: dataFim);
+            yield return movimento.Listar(CodigoProjeto, dataInicio: dataInicio, dataFim: dataFim);
         }
         [EnableCors("*", "*", "*")]
         [HttpGet]
@@ -56,7 +65,7 @@ namespace ctrlProjetoService.Controllers
                 dataFim = null;
 
             Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
-            yield return movimento.GerarExcelExtrato( idprojeto,  dataInicio,  dataFim);
+            yield return movimento.GerarExcelExtrato(idprojeto, dataInicio, dataFim);
         }
         [EnableCors("*", "*", "*")]
         [HttpGet]

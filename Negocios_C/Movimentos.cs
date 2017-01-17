@@ -1,10 +1,5 @@
 ﻿using System;
-using NPOI.HSSF.Model;
 using NPOI.HSSF.UserModel;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Negocio;
 using System.IO;
 using System.Data;
@@ -452,6 +447,25 @@ namespace Puc.Negocios_C
         #endregion
 
         #region Modulos de consulta e CRUD
+        public string SaldosProjeto(string data, int projeto)
+        {
+            string lResult = "";
+
+            banco.parametros.Clear();
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("data", data));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("projeto", projeto));
+            banco.ExecuteAndReturnData("sp_CtrlProjetos_SaldosProjeto", "tabela");
+            if (banco.tabela != null)
+            {
+                if (banco.tabela.Rows.Count > 0)
+                {
+                    lResult = banco.GetJsonTabela();
+                }
+            }
+            return lResult;
+        }
+
+
         public string ListarSaldosProjetosRubricas( string data, string conta, int projeto)
         {
             string lResult = "";
@@ -609,7 +623,7 @@ namespace Puc.Negocios_C
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("tipo_lancamento", tipo_lancamento));
             #endregion
 
-            banco.ExecuteAndReturnData("[sp_CtrlProjetos_MovimentosIncluir]", "tabcoordenador");
+            banco.ExecuteAndReturnData("[sp_CtrlProjetos_MovimentosIncluir]", "tabela");
             if (banco.tabela != null)
             {
                 if (banco.tabela.Rows.Count > 0)

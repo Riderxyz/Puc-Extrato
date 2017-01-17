@@ -224,6 +224,7 @@
     <Compile Include="Controllers\ProjetoController.cs" />
     <Compile Include="Controllers\RubricaController.cs" />
     <Compile Include="Controllers\SegurancaController.cs" />
+    <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
