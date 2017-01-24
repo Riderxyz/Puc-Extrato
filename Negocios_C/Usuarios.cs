@@ -99,5 +99,24 @@ namespace Negocios_C
             }
             return lResult;
         }
+
+        public string AlterarSenha(int id, string senhaatual, string novasenha)
+        {
+            string lResult = "";
+            banco.parametros.Clear();
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("idusuario", id));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("senhaAtual", senhaatual));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("novasenha", novasenha));
+            banco.ExecuteAndReturnData("sp_CtrlUsuarios_AlterarSenha");
+            if (banco.tabela != null)
+            {
+                if (banco.tabela.Rows.Count > 0)
+                {
+                    lResult = banco.GetJsonTabela();
+                }
+            }
+            return lResult;
+        }
+
     }
 }

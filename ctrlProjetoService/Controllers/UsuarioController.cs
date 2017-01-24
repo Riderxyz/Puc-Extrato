@@ -26,7 +26,7 @@ namespace ctrlProjetoService.Controllers
         public IEnumerable<string> AtualizarDadosCinemas(string campo, int id, string valor)
         {
             Negocio_C.NegociosGenericos generico = new Negocio_C.NegociosGenericos();
-            yield return generico.AtualizarCamposTabela("usuarios",campo, id, valor);
+            yield return generico.AtualizarCamposTabela("usuarios", campo, id, valor);
         }
 
         [EnableCors("*", "*", "*")]
@@ -53,7 +53,7 @@ namespace ctrlProjetoService.Controllers
         public IEnumerable<string> Incluir(string usuario, string nome, int idGrupo)
         {
             Negocios_C.Usuarios usuarios = new Negocios_C.Usuarios();
-            yield return usuarios.Incluir(usuario, nome,idGrupo);
+            yield return usuarios.Incluir(usuario, nome, idGrupo);
         }
 
 
@@ -64,6 +64,15 @@ namespace ctrlProjetoService.Controllers
         {
             Negocios_C.Usuarios usuarios = new Negocios_C.Usuarios();
             yield return usuarios.SetarSenhaInicial(id, pass);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("AlterarSenha")]
+        public IEnumerable<string> AlterarSenha(int id, string senhaatual, string novasenha)
+        {
+            Negocios_C.Usuarios usuarios = new Negocios_C.Usuarios();
+            yield return usuarios.AlterarSenha(id, senhaatual, novasenha);
         }
     }
 }
