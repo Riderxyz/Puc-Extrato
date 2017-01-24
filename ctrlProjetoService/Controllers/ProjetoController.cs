@@ -19,7 +19,7 @@ namespace ctrlProjetoService.Controllers
         public IEnumerable<string> ListaProjetosCoordenador(int coordenador)
         {
             projetoNegocios projeto = new projetoNegocios();
-            yield return projeto.GetListaProjetosCoordenador(coordenador);
+            yield return projeto.GetProjetos(coordenador);
         }
 
         [EnableCors("*", "*", "*")]

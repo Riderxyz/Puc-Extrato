@@ -24,6 +24,24 @@ namespace ctrlProjetoService.Controllers
 
         [EnableCors("*", "*", "*")]
         [HttpGet]
+        [Route("GerarSenhaCoordenador")]
+        public IEnumerable<string> GerarSenhaCoordenador(Int32 Coord)
+        {
+            Negocios_C.projetos projeto = new Negocios_C.projetos();
+            yield return projeto.GerarSenhaCoordenador(Coord);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("Coordenador_ProjetosListar")]
+        public IEnumerable<string> Coordenador_ProjetosListar(string nome = "")
+        {
+            coordenadorNegocio coordenador = new coordenadorNegocio();
+            yield return coordenador.Coordenador_ProjetosListar(nome);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
         [Route("GetCoordenadorById")]
         public IEnumerable<string> GetCoordenadorById(int id)
         {

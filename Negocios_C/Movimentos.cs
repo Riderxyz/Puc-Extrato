@@ -26,7 +26,7 @@ namespace Puc.Negocios_C
         }
         HSSFFont FonteCabecalho(ref HSSFSheet sh, ref HSSFWorkbook wb, short tamanho = 12)
         {
-           // HSSFFont hFontNormal = (HSSFFont)wb.CreateFont();
+            // HSSFFont hFontNormal = (HSSFFont)wb.CreateFont();
 
             hFontNormal.FontHeightInPoints = tamanho;
             hFontNormal.FontName = "Calibri";
@@ -35,7 +35,7 @@ namespace Puc.Negocios_C
         }
         HSSFFont FontePadrao(ref HSSFSheet sh, ref HSSFWorkbook wb, short tamanho = 11)
         {
-           // HSSFFont hFontNormal = (HSSFFont)wb.CreateFont();
+            // HSSFFont hFontNormal = (HSSFFont)wb.CreateFont();
 
             hFontNormal.FontHeightInPoints = tamanho;
             hFontNormal.FontName = "Calibri";
@@ -44,7 +44,7 @@ namespace Puc.Negocios_C
         }
         ICellStyle estiloBold(ref HSSFSheet sh, ref HSSFWorkbook wb, Boolean borda = true, int tamanho = 12, bool currency = false)
         {
-            
+
             if (currency)
                 cellCurrencyStyleBold.DataFormat = wb.CreateDataFormat().GetFormat("$#,##0.00");
             cellCurrencyStyleBold.VerticalAlignment = VerticalAlignment.Center;
@@ -55,18 +55,18 @@ namespace Puc.Negocios_C
         }
         ICellStyle estiloPadrao(ref HSSFSheet sh, ref HSSFWorkbook wb, Boolean borda = true, short tamanho = 12, bool currency = false)
         {
-           // ICellStyle cellCurrencyStyleBold = wb.CreateCellStyle();
+            // ICellStyle cellCurrencyStyleBold = wb.CreateCellStyle();
             cellCurrencyStyleBold.VerticalAlignment = VerticalAlignment.Center;
             if (currency)
                 cellCurrencyStyleBold.DataFormat = wb.CreateDataFormat().GetFormat("$#,##0.00");
-            cellCurrencyStyleBold.SetFont(FontePadrao (ref sh, ref wb, tamanho));
+            cellCurrencyStyleBold.SetFont(FontePadrao(ref sh, ref wb, tamanho));
             if (borda)
                 cellCurrencyStyleBold.BorderBottom = BorderStyle.Medium;
             return cellCurrencyStyleBold;
         }
         ICellStyle estiloCabecalho(ref HSSFSheet sh, ref HSSFWorkbook wb, Boolean borda = true, short tamanho = 16, bool currency = false)
         {
-           // ICellStyle cellCurrencyStyleBold = wb.CreateCellStyle();
+            // ICellStyle cellCurrencyStyleBold = wb.CreateCellStyle();
             cellCurrencyStyleBold.VerticalAlignment = VerticalAlignment.Center;
             if (currency)
                 cellCurrencyStyleBold.DataFormat = wb.CreateDataFormat().GetFormat("$#,##0.00");
@@ -253,7 +253,7 @@ namespace Puc.Negocios_C
         void CabecalhoExtrato(ref HSSFSheet sh, ref HSSFWorkbook wb, ref int numlinha, DataRow r, DateTime dataInicio, DateTime dataFim)
         {
             sh.CreateRow(numlinha).CreateCell(0).SetCellValue("Fundação Padre Leonel Franca");
-            sh.GetRow(numlinha).GetCell(0).CellStyle = estiloCabecalho(ref sh, ref wb, false,tamanho:17);
+            sh.GetRow(numlinha).GetCell(0).CellStyle = estiloCabecalho(ref sh, ref wb, false, tamanho: 17);
 
             sh.GetRow(numlinha).CreateCell(3).SetCellValue("Extrato de Projetos");
             sh.GetRow(numlinha).GetCell(3).CellStyle.SetFont(FonteCabecalho(ref sh, ref wb));
@@ -294,7 +294,7 @@ namespace Puc.Negocios_C
             int numlinha = 0;
             Double SaldoProjeto;
             int linhasporpagina = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings.Get("qtd_linhas_extrato_por_pagina"));
-            
+
             HSSFWorkbook wb;// = new HSSFWorkbook();
             //wb.CreateSheet("Extrato");
             HSSFSheet sh;// = (HSSFSheet)wb.GetSheet("Extrato");
@@ -378,8 +378,6 @@ namespace Puc.Negocios_C
             ExportarArquivo(wb, "Extrato.xls");
             return "";
         }
-
-
         public string GerarExcelSaldoProjeto(string conta, string data)
         {
             int numlinha = 0;
@@ -390,7 +388,7 @@ namespace Puc.Negocios_C
             HSSFWorkbook wb;// = new HSSFWorkbook();
             //wb.CreateSheet("Extrato");
             HSSFSheet sh;// = (HSSFSheet)wb.GetSheet("Extrato");
-//            sh.rep
+                         //            sh.rep
             try
             {
                 string x = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings.Get("pathModeloSaldoProjetos"));
@@ -418,7 +416,7 @@ namespace Puc.Negocios_C
                 var p = numlinha % linhasporpagina;
                 if (_conta != r["conta"].ToString())
                 {
-                    sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim()+" - "+ r["descricao"].ToString().Trim());
+                    sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim() + " - " + r["descricao"].ToString().Trim());
                     _conta = r["conta"].ToString();
                     numlinha++;
                 }
@@ -442,7 +440,49 @@ namespace Puc.Negocios_C
             ExportarArquivo(wb, "Extrato.xls");
             return "";
         }
+        public string GerarSenhaCoordenador(Int32 coordenador)
+        {
+            Int32 totalProjetos = 0;
+            HSSFWorkbook wb;// = new HSSFWorkbook();
+            HSSFSheet sh;// = (HSSFSheet)wb.GetSheet("Extrato");
+                         //            sh.rep
+            try
+            {
+                string x = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings.Get("pathsenhacoordenador"));
+                using (FileStream file = new FileStream(x, FileMode.Open, FileAccess.Read))
+                {
+                    wb = new HSSFWorkbook(file);
+                    file.Close();
+                    sh = (HSSFSheet)wb.GetSheetAt(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao abrir o arquivo de modelo. Processo encerrado. Erro " + ex.Message);
+            }
+            Negocio.coordenadorNegocio objCoordenador = new coordenadorNegocio();
+            objCoordenador.GetCoordenadorById(coordenador);
+            sh.GetRow(2).GetCell(0).SetCellValue(objCoordenador.banco.tabela.Rows[0]["Nome"].ToString());
+            sh.GetRow(2).GetCell(1).SetCellValue("Senha: "+objCoordenador.banco.tabela.Rows[0]["senha"].ToString());
+            Negocio.projetoNegocios objProjeto = new projetoNegocios();
+            objProjeto.GetProjetos(coordenador);
+            Int32 numlinha = 4;
+            foreach (DataRow r in objProjeto.banco.tabela.Rows)
+            {
+                totalProjetos++;
+                //var linha = sh.CreateRow(numlinha);
+                sh.GetRow(numlinha).GetCell(0).SetCellValue(r["projeto"].ToString());
+                sh.GetRow(numlinha).GetCell(1).SetCellValue(r["conta_principal"].ToString());
+                numlinha++;
+            }
 
+            wb.SetPrintArea(0, 0, 2, 0, numlinha);
+            //sh.PrintSetup.PaperSize = (short)PaperSize.A4;
+            sh.FitToPage = false;// RowBreak(8);
+
+            ExportarArquivo(wb, "SenhaCoordenador.xls");
+            return "";
+        }
 
         #endregion
 
@@ -466,7 +506,7 @@ namespace Puc.Negocios_C
         }
 
 
-        public string ListarSaldosProjetosRubricas( string data, string conta, int projeto)
+        public string ListarSaldosProjetosRubricas(string data, string conta, int projeto)
         {
             string lResult = "";
 
@@ -511,7 +551,7 @@ namespace Puc.Negocios_C
             DateTime dtFim = new DateTime(ano, 12, 31);
 
             banco.parametros.Clear();
-            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataInicio", dtInicio ));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataInicio", dtInicio));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataFim", dtFim));
             banco.ExecuteAndReturnData("sp_CtrlProjetos_MovimentosListaPagamentos", "tabela");
             if (banco.tabela != null)

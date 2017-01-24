@@ -7,6 +7,7 @@ Public Class projetoNegocios
 #Region "Propriedades"
     Property projeto As Dominio.projeto
     Property ListaProjetos As List(Of Dominio.projeto)
+    Public banco As clBanco = New clBanco
 #End Region
 
 #Region "Processos dos Serviços"
@@ -115,7 +116,7 @@ Public Class projetoNegocios
 
     Public Function GetProjetos(coordenador As Integer) As String
         Dim lResult As String
-        Dim banco As clBanco = New clBanco
+        banco = New clBanco
         banco.parametros.Add(New SqlParameter("coordenador", coordenador))
 
         banco.ExecuteAndReturnData("sp_internet_ProjetosGet", "tabProjetos")
@@ -132,9 +133,9 @@ Public Class projetoNegocios
         Return lResult
     End Function
 
-    Public Function GetListaProjetosCoordenador(coordenador As Integer) As String
+    Public Function GerarSenhaCoordenador(coordenador As Integer) As String
         Dim lResult As String
-        Dim banco As clBanco = New clBanco
+
         banco.parametros.Add(New SqlParameter("coordenador", coordenador))
 
         banco.ExecuteAndReturnData("sp_CtrlProjetos_GetProjetosCoordenador", "tabProjetos")

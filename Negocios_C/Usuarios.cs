@@ -21,7 +21,7 @@ namespace Negocios_C
             banco.parametros.Clear();
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("usuario", usuario));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("pass", pass));
-            banco.ExecuteAndReturnData("sp_CtrlProjetos_SaldosProjeto", "tabela");
+            banco.ExecuteAndReturnData("sp_CtrlUsuarios_UsuariosAutenticar", "tabela");
             if (banco.tabela != null)
             {
                 if (banco.tabela.Rows.Count > 0)
@@ -31,13 +31,13 @@ namespace Negocios_C
             }
             return lResult;
         }
-        public string Incluir(string usuario, string nome, string pass)
+        public string Incluir(string usuario, string nome, int idGrupo)
         {
             string lResult = "";
             banco.parametros.Clear();
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("LoginName", usuario));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("fullname", nome));
-            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("password", pass));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("idGrupo", idGrupo));
 
             banco.ExecuteAndReturnData("sp_CtrlUsuarios_UsuariosInsert", "tabela");
             if (banco.tabela != null)
@@ -49,13 +49,14 @@ namespace Negocios_C
             }
             return lResult;
         }
-        public string Atualizar(int id, string usuario, string nome, string pass)
+        public string Atualizar(int id, string usuario, string nome, int idGrupo)
         {
             string lResult = "";
             banco.parametros.Clear();
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("id", id));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("LoginName", usuario));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("fullname", nome));
-            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("password", pass));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("idGrupo", idGrupo));
             banco.ExecuteAndReturnData("sp_CtrlUsuarios_UsuariosUpdate", "tabela");
             if (banco.tabela != null)
             {

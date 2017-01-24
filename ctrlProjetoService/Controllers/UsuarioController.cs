@@ -38,6 +38,24 @@ namespace ctrlProjetoService.Controllers
             yield return usuarios.Autenticar(usuario, pass);
         }
 
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("Atualizar")]
+        public IEnumerable<string> Atualizar(int id, string usuario, string nome, int idGrupo)
+        {
+            Negocios_C.Usuarios usuarios = new Negocios_C.Usuarios();
+            yield return usuarios.Atualizar(id, usuario, nome, idGrupo);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("Incluir")]
+        public IEnumerable<string> Incluir(string usuario, string nome, int idGrupo)
+        {
+            Negocios_C.Usuarios usuarios = new Negocios_C.Usuarios();
+            yield return usuarios.Incluir(usuario, nome,idGrupo);
+        }
+
 
         [EnableCors("*", "*", "*")]
         [HttpGet]

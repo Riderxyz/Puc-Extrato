@@ -1,13 +1,31 @@
 ﻿Imports System.Data.SqlClient
 
 Public Class coordenadorNegocio
+    Public banco As clBanco = New clBanco
 #Region "Metodos"
     Public Function GetCoordenadorLista(Optional nome As String = "") As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
-        banco.parametros.Clear
+        banco.parametros.Clear()
         banco.parametros.Add(New SqlParameter("nome", nome))
         banco.ExecuteAndReturnData("sp_CtrlProjetos_CoordenadorList", "tabcoordenador")
+        If (Not IsNothing(banco.tabela)) Then
+            If (banco.tabela.Rows.Count > 0) Then
+                lResult = banco.GetJsonTabela
+            Else
+                lResult = Empty()
+            End If
+        Else
+            lResult = Empty()
+        End If
+        Return lResult
+    End Function
+    Public Function Coordenador_ProjetosListar(Optional nome As String = "") As String
+        Dim lResult As String
+        Dim banco As clBanco = New clBanco
+        banco.parametros.Clear()
+        banco.parametros.Add(New SqlParameter("nome", nome))
+        banco.ExecuteAndReturnData("sp_CtrlProjetos_Coordenador_ProjetosListar")
         If (Not IsNothing(banco.tabela)) Then
             If (banco.tabela.Rows.Count > 0) Then
                 lResult = banco.GetJsonTabela
@@ -22,7 +40,7 @@ Public Class coordenadorNegocio
 
     Public Function GetCoordenadorById(id As Integer) As String
         Dim lResult As String
-        Dim banco As clBanco = New clBanco
+
         banco.parametros.Clear
         banco.parametros.Add(New SqlParameter("id", id))
         banco.ExecuteAndReturnData("sp_CtrlProjetos_GetCoordenadorById", "tabcoordenador")
@@ -38,10 +56,10 @@ Public Class coordenadorNegocio
         Return lResult
     End Function
 
-    Public Function GetCoordenadorIncluir(nome As String, email As string) As String
+    Public Function GetCoordenadorIncluir(nome As String, email As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
-        banco.parametros.Clear
+        banco.parametros.Clear()
         banco.parametros.Add(New SqlParameter("nome", nome))
         banco.parametros.Add(New SqlParameter("email", email))
         banco.ExecuteAndReturnData("sp_CtrlProjetos_CoordenadorIncluir", "tabcoordenador")
@@ -57,10 +75,10 @@ Public Class coordenadorNegocio
         Return lResult
     End Function
 
-    Public Function GetCoordenadorUpdate(id As Integer, optional nome As String = "", optional email As string = "") As String
+    Public Function GetCoordenadorUpdate(id As Integer, Optional nome As String = "", Optional email As String = "") As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
-        banco.parametros.Clear
+        banco.parametros.Clear()
         banco.parametros.Add(New SqlParameter("id", id))
         If (nome <> "") Then
             banco.parametros.Add(New SqlParameter("nome", nome))
@@ -83,10 +101,10 @@ Public Class coordenadorNegocio
         Return lResult
     End Function
 
-        Public Function CoordenadorExcluir(id As Integer) As String
+    Public Function CoordenadorExcluir(id As Integer) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
-        banco.parametros.Clear
+        banco.parametros.Clear()
         banco.parametros.Add(New SqlParameter("codigo", id))
 
         banco.ExecuteAndReturnData("sp_CtrlProjetos_CoordenadorExcluir", "tabcoordenador")
