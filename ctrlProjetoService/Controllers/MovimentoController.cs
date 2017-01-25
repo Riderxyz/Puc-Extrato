@@ -32,6 +32,15 @@ namespace ctrlProjetoService.Controllers
 
         [EnableCors("*", "*", "*")]
         [HttpGet]
+        [Route("GerarExcelSaldoRubricas")]
+        public IEnumerable<string> GerarExcelSaldoRubricas(string data, string conta, int projeto)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.GerarExcelSaldoRubrica(data, conta, projeto);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
         [Route("ListarSaldosRubricas")]
         public IEnumerable<string> ListarSaldosRubricas(string data, string conta, int projeto)
         {

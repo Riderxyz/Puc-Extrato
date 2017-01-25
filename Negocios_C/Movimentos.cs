@@ -83,9 +83,9 @@ namespace Puc.Negocios_C
         {
             int x = 1, k;
             if (n == 1) return x;
-            for (k=1;k<n;++k)
+            for (k = 1; k < n; ++k)
             {
-                x = x + (teste(k) * teste(n -k));
+                x = x + (teste(k) * teste(n - k));
             }
             return x;
         }
@@ -308,9 +308,7 @@ namespace Puc.Negocios_C
             int linhasporpagina = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings.Get("qtd_linhas_extrato_por_pagina"));
 
             HSSFWorkbook wb;// = new HSSFWorkbook();
-            //wb.CreateSheet("Extrato");
             HSSFSheet sh;// = (HSSFSheet)wb.GetSheet("Extrato");
-
             try
             {
                 string x = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings.Get("pathModeloExtratos"));
@@ -329,6 +327,11 @@ namespace Puc.Negocios_C
             ListarExtratoProjeto(idprojeto, dataInicio, dataFim);
             SaldoProjeto = 0;
             numlinha = 4;
+            sh.GetRow(1).GetCell(1).SetCellValue(banco.tabela.Rows[1]["NomeProjeto"].ToString());
+            sh.GetRow(2).GetCell(1).SetCellValue(banco.tabela.Rows[1]["NomeCoordenador"].ToString());
+            sh.GetRow(2).GetCell(3).SetCellValue(Convert.ToDateTime(dataInicio).ToString("dd/MM/yyyy"));
+            sh.GetRow(2).GetCell(4).SetCellValue("a");
+            sh.GetRow(2).GetCell(5).SetCellValue(Convert.ToDateTime(dataFim).ToString("dd/MM/yyyy"));
             foreach (DataRow r in banco.tabela.Rows)
             {
                 SaldoProjeto -= Convert.ToDouble(r["despesa"].ToString());
@@ -345,6 +348,49 @@ namespace Puc.Negocios_C
             wb.SetPrintArea(0, 0, 5, 0, numlinha);
             sh.FitToPage = false;// RowBreak(8);
             ExportarArquivo(wb, "Extrato.xls");
+            return "";
+        }
+        public string GerarExcelSaldoRubrica(string data, string conta, int projeto)
+        {
+            int numlinha = 0;
+            Double SaldoProjeto;
+            int linhasporpagina = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings.Get("qtd_linhas_extrato_por_pagina"));
+
+            HSSFWorkbook wb;// = new HSSFWorkbook();
+            HSSFSheet sh;// = (HSSFSheet)wb.GetSheet("Extrato");
+            try
+            {
+                string x = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings.Get("pathModeloSaldoRubricas"));
+                using (FileStream file = new FileStream(x, FileMode.Open, FileAccess.Read))
+                {
+                    wb = new HSSFWorkbook(file);
+                    file.Close();
+                    sh = (HSSFSheet)wb.GetSheetAt(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao abrir o arquivo de modelo. Processo encerrado. Erro " + ex.Message);
+            }
+
+            ListarSaldosProjetosRubricas(data, conta, projeto);
+            SaldoProjeto = 0;
+            numlinha = 4;
+            sh.GetRow(1).GetCell(0).SetCellValue("Projeto: "+banco.tabela.Rows[1]["nome"].ToString());
+            sh.GetRow(2).GetCell(0).SetCellValue("Coordenador: "+banco.tabela.Rows[1]["nomecoordenador"].ToString());
+            sh.GetRow(2).GetCell(1).SetCellValue(Convert.ToDateTime(data).ToString("dd/MM/yyyy"));
+            foreach (DataRow r in banco.tabela.Rows)
+            {
+                SaldoProjeto -= Convert.ToDouble(r["Despesa"].ToString());
+                SaldoProjeto += Convert.ToDouble(r["Receita"].ToString());
+                var linha = sh.GetRow(numlinha);
+                linha.GetCell(0).SetCellValue(r["rubrica"].ToString());
+                linha.GetCell(1).SetCellValue(SaldoProjeto);
+                numlinha++;
+            }
+            wb.SetPrintArea(0, 0, 5, 0, numlinha);
+            sh.FitToPage = false;// RowBreak(8);
+            ExportarArquivo(wb, "Saldo por Rubricas.xls");
             return "";
         }
         public string GerarExcelSaldoProjeto(string conta, string data)
@@ -432,7 +478,7 @@ namespace Puc.Negocios_C
             Negocio.coordenadorNegocio objCoordenador = new coordenadorNegocio();
             objCoordenador.GetCoordenadorById(coordenador);
             sh.GetRow(2).GetCell(0).SetCellValue(objCoordenador.banco.tabela.Rows[0]["Nome"].ToString());
-            sh.GetRow(2).GetCell(1).SetCellValue("Senha: "+objCoordenador.banco.tabela.Rows[0]["senha"].ToString());
+            sh.GetRow(2).GetCell(1).SetCellValue("Senha: " + objCoordenador.banco.tabela.Rows[0]["senha"].ToString());
             Negocio.projetoNegocios objProjeto = new projetoNegocios();
             objProjeto.GetProjetos(coordenador);
             Int32 numlinha = 4;
