@@ -326,67 +326,24 @@ namespace Puc.Negocios_C
                 throw new Exception("Erro ao abrir o arquivo de modelo. Processo encerrado. Erro " + ex.Message);
             }
 
-            hFontNormal = (HSSFFont)wb.CreateFont();
-            cellCurrencyStyleBold = wb.CreateCellStyle();
-
-            sh.DisplayGridlines = false;
-            sh.SetColumnWidth(0, 3000);
-            sh.SetColumnWidth(1, 3000);
-            sh.SetColumnWidth(2, 12000);
-            sh.SetColumnWidth(3, 3500);
-            sh.SetColumnWidth(4, 3500);
-            sh.SetColumnWidth(5, 3500);
-
-
             ListarExtratoProjeto(idprojeto, dataInicio, dataFim);
-            CabecalhoExtrato(ref sh, ref wb, ref numlinha, banco.tabela.Rows[0], Convert.ToDateTime(dataInicio), Convert.ToDateTime(dataFim));
-
-
             SaldoProjeto = 0;
+            numlinha = 4;
             foreach (DataRow r in banco.tabela.Rows)
             {
                 SaldoProjeto -= Convert.ToDouble(r["despesa"].ToString());
                 SaldoProjeto += Convert.ToDouble(r["receita"].ToString());
-                var p = numlinha % linhasporpagina;
-                if (p == 0)
-                {
-                    sh.SetRowBreak(numlinha);
-                    numlinha++;
-                    CabecalhoExtrato(ref sh, ref wb, ref numlinha, banco.tabela.Rows[0], Convert.ToDateTime(dataInicio), Convert.ToDateTime(dataFim));
-                }
-                var linha = sh.CreateRow(numlinha);
-                linha.CreateCell(0).SetCellValue(Convert.ToDateTime(r["data"].ToString()).ToString("dd/MM/yyyy"));
-                linha.GetCell(0).SetCellType(NPOI.SS.UserModel.CellType.String);
-                linha.GetCell(0).CellStyle = estiloPadrao(ref sh, ref wb, false);
-
-                linha.CreateCell(1).SetCellValue(r["fatura"].ToString());
-                linha.GetCell(0).SetCellType(NPOI.SS.UserModel.CellType.String);
-                linha.GetCell(1).CellStyle = estiloPadrao(ref sh, ref wb, false);
-
-                linha.CreateCell(2).SetCellValue(r["historico"].ToString());
-                linha.GetCell(2).SetCellType(NPOI.SS.UserModel.CellType.String);
-                linha.GetCell(2).CellStyle = estiloPadrao(ref sh, ref wb, false);
-
-                linha.CreateCell(3).SetCellValue(Convert.ToDouble(r["receita"].ToString()));
-                linha.GetCell(3).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
-                linha.GetCell(3).CellStyle = estiloPadrao(ref sh, ref wb, false);
-
-                linha.CreateCell(4).SetCellValue(Convert.ToDouble(r["despesa"].ToString()));
-                linha.GetCell(4).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
-                linha.GetCell(4).CellStyle = estiloPadrao(ref sh, ref wb, false);
-
-                linha.CreateCell(5).SetCellValue(SaldoProjeto);
-                linha.GetCell(5).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
-                linha.GetCell(5).CellStyle = estiloPadrao(ref sh, ref wb, false);
-
+                var linha = sh.GetRow(numlinha);
+                linha.GetCell(0).SetCellValue(Convert.ToDateTime(r["data"].ToString()).ToString("dd/MM/yyyy"));
+                linha.GetCell(1).SetCellValue(r["fatura"].ToString());
+                linha.GetCell(2).SetCellValue(r["historico"].ToString());
+                linha.GetCell(3).SetCellValue(Convert.ToDouble(r["receita"].ToString()));
+                linha.GetCell(4).SetCellValue(Convert.ToDouble(r["despesa"].ToString()));
+                linha.GetCell(5).SetCellValue(SaldoProjeto);
                 numlinha++;
-
             }
-
             wb.SetPrintArea(0, 0, 5, 0, numlinha);
-            //sh.PrintSetup.PaperSize = (short)PaperSize.A4;
             sh.FitToPage = false;// RowBreak(8);
-
             ExportarArquivo(wb, "Extrato.xls");
             return "";
         }
