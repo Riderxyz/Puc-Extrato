@@ -24,10 +24,10 @@ namespace ctrlProjetoService.Controllers
         [EnableCors("*", "*", "*")]
         [Route("Excluir")]
         [HttpGet]
-        public IEnumerable<string> Excluir(string NumConta)
+        public IEnumerable<string> Excluir(int id)
         {
             contaNegocio conta = new contaNegocio();
-            yield return conta.GetContasExcluir(NumConta);
+            yield return conta.GetContasExcluir(id);
         }
 
 
@@ -43,10 +43,10 @@ namespace ctrlProjetoService.Controllers
         [EnableCors("*", "*", "*")]
         [Route("Atualizar")]
         [HttpGet]
-        public IEnumerable<string> Atualizar(string NumConta, string Descricao)
+        public IEnumerable<string> Atualizar(int id, string NumConta, string Descricao)
         {
             contaNegocio conta = new contaNegocio();
-            yield return conta.GetContasAtualizar(NumConta, Descricao);
+            yield return conta.GetContasAtualizar(id, NumConta, Descricao);
         }
     }
 }

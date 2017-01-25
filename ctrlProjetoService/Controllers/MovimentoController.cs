@@ -14,6 +14,15 @@ namespace ctrlProjetoService.Controllers
 
         [EnableCors("*", "*", "*")]
         [HttpGet]
+        [Route("teste")]
+        public void teste(int n)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            int d =  movimento.teste(n);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
         [Route("GerarExcelSaldoProjeto")]
         public IEnumerable<string> GerarExcelSaldoProjeto(string Conta, string data)
         {

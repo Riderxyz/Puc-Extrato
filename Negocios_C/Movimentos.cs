@@ -78,6 +78,18 @@ namespace Puc.Negocios_C
         #endregion
 
         #region Metodos de relatórios
+
+        public int teste(int n)
+        {
+            int x = 1, k;
+            if (n == 1) return x;
+            for (k=1;k<n;++k)
+            {
+                x = x + (teste(k) * teste(n -k));
+            }
+            return x;
+        }
+
         public string GerarListagemPagamentos(string lote, string data)
         {
             int proj;

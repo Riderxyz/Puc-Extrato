@@ -10,8 +10,7 @@ Public Class contaNegocio
 #End Region
 
 #Region "Processos"
-
-    Public Function GetContasLista(optional nome As String = "") As String
+    Public Function GetContasLista(Optional nome As String = "") As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
         banco.parametros.Add(New SqlParameter("nome", nome))
@@ -46,10 +45,11 @@ Public Class contaNegocio
         End If
         Return lResult
     End Function
-    Public Function GetContasAtualizar(conta As string, nome as string) As string
+    Public Function GetContasAtualizar(id As Integer, conta As String, nome As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
-        banco.parametros.Clear
+        banco.parametros.Clear()
+        banco.parametros.Add(New SqlParameter("id", id))
         banco.parametros.Add(New SqlParameter("conta", conta))
         banco.parametros.Add(New SqlParameter("descricao", nome))
         banco.ExecuteAndReturnData("sp_CtrlProjetos_ContasAtualizar", "tabcontas")
@@ -64,12 +64,12 @@ Public Class contaNegocio
         End If
         Return lResult
     End Function
-    Public Function GetContasExcluir(conta As string) As string
+    Public Function GetContasExcluir(id As Integer) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
-        banco.parametros.Clear
-        banco.parametros.Add(New SqlParameter("conta", conta))
-        banco.ExecuteAndReturnData("sp_CtrlProjetos_ContasExcluir", "tabcontas")
+        banco.parametros.Clear()
+        banco.parametros.Add(New SqlParameter("id", id))
+        banco.ExecuteAndReturnData("sp_CtrlProjetos_ContasExcluir")
         If (Not IsNothing(banco.tabela)) Then
             If (banco.tabela.Rows.Count > 0) Then
                 lResult = banco.GetJsonTabela
