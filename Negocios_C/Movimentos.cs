@@ -477,7 +477,7 @@ namespace Puc.Negocios_C
             }
             Negocio.coordenadorNegocio objCoordenador = new coordenadorNegocio();
             objCoordenador.GetCoordenadorById(coordenador);
-            sh.GetRow(2).GetCell(0).SetCellValue(objCoordenador.banco.tabela.Rows[0]["Nome"].ToString());
+            sh.GetRow(2).GetCell(0).SetCellValue(objCoordenador.banco.tabela.Rows[0]["nomeCompleto"].ToString());
             sh.GetRow(2).GetCell(1).SetCellValue("Senha: " + objCoordenador.banco.tabela.Rows[0]["senha"].ToString());
             Negocio.projetoNegocios objProjeto = new projetoNegocios();
             objProjeto.GetProjetos(coordenador);

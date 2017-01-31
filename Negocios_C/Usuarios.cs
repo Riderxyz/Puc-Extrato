@@ -13,11 +13,13 @@ namespace Negocios_C
     {
         Puc.Negocios_C.logErro log = new logErro();
         Negocio.clBanco banco = new clBanco();
+        NegocioUtil util = new NegocioUtil();
 
         public string Autenticar(string usuario, string pass)
         {
+            
             string lResult = "";
-
+            //pass = util.decripto(pass);
             banco.parametros.Clear();
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("usuario", usuario));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("pass", pass));
