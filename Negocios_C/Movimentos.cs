@@ -350,6 +350,58 @@ namespace Puc.Negocios_C
             ExportarArquivo(wb, "Extrato.xls");
             return "";
         }
+        public string GerarExcelExtratoRubrica(int rubrica, string dtInicio, string dtFim, int projeto = -1)
+        {
+            int numlinha = 0;
+            Double SaldoProjeto;
+            HSSFWorkbook wb;// = new HSSFWorkbook();
+            HSSFSheet sh;// = (HSSFSheet)wb.GetSheet("Extrato");
+            try
+            {
+                string x = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings.Get("pathModeloExtratosRubrica"));
+                using (FileStream file = new FileStream(x, FileMode.Open, FileAccess.Read))
+                {
+                    wb = new HSSFWorkbook(file);
+                    file.Close();
+                    sh = (HSSFSheet)wb.GetSheetAt(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao abrir o arquivo de modelo. Processo encerrado. Erro " + ex.Message);
+            }
+            if (projeto != -1)
+                Listar(projeto: projeto.ToString(), dataInicio: dtInicio, dataFim: dtFim, rubrica: rubrica);
+            else
+                Listar(dataInicio: dtInicio, dataFim: dtFim, rubrica: rubrica);
+
+            SaldoProjeto = 0;
+            numlinha = 5;
+            sh.GetRow(1).GetCell(1).SetCellValue(banco.tabela.Rows[1]["NomeProjeto"].ToString());
+            sh.GetRow(2).GetCell(1).SetCellValue(banco.tabela.Rows[1]["NomeCoordenador"].ToString());
+            sh.GetRow(2).GetCell(3).SetCellValue(Convert.ToDateTime(dtInicio).ToString("dd/MM/yyyy"));
+            sh.GetRow(2).GetCell(4).SetCellValue("a");
+            sh.GetRow(2).GetCell(5).SetCellValue(Convert.ToDateTime(dtFim).ToString("dd/MM/yyyy"));
+            sh.GetRow(3).GetCell(1).SetCellValue(banco.tabela.Rows[1]["nomerubricacompleta"].ToString());
+            foreach (DataRow r in banco.tabela.Rows)
+            {
+                SaldoProjeto -= Convert.ToDouble(r["despesa"].ToString());
+                SaldoProjeto += Convert.ToDouble(r["receita"].ToString());
+                var linha = sh.GetRow(numlinha);
+                linha.GetCell(0).SetCellValue(Convert.ToDateTime(r["data"].ToString()).ToString("dd/MM/yyyy"));
+                linha.GetCell(1).SetCellValue(r["fatura"].ToString());
+                linha.GetCell(2).SetCellValue(r["historico"].ToString());
+                linha.GetCell(3).SetCellValue(Convert.ToDouble(r["receita"].ToString()));
+                linha.GetCell(4).SetCellValue(Convert.ToDouble(r["despesa"].ToString()));
+                linha.GetCell(5).SetCellValue(SaldoProjeto);
+                numlinha++;
+            }
+            wb.SetPrintArea(0, 0, 5, 0, numlinha);
+            sh.FitToPage = false;// RowBreak(8);
+            ExportarArquivo(wb, "Extrato_Rubrica.xls");
+            return "";
+        }
+
         public string GerarExcelSaldoRubrica(string data, string conta, int projeto)
         {
             int numlinha = 0;

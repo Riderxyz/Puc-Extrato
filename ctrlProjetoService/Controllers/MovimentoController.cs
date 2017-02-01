@@ -23,6 +23,18 @@ namespace ctrlProjetoService.Controllers
 
         [EnableCors("*", "*", "*")]
         [HttpGet]
+        [Route("GerarExcelExtratoPorRubrica")]
+        public IEnumerable<string> GerarExcelExtratoPorRubrica(string rubrica, string dtInicio, string dtFim, int projeto = -1)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            if (projeto != -1)
+                yield return movimento.GerarExcelExtratoRubrica(projeto: projeto, rubrica: Convert.ToInt32(rubrica), dtInicio: dtInicio, dtFim: dtFim);
+            else
+                yield return movimento.GerarExcelExtratoRubrica(rubrica: Convert.ToInt32(rubrica), dtInicio: dtInicio, dtFim: dtFim );
+        }
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
         [Route("GerarExcelSaldoProjeto")]
         public IEnumerable<string> GerarExcelSaldoProjeto(string Conta, string data)
         {
