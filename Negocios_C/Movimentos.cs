@@ -445,7 +445,7 @@ namespace Puc.Negocios_C
             ExportarArquivo(wb, "Saldo por Rubricas.xls");
             return "";
         }
-        public string GerarExcelSaldoProjeto(string data)
+        public string GerarExcelSaldoProjeto(string data, string conta="", string projeto="")
         {
             int numlinha = 0;
             Double SaldoProjeto;
@@ -474,24 +474,27 @@ namespace Puc.Negocios_C
             ListarSaldosProjetos(data);
 
             SaldoProjeto = 0;
-            numlinha = 4;
+            numlinha = 3;
             _conta = "";
             foreach (DataRow r in banco.tabela.Rows)
             {
                 SaldoProjeto -= Convert.ToDouble(r["despesa"].ToString());
                 SaldoProjeto += Convert.ToDouble(r["receita"].ToString());
-                var p = numlinha % linhasporpagina;
-                if (_conta != r["conta"].ToString())
-                {
-                    sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim() + " - " + r["descricao"].ToString().Trim());
-                    _conta = r["conta"].ToString();
-                    numlinha++;
-                }
+                //var p = numlinha % linhasporpagina;
+                //if (_conta != r["conta"].ToString())
+                //{
+                //    sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim() + " - " + r["descricao"].ToString().Trim());
+                //    _conta = r["conta"].ToString();
+                //    numlinha++;
+                //}
                 //var linha = sh.CreateRow(numlinha);
                 try
                 {
-                    sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nome"].ToString());
+                    sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nome"].ToString().Trim());
+//                    sh.GetRow(numlinha).GetCell(0).SetCellValue(Convert.ToDouble(r["receita"].ToString()));
+//                    sh.GetRow(numlinha).GetCell(1).SetCellValue(Convert.ToDouble(r["despesa"].ToString()));
                     sh.GetRow(numlinha).GetCell(1).SetCellValue(Convert.ToDouble(r["saldo"].ToString()));
+                    sh.GetRow(numlinha).GetCell(2).SetCellValue(r["conta"].ToString().Trim());
                 }
                 catch
                 {
