@@ -428,8 +428,8 @@ namespace Puc.Negocios_C
             ListarSaldosProjetosRubricas(data, conta, projeto);
             SaldoProjeto = 0;
             numlinha = 4;
-            sh.GetRow(1).GetCell(0).SetCellValue("Projeto: "+banco.tabela.Rows[1]["nome"].ToString());
-            sh.GetRow(2).GetCell(0).SetCellValue("Coordenador: "+banco.tabela.Rows[1]["nomecoordenador"].ToString());
+            sh.GetRow(1).GetCell(0).SetCellValue("Projeto: " + banco.tabela.Rows[1]["nome"].ToString());
+            sh.GetRow(2).GetCell(0).SetCellValue("Coordenador: " + banco.tabela.Rows[1]["nomecoordenador"].ToString());
             sh.GetRow(2).GetCell(1).SetCellValue(Convert.ToDateTime(data).ToString("dd/MM/yyyy"));
             foreach (DataRow r in banco.tabela.Rows)
             {
@@ -445,7 +445,7 @@ namespace Puc.Negocios_C
             ExportarArquivo(wb, "Saldo por Rubricas.xls");
             return "";
         }
-        public string GerarExcelSaldoProjeto(string conta, string data)
+        public string GerarExcelSaldoProjeto(string data)
         {
             int numlinha = 0;
             Double SaldoProjeto;
@@ -471,7 +471,7 @@ namespace Puc.Negocios_C
                 throw new Exception("Erro ao abrir o arquivo de modelo. Processo encerrado. Erro " + ex.Message);
             }
 
-            ListarSaldosProjetos(conta, data);
+            ListarSaldosProjetos(data);
 
             SaldoProjeto = 0;
             numlinha = 4;
@@ -591,13 +591,17 @@ namespace Puc.Negocios_C
             }
             return lResult;
         }
-        public string ListarSaldosProjetos(string conta, string data)
+        public string ListarSaldosProjetos(string data, string conta = "", string projeto = "")
         {
             string lResult = "";
 
             banco.parametros.Clear();
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("data", data));
-            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("conta", conta));
+            if (conta != "")
+                banco.parametros.Add(new System.Data.SqlClient.SqlParameter("conta", conta));
+            if (projeto != "")
+                banco.parametros.Add(new System.Data.SqlClient.SqlParameter("projeto", projeto));
+
             banco.ExecuteAndReturnData("sp_CtrlProjetos_ListarSaldosProjetos", "tabela");
             if (banco.tabela != null)
             {
@@ -656,6 +660,7 @@ namespace Puc.Negocios_C
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("projeto", idProjeto));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataInicio", Convert.ToDateTime(dataInicio).ToString("yyyy-MM-dd")));
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataFim", Convert.ToDateTime(dataFim).ToString("yyyy-MM-dd")));
+
             banco.ExecuteAndReturnData("[sp_CtrlProjetos_MovimentosListaExtrato]", "tabmovimento");
             if (banco.tabela != null)
             {
@@ -667,7 +672,7 @@ namespace Puc.Negocios_C
             return lResult;
         }
 
-        public string Listar(string projeto = default(string), string conta = default(string), string historico = default(string), int? coordenador = default(int), int? rubrica = default(int), string dataInicio = default(string), string dataFim = default(string))
+        public string Listar(string projeto = default(string), string conta = default(string), string historico = default(string), int? coordenador = default(int), int? rubrica = default(int), string dataInicio = default(string), string dataFim = default(string), bool FiltrarDataAlteracao = false)
         {
             string lResult = "";
             #region Preparação dos parametros
@@ -701,8 +706,10 @@ namespace Puc.Negocios_C
                 banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataFim", dataFim));
             }
             #endregion
-
-            banco.ExecuteAndReturnData("sp_CtrlProjetos_MovimentosLista", "tabmovimento");
+            if (!FiltrarDataAlteracao)
+                banco.ExecuteAndReturnData("sp_CtrlProjetos_MovimentosLista", "tabmovimento");
+            else
+                banco.ExecuteAndReturnData("sp_CtrlProjetos_MovimentosListaPorAlteracao", "tabmovimento");
             if (banco.tabela != null)
             {
                 if (banco.tabela.Rows.Count > 0)

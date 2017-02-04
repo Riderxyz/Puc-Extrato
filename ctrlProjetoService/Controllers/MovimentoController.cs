@@ -81,10 +81,10 @@ namespace ctrlProjetoService.Controllers
         [EnableCors("*", "*", "*")]
         [HttpGet]
         [Route("ListarExtratoProjeto")]
-        public IEnumerable<string> ListarExtratoProjeto(string CodigoProjeto, string dataInicio, string dataFim)
+        public IEnumerable<string> ListarExtratoProjeto(string CodigoProjeto, string dataInicio, string dataFim, bool FiltrarDataAlteracao = false)
         {
             Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
-            yield return movimento.Listar(CodigoProjeto, dataInicio: dataInicio, dataFim: dataFim);
+            yield return movimento.Listar(CodigoProjeto, dataInicio: dataInicio, dataFim: dataFim, FiltrarDataAlteracao: FiltrarDataAlteracao );
         }
         [EnableCors("*", "*", "*")]
         [HttpGet]
