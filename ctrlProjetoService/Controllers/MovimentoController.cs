@@ -11,16 +11,6 @@ namespace ctrlProjetoService.Controllers
     [RoutePrefix("Movimentos")]
     public class MovimentoController : ApiController
     {
-
-        [EnableCors("*", "*", "*")]
-        [HttpGet]
-        [Route("teste")]
-        public void teste(int n)
-        {
-            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
-            int d =  movimento.teste(n);
-        }
-
         [EnableCors("*", "*", "*")]
         [HttpGet]
         [Route("GerarExcelExtratoPorRubrica")]
@@ -58,6 +48,15 @@ namespace ctrlProjetoService.Controllers
         {
             Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
             yield return movimento.ListarSaldosProjetosRubricas(conta: conta, data: data, projeto: projeto);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("ListarSaldosProjetos")]
+        public IEnumerable<string> ListarSaldosProjetos(string data)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.ListarSaldosProjetos(data);
         }
 
         [EnableCors("*", "*", "*")]
