@@ -65,7 +65,7 @@ namespace Negocios_C
             Negocio.coordenadorNegocio objCoordenador = new coordenadorNegocio();
             objCoordenador.GetCoordenadorById(coordenador);
             sh.GetRow(2).GetCell(0).SetCellValue(objCoordenador.banco.tabela.Rows[0]["nomeCompleto"].ToString().Trim().ToUpper());
-            sh.GetRow(2).GetCell(1).SetCellValue("Senha: " + objCoordenador.banco.tabela.Rows[0]["senha"].ToString().Trim());
+            //sh.GetRow(2).GetCell(1).SetCellValue("Senha: " + objCoordenador.banco.tabela.Rows[0]["senha"].ToString().Trim());
             Negocio.projetoNegocios objProjeto = new projetoNegocios();
             objProjeto.GetProjetos(coordenador);
             Int32 numlinha = 4;
@@ -74,11 +74,43 @@ namespace Negocios_C
                 totalProjetos++;
                 //var linha = sh.CreateRow(numlinha);
                 sh.GetRow(numlinha).GetCell(0).SetCellValue(r["projeto"].ToString().Trim());
-                sh.GetRow(numlinha).GetCell(1).SetCellValue(r["conta_principal"].ToString().Trim());
+              //  sh.GetRow(numlinha).GetCell(1).SetCellValue(r["conta_principal"].ToString().Trim());
                 numlinha++;
             }
 
-            wb.SetPrintArea(0, 0, 2, 0, numlinha);
+            NPOI.SS.Util.CellRangeAddress region = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha+5, 0, 7);
+            NPOI.SS.Util.RegionUtil.SetBorderBottom(1, region, sh, wb);
+            NPOI.SS.Util.RegionUtil.SetBorderTop(1, region, sh, wb);
+            NPOI.SS.Util.RegionUtil.SetBorderLeft(1, region, sh, wb);
+            NPOI.SS.Util.RegionUtil.SetBorderRight(1, region, sh, wb);
+
+            HSSFFont hFont = (HSSFFont)wb.CreateFont();
+
+            hFont.FontHeightInPoints = 14;
+            hFont.FontName = "Calibri";
+            hFont.Underline = FontUnderlineType.Double;
+            hFont.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.Bold;
+
+            HSSFCellStyle hStyle = (HSSFCellStyle)wb.CreateCellStyle();
+            hStyle.SetFont(hFont);
+
+            numlinha +=2;
+            sh.GetRow(numlinha).GetCell(1).SetCellValue("Estes são os seus dados para realizar o acesso via internet");
+            sh.GetRow(numlinha).GetCell(1).CellStyle = hStyle;
+            sh.GetRow(numlinha).RemoveCell(sh.GetRow(numlinha).GetCell(2));
+            sh.GetRow(numlinha).RemoveCell(sh.GetRow(numlinha).GetCell(3));
+            sh.GetRow(numlinha).RemoveCell(sh.GetRow(numlinha).GetCell(4));
+            numlinha++;
+            sh.GetRow(numlinha).GetCell(2).SetCellValue("Código");
+            sh.GetRow(numlinha).GetCell(4).SetCellValue("Senha");
+            numlinha++;
+            sh.GetRow(numlinha).GetCell(2).SetCellValue(objCoordenador.banco.tabela.Rows[0]["coordenador"].ToString().Trim().ToUpper());
+            sh.GetRow(numlinha).GetCell(4).SetCellValue(objCoordenador.banco.tabela.Rows[0]["senha"].ToString().Trim().ToUpper());
+
+
+            sh.AddMergedRegion(region);
+
+            wb.SetPrintArea(0, 0, 7, 0, numlinha);
             //sh.PrintSetup.PaperSize = (short)PaperSize.A4;
             sh.FitToPage = false;// RowBreak(8);
             Char delimiter = ' ';
