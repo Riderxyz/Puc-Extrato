@@ -74,16 +74,9 @@ namespace Negocios_C
                 totalProjetos++;
                 //var linha = sh.CreateRow(numlinha);
                 sh.GetRow(numlinha).GetCell(0).SetCellValue(r["projeto"].ToString().Trim());
-              //  sh.GetRow(numlinha).GetCell(1).SetCellValue(r["conta_principal"].ToString().Trim());
+                //  sh.GetRow(numlinha).GetCell(1).SetCellValue(r["conta_principal"].ToString().Trim());
                 numlinha++;
             }
-
-            NPOI.SS.Util.CellRangeAddress region = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha+5, 0, 7);
-            NPOI.SS.Util.RegionUtil.SetBorderBottom(1, region, sh, wb);
-            NPOI.SS.Util.RegionUtil.SetBorderTop(1, region, sh, wb);
-            NPOI.SS.Util.RegionUtil.SetBorderLeft(1, region, sh, wb);
-            NPOI.SS.Util.RegionUtil.SetBorderRight(1, region, sh, wb);
-
             HSSFFont hFont = (HSSFFont)wb.CreateFont();
 
             hFont.FontHeightInPoints = 14;
@@ -94,7 +87,7 @@ namespace Negocios_C
             HSSFCellStyle hStyle = (HSSFCellStyle)wb.CreateCellStyle();
             hStyle.SetFont(hFont);
 
-            numlinha +=2;
+            numlinha += 2;
             sh.GetRow(numlinha).GetCell(1).SetCellValue("Estes são os seus dados para realizar o acesso via internet");
             sh.GetRow(numlinha).GetCell(1).CellStyle = hStyle;
             sh.GetRow(numlinha).RemoveCell(sh.GetRow(numlinha).GetCell(2));
@@ -107,14 +100,22 @@ namespace Negocios_C
             sh.GetRow(numlinha).GetCell(2).SetCellValue(objCoordenador.banco.tabela.Rows[0]["coordenador"].ToString().Trim().ToUpper());
             sh.GetRow(numlinha).GetCell(4).SetCellValue(objCoordenador.banco.tabela.Rows[0]["senha"].ToString().Trim().ToUpper());
 
-
-            sh.AddMergedRegion(region);
+            //for (int i = 0; i <= 7; i++)
+            //{
+            //    sh.GetRow(numlinha).GetCell(i).CellStyle.BorderTop = BorderStyle.Medium;
+            //    sh.GetRow(numlinha + 4).GetCell(i).CellStyle.BorderTop = BorderStyle.Medium;
+            //}
+            //for (int i = numlinha - 4; i <= numlinha; i++)
+            //{
+            //    sh.GetRow(i).GetCell(0).CellStyle.BorderLeft = BorderStyle.Medium;
+            //    sh.GetRow(i).GetCell(7).CellStyle.BorderRight = BorderStyle.Medium;
+            //}
 
             wb.SetPrintArea(0, 0, 7, 0, numlinha);
             //sh.PrintSetup.PaperSize = (short)PaperSize.A4;
             sh.FitToPage = false;// RowBreak(8);
             Char delimiter = ' ';
-            ExportarArquivo(wb, "SenhaCoordenador_"+objCoordenador.banco.tabela.Rows[0]["nome"].ToString().Split(delimiter)[0].Trim() +".xls");
+            ExportarArquivo(wb, "SenhaCoordenador_" + objCoordenador.banco.tabela.Rows[0]["nome"].ToString().Split(delimiter)[0].Trim() + ".xls");
             return "";
         }
 

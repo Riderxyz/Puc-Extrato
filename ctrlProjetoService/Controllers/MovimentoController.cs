@@ -83,7 +83,8 @@ namespace ctrlProjetoService.Controllers
         public IEnumerable<string> ListarExtratoProjeto(string CodigoProjeto, string dataInicio, string dataFim, bool FiltrarDataAlteracao = false)
         {
             Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
-            yield return movimento.Listar(CodigoProjeto, dataInicio: dataInicio, dataFim: dataFim, FiltrarDataAlteracao: FiltrarDataAlteracao );
+            //yield return movimento.Listar(CodigoProjeto, dataInicio: dataInicio, dataFim: dataFim, FiltrarDataAlteracao: FiltrarDataAlteracao, incluirSaldo: false );
+            yield return movimento.ListarExtratoProjeto(Convert.ToInt32(CodigoProjeto), dataInicio: dataInicio, dataFim: dataFim);//, FiltrarDataAlteracao: FiltrarDataAlteracao);//, incluirSaldo: false);
         }
         [EnableCors("*", "*", "*")]
         [HttpGet]

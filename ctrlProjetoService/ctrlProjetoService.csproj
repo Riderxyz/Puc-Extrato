@@ -269,6 +269,7 @@
     <Content Include="App_Data\template\ModeloSaldoProjetos.xls" />
     <Content Include="App_Data\template\ModeloSaldoRubricas.xls" />
     <Content Include="App_Data\template\ModeloSenhacoordenador.xls" />
+    <Content Include="App_Data\template\modeloExtratosRubrica.xls" />
     <None Include="Properties\PublishProfiles\ControleProjetos.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
