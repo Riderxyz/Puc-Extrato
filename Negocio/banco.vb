@@ -5,6 +5,8 @@ Imports System.Configuration
 Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Serialization
 Imports System.Collections.Specialized
+Imports fastJSON
+
 
 Public Class clBanco
 #Region "Inicialização"
@@ -210,8 +212,8 @@ Public Class clBanco
 
         If (Not IsNothing(tabela))
             Return JsonConvert.SerializeObject(ds, Formatting.Indented, jss)
-        ElseIf (Not IsNothing(ds.Tables(0)))
-            Return JsonConvert.SerializeObject(ds.Tables(0), Formatting.Indented, jss)
+        ElseIf (Not IsNothing(ds.Tables(0))) Then
+            Return JsonConvert.SerializeObject(ds, Formatting.Indented, jss) 'fastJSON.JSON.ToJSON(ds.Tables(0))
         Else
             Return JsonConvert.SerializeObject("Sem dados na tabela", jss)
         End If
