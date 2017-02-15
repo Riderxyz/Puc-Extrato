@@ -606,7 +606,7 @@ namespace Puc.Negocios_C
                 numlinha++;
             }
 
-            wb.SetPrintArea(0, 0, 2, 0, numlinha);
+            wb.SetPrintArea(1, 0, 2, 0, numlinha);
             //sh.PrintSetup.PaperSize = (short)PaperSize.A4;
             sh.FitToPage = false;// RowBreak(8);
 
