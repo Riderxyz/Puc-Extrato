@@ -507,11 +507,41 @@ namespace Puc.Negocios_C
             return "";
         }
 
-        void QuebrarPagina(HSSFSheet sh, ref int numlinha)
+        void QuebrarPagina(ref HSSFSheet sh, ref int numlinha)
         {
+            sh.GetRow(numlinha).GetCell(0).SetCellValue("  ");
+            sh.GetRow(numlinha).GetCell(0).SetCellValue("  ");
             sh.SetRowBreak(numlinha);
             numlinha++;
         }
+
+        //void bordercells(ref HSSFSheet sh, int li, int lf, int ci, int cf, bool clear = false)
+        //{
+        //    if (clear)
+        //    {
+        //        for (int x = li; x <= lf; x++)
+        //        {
+        //            for (int i = ci; i <= cf; i++)
+        //            {
+        //                sh.GetRow(x).GetCell(i).CellStyle.BorderTop = BorderStyle.None;
+        //                sh.GetRow(x).GetCell(i).CellStyle.BorderBottom = BorderStyle.None;
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        for (int i = ci; i <= cf; i++)
+        //        {
+        //            sh.GetRow(li).GetCell(i).CellStyle.BorderTop = BorderStyle.Thin;
+        //            sh.GetRow(lf).GetCell(i).CellStyle.BorderBottom = BorderStyle.Thin;
+        //        }
+        //        for (int i = li; i <= lf; i++)
+        //        {
+        //            sh.GetRow(i).GetCell(ci).CellStyle.BorderLeft = BorderStyle.Thin;
+        //            sh.GetRow(i).GetCell(cf).CellStyle.BorderRight = BorderStyle.Thin;
+        //        }
+        //    }
+        //}
         public string GerarExcelSaldoProjeto(string data, string conta = "", string projeto = "")
         {
             #region Definição das variaveis
@@ -522,9 +552,9 @@ namespace Puc.Negocios_C
             Double SaldoTipoProjeto = 0;
             String _conta = "";
             String _tipoProjeto = "";
-            int contaLinha = 1;
-         //   DataRow r;
-            bool imprimiucabecalho = false;
+            int contaLinha = 1, linhainicial = 0;
+            DataRow r;
+            bool impHeader = false;
             int linhasporpagina = 30;// Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings.Get("qtd_linhas_extrato_por_pagina"));
 
             #endregion
@@ -566,9 +596,23 @@ namespace Puc.Negocios_C
 
             ICellStyle cellStylenormal = wb.CreateCellStyle();
             cellStylenormal.SetFont(hFontNormal);
+            //cellStylenormal.BorderBottom = BorderStyle.None;
+            //cellStylenormal.BorderTop = BorderStyle.None;
+            //cellStylenormal.BorderLeft = BorderStyle.None;
+            //cellStylenormal.BorderRight = BorderStyle.None;
+
 
             ICellStyle cellStylebold = wb.CreateCellStyle();
             cellStylebold.SetFont(hFontBold);
+
+
+            ICellStyle cellStyleCurrencybold = wb.CreateCellStyle();
+           // cellStyleCurrencybold.DataFormat = wb.CreateDataFormat().GetFormat("###,##0.00");
+            cellStylebold.SetFont(hFontBold);
+            //cellStylebold.BorderBottom = BorderStyle.None;
+            //cellStylebold.BorderTop = BorderStyle.None;
+            //cellStylebold.BorderLeft = BorderStyle.None;
+            //cellStylebold.BorderRight = BorderStyle.None;
 
             #endregion
 
@@ -578,82 +622,137 @@ namespace Puc.Negocios_C
             _conta = "";
             _tipoProjeto = "";
 
-            //while (contaLinha <= banco.tabela.Rows.Count - 1)
+            while (contaLinha <= banco.tabela.Rows.Count - 1)
+            {
+                r = banco.tabela.Rows[contaLinha];
+                _tipoProjeto = r["Tipo_Projeto"].ToString();
+                sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
+                sh.GetRow(numlinha).GetCell(0).CellStyle.VerticalAlignment = VerticalAlignment.Center;
+                sh.GetRow(numlinha).GetCell(0).CellStyle.Alignment = HorizontalAlignment.Left;
+                sh.GetRow(numlinha).GetCell(0).CellStyle.GetFont(wb).FontHeightInPoints = 14;
+                sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nometipo"].ToString().Trim());
+                sh.GetRow(numlinha).GetCell(2).SetCellValue(3);
+                SaldoTipoProjeto = 0;
+                numlinha++;
+                while ((contaLinha <= banco.tabela.Rows.Count - 1) & (_tipoProjeto == r["Tipo_Projeto"].ToString()))
+                {
+                    _conta = r["conta"].ToString();
+                    SaldoConta = 0;
+                    if (!impHeader)
+                    {
+                        sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
+                        sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim() + " - " + r["descricao"].ToString().Trim());
+                        sh.GetRow(numlinha).GetCell(2).SetCellValue(1);
+                        linhainicial = numlinha;
+                        numlinha++;
+                    }
+                    while ((contaLinha <= banco.tabela.Rows.Count - 1) & (_tipoProjeto == r["Tipo_Projeto"].ToString()) & (_conta == r["conta"].ToString()))
+                    {
+                        var p = numlinha % linhasporpagina;
+                        impHeader = false;
+                        while ((contaLinha <= banco.tabela.Rows.Count - 1) & (_tipoProjeto == r["Tipo_Projeto"].ToString()) & (_conta == r["conta"].ToString()) & (p != 0))
+                        {
+                            r = banco.tabela.Rows[contaLinha];
+
+                            sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nome"].ToString().Trim());
+                            sh.GetRow(numlinha).GetCell(1).SetCellValue(Convert.ToDouble(r["saldo"].ToString()));
+                            sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylenormal;
+                            sh.GetRow(numlinha).GetCell(1).CellStyle = cellStylenormal;
+                            sh.GetRow(numlinha).GetCell(1).CellStyle.DataFormat = wb.CreateDataFormat().GetFormat("###,##0.00");
+                            SaldoConta += Convert.ToDouble(r["saldo"].ToString());
+                            numlinha++;
+                            p = numlinha % linhasporpagina;
+                            contaLinha++;
+                            
+                        }
+                        if (p == 0)
+                        {
+                            QuebrarPagina(ref sh, ref numlinha);
+                            sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
+                            sh.GetRow(numlinha).GetCell(0).CellStyle.VerticalAlignment = VerticalAlignment.Center;
+                            sh.GetRow(numlinha).GetCell(0).CellStyle.GetFont(wb).FontHeightInPoints = 14;
+                            sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nometipo"].ToString().Trim());
+                            sh.GetRow(numlinha).GetCell(2).SetCellValue(3);
+                            numlinha++;
+                            sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
+                            sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim() + " - " + r["descricao"].ToString().Trim());
+                            sh.GetRow(numlinha).GetCell(2).SetCellValue(1);
+                            numlinha++;
+                            impHeader = true;
+                        }
+                    }
+                    SaldoTipoProjeto += SaldoConta;
+                    sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylenormal;
+                    sh.GetRow(numlinha).GetCell(1).CellStyle = cellStyleCurrencybold;
+                    sh.GetRow(numlinha).GetCell(0).SetCellValue("Saldo da Conta");
+                    sh.GetRow(numlinha).GetCell(1).SetCellValue(SaldoConta);
+                    sh.GetRow(numlinha).GetCell(1).CellStyle.DataFormat = wb.CreateDataFormat().GetFormat("###,##0.00");
+                    sh.GetRow(numlinha).GetCell(2).SetCellValue(2);
+                 //   bordercells(ref sh, linhainicial, numlinha, 0, 1, true);
+                 //   bordercells(ref sh, linhainicial, linhainicial, 0, 1);
+                    numlinha++;
+                }
+                sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
+                sh.GetRow(numlinha).GetCell(1).CellStyle = cellStyleCurrencybold;
+                sh.GetRow(numlinha).GetCell(0).SetCellValue("Saldo do tipo do projeto");
+                sh.GetRow(numlinha).GetCell(1).SetCellValue(SaldoTipoProjeto);
+                sh.GetRow(numlinha).GetCell(2).SetCellValue(2);
+                sh.GetRow(numlinha).GetCell(1).CellStyle.DataFormat = wb.CreateDataFormat().GetFormat("###,##0.00");
+                numlinha++;
+                QuebrarPagina(ref sh, ref numlinha);
+
+            }
+            //foreach (DataRow r in banco.tabela.Rows)
             //{
-            //    r = banco.tabela.Rows[contaLinha];
-            //    _tipoProjeto = r["Tipo_Projeto"].ToString();
-            //    while ((contaLinha <= banco.tabela.Rows.Count - 1) & (_tipoProjeto == r["Tipo_Projeto"].ToString()))
+            //    SaldoProjeto += (Convert.ToDouble(r["receita"].ToString())) - (Convert.ToDouble(r["despesa"].ToString()));
+            //    SaldoConta += (Convert.ToDouble(r["receita"].ToString())) - (Convert.ToDouble(r["despesa"].ToString()));
+            //    SaldoGeral += (Convert.ToDouble(r["receita"].ToString())) - (Convert.ToDouble(r["despesa"].ToString()));
+            //    var p = numlinha % linhasporpagina;
+            //    if (p == 0)
             //    {
-            //        _conta = r["conta"].ToString();
-            //        SaldoConta = 0;
-            //        while ((contaLinha <= banco.tabela.Rows.Count - 1) & (_tipoProjeto == r["Tipo_Projeto"].ToString()) & (_conta == r["conta"].ToString()))
+            //        sh.SetRowBreak(numlinha);
+            //        numlinha++;
+            //        sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
+            //        sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nometipo"].ToString().Trim());
+            //        sh.GetRow(numlinha).GetCell(0).CellStyle.BorderBottom = BorderStyle.Double;
+            //        numlinha+=2;
+            //        sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim() + " - " + r["descricao"].ToString().Trim());
+            //        numlinha++;
+            //        imprimiucabecalho = true;
+            //    }
+            //    if (_conta != r["conta"].ToString())
+            //    {
+            //        if (!imprimiucabecalho)
             //        {
-            //            sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nome"].ToString().Trim());
-            //            sh.GetRow(numlinha).GetCell(2).SetCellValue(Convert.ToDouble(r["saldo"].ToString()));
-            //            SaldoConta += (Convert.ToDouble(r["receita"].ToString())) - (Convert.ToDouble(r["despesa"].ToString()));
-            //            numlinha++;
+            //            sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
+            //            sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim() + " - " + r["descricao"].ToString().Trim());
             //        }
-            //        SaldoTipoProjeto += SaldoConta;
+            //        else
+            //        {
+            //            imprimiucabecalho = false;
+            //        }
             //        numlinha++;
             //        sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
             //        sh.GetRow(numlinha).GetCell(2).CellStyle = cellStylebold;
             //        sh.GetRow(numlinha).GetCell(0).SetCellValue("Saldo da Conta");
             //        sh.GetRow(numlinha).GetCell(2).SetCellValue(SaldoConta);
+            //        SaldoConta = 0;
+            //        _conta = r["conta"].ToString();
+            //        numlinha++;
             //    }
-            //    QuebrarPagina(sh, ref numlinha);
+            //    try
+            //    {
+            //        sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nome"].ToString().Trim());
+            //        sh.GetRow(numlinha).GetCell(2).SetCellValue(Convert.ToDouble(r["saldo"].ToString()));
+            //    }
+            //    catch
+            //    {
 
+            //    }
+            //    numlinha++;
             //}
-            foreach (DataRow r in banco.tabela.Rows)
-            {
-                SaldoProjeto += (Convert.ToDouble(r["receita"].ToString())) - (Convert.ToDouble(r["despesa"].ToString()));
-                SaldoConta += (Convert.ToDouble(r["receita"].ToString())) - (Convert.ToDouble(r["despesa"].ToString()));
-                SaldoGeral += (Convert.ToDouble(r["receita"].ToString())) - (Convert.ToDouble(r["despesa"].ToString()));
-                var p = numlinha % linhasporpagina;
-                if (p == 0)
-                {
-                    sh.SetRowBreak(numlinha);
-                    numlinha++;
-                    sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
-                    sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nometipo"].ToString().Trim());
-                    sh.GetRow(numlinha).GetCell(0).CellStyle.BorderBottom = BorderStyle.Double;
-                    numlinha+=2;
-                    sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim() + " - " + r["descricao"].ToString().Trim());
-                    numlinha++;
-                    imprimiucabecalho = true;
-                }
-                if (_conta != r["conta"].ToString())
-                {
-                    if (!imprimiucabecalho)
-                    {
-                        sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
-                        sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim() + " - " + r["descricao"].ToString().Trim());
-                    }
-                    else
-                    {
-                        imprimiucabecalho = false;
-                    }
-                    numlinha++;
-                    sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
-                    sh.GetRow(numlinha).GetCell(2).CellStyle = cellStylebold;
-                    sh.GetRow(numlinha).GetCell(0).SetCellValue("Saldo da Conta");
-                    sh.GetRow(numlinha).GetCell(2).SetCellValue(SaldoConta);
-                    SaldoConta = 0;
-                    _conta = r["conta"].ToString();
-                    numlinha++;
-                }
-                try
-                {
-                    sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nome"].ToString().Trim());
-                    sh.GetRow(numlinha).GetCell(2).SetCellValue(Convert.ToDouble(r["saldo"].ToString()));
-                }
-                catch
-                {
 
-                }
-                numlinha++;
-            }
-
-            wb.SetPrintArea(0, 0, 2, 0, numlinha);
+            wb.SetPrintArea(0, 0, 1, 0, numlinha);
             //sh.PrintSetup.PaperSize = (short)PaperSize.A4;
             sh.FitToPage = false;// RowBreak(8);
 
