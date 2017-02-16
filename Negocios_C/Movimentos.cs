@@ -158,25 +158,25 @@ namespace Puc.Negocios_C
             IRow linha = sh.CreateRow(numlinha);
             int conta_registro = 0;
             DataRow r = banco.tabela.Rows[0];
-            while (conta_registro <= banco.tabela.Rows.Count-1)
+            while (conta_registro <= banco.tabela.Rows.Count - 1)
             {
                 SaldoGrupo = 0;
                 grupo = r["tipo_projeto"].ToString();
                 linha = sh.CreateRow(numlinha);
                 linha.CreateCell(1).SetCellValue(r["nometipoprojeto"].ToString().ToUpper());
                 linha.HeightInPoints = 30;
-                linha.GetCell(1).CellStyle  = wb.CreateCellStyle();
+                linha.GetCell(1).CellStyle = wb.CreateCellStyle();
                 linha.GetCell(1).CellStyle.SetFont(hFontBold);
                 linha.GetCell(1).CellStyle.VerticalAlignment = VerticalAlignment.Center;
                 linha.GetCell(1).CellStyle.BorderBottom = BorderStyle.Double;
                 numlinha++;
-                while ( (grupo == r["tipo_projeto"].ToString()) & (conta_registro <= banco.tabela.Rows.Count-1))
+                while ((grupo == r["tipo_projeto"].ToString()) & (conta_registro <= banco.tabela.Rows.Count - 1))
                 {
                     proj = Convert.ToInt32(r["projeto"].ToString());
                     SaldoProjeto = 0;
-                    while ( (proj == Convert.ToInt32(r["projeto"].ToString())) & (grupo == r["tipo_projeto"].ToString()) & (conta_registro <= banco.tabela.Rows.Count-1))
+                    while ((proj == Convert.ToInt32(r["projeto"].ToString())) & (grupo == r["tipo_projeto"].ToString()) & (conta_registro <= banco.tabela.Rows.Count - 1))
                     {
-                        
+
                         linha = sh.CreateRow(numlinha);
                         linha.CreateCell(1).SetCellValue(r["nomeprojeto"].ToString());
                         linha.GetCell(1).SetCellType(NPOI.SS.UserModel.CellType.String);
@@ -208,8 +208,8 @@ namespace Puc.Negocios_C
                     #region Total do projeto
                     linha = sh.CreateRow(numlinha);
                     linha.HeightInPoints = 25;
-                   // cra = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
-                   // sh.AddMergedRegion(cra);
+                    // cra = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
+                    // sh.AddMergedRegion(cra);
                     linha.CreateCell(4).SetCellValue(SaldoProjeto);
                     linha.GetCell(4).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
                     linha.GetCell(4).CellStyle = cellCurrencyStyleBold;
@@ -231,7 +231,7 @@ namespace Puc.Negocios_C
                 #endregion
             }
             #region Total Geral
-            numlinha+=2;
+            numlinha += 2;
             linha = sh.CreateRow(numlinha);
             linha.HeightInPoints = 35;
             //cra = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
@@ -398,8 +398,11 @@ namespace Puc.Negocios_C
                 linha.GetCell(0).SetCellValue(Convert.ToDateTime(r["data"].ToString()).ToString("dd/MM/yyyy"));
                 linha.GetCell(1).SetCellValue(r["fatura"].ToString());
                 linha.GetCell(2).SetCellValue(r["historico"].ToString());
-                linha.GetCell(3).SetCellValue(Convert.ToDouble(r["receita"].ToString()));
-                linha.GetCell(4).SetCellValue(Convert.ToDouble(r["despesa"].ToString()));
+                if (Convert.ToDouble(r["receita"].ToString()) > 0)
+                    linha.GetCell(3).SetCellValue(Convert.ToDouble(r["receita"].ToString()));
+
+                if (Convert.ToDouble(r["despesa"].ToString()) > 0)
+                    linha.GetCell(4).SetCellValue(Convert.ToDouble(r["despesa"].ToString()));
                 linha.GetCell(5).SetCellValue(SaldoProjeto);
                 numlinha++;
             }
@@ -491,11 +494,11 @@ namespace Puc.Negocios_C
             sh.GetRow(2).GetCell(1).SetCellValue(Convert.ToDateTime(data).ToString("dd/MM/yyyy"));
             foreach (DataRow r in banco.tabela.Rows)
             {
-                SaldoProjeto -= Convert.ToDouble(r["Despesa"].ToString());
-                SaldoProjeto += Convert.ToDouble(r["Receita"].ToString());
+                // SaldoProjeto -= Convert.ToDouble(r["Despesa"].ToString());
+                // SaldoProjeto += Convert.ToDouble(r["Receita"].ToString());
                 var linha = sh.GetRow(numlinha);
                 linha.GetCell(0).SetCellValue(r["rubrica"].ToString());
-                linha.GetCell(1).SetCellValue(SaldoProjeto);
+                linha.GetCell(1).SetCellValue(Convert.ToDouble(r["saldo"].ToString()));
                 numlinha++;
             }
             wb.SetPrintArea(0, 0, 5, 0, numlinha);
@@ -503,15 +506,29 @@ namespace Puc.Negocios_C
             ExportarArquivo(wb, "Saldo por Rubricas.xls");
             return "";
         }
+
+        void QuebrarPagina(HSSFSheet sh, ref int numlinha)
+        {
+            sh.SetRowBreak(numlinha);
+            numlinha++;
+        }
         public string GerarExcelSaldoProjeto(string data, string conta = "", string projeto = "")
         {
+            #region Definição das variaveis
             int numlinha = 0;
-            Double SaldoProjeto;
-#pragma warning disable CS0219 // The variable '_conta' is assigned but its value is never used
+            Double SaldoProjeto = 0;
+            Double SaldoConta = 0;
+            Double SaldoGeral = 0;
+            Double SaldoTipoProjeto = 0;
             String _conta = "";
-#pragma warning restore CS0219 // The variable '_conta' is assigned but its value is never used
-            int linhasporpagina = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings.Get("qtd_linhas_extrato_por_pagina"));
+            String _tipoProjeto = "";
+            int contaLinha = 1;
+         //   DataRow r;
+            bool imprimiucabecalho = false;
+            int linhasporpagina = 30;// Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings.Get("qtd_linhas_extrato_por_pagina"));
 
+            #endregion
+            #region Abertura do arquivo de template
             HSSFWorkbook wb;// = new HSSFWorkbook();
                             //wb.CreateSheet("Extrato");
             HSSFSheet sh;// = (HSSFSheet)wb.GetSheet("Extrato");
@@ -531,30 +548,103 @@ namespace Puc.Negocios_C
                 throw new Exception("Erro ao abrir o arquivo de modelo. Processo encerrado. Erro " + ex.Message);
             }
 
-            ListarSaldosProjetos(data);
+            #endregion
 
+            #region stilos
+            HSSFFont hFontNormal = (HSSFFont)wb.CreateFont();
+
+            hFontNormal.FontHeightInPoints = 12;
+            hFontNormal.FontName = "Calibri";
+            // hFontNormal.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.None;
+
+            HSSFFont hFontBold = (HSSFFont)wb.CreateFont();
+
+            hFontBold.FontHeightInPoints = 12;
+            hFontBold.IsBold = true;
+            hFontBold.FontName = "Calibri";
+            //  hFontBold.Boldweight = (short)FontBoldWeight.Bold;
+
+            ICellStyle cellStylenormal = wb.CreateCellStyle();
+            cellStylenormal.SetFont(hFontNormal);
+
+            ICellStyle cellStylebold = wb.CreateCellStyle();
+            cellStylebold.SetFont(hFontBold);
+
+            #endregion
+
+            ListarSaldosProjetos(data);
             SaldoProjeto = 0;
-            numlinha = 3;
+            numlinha = 4;
             _conta = "";
+            _tipoProjeto = "";
+
+            //while (contaLinha <= banco.tabela.Rows.Count - 1)
+            //{
+            //    r = banco.tabela.Rows[contaLinha];
+            //    _tipoProjeto = r["Tipo_Projeto"].ToString();
+            //    while ((contaLinha <= banco.tabela.Rows.Count - 1) & (_tipoProjeto == r["Tipo_Projeto"].ToString()))
+            //    {
+            //        _conta = r["conta"].ToString();
+            //        SaldoConta = 0;
+            //        while ((contaLinha <= banco.tabela.Rows.Count - 1) & (_tipoProjeto == r["Tipo_Projeto"].ToString()) & (_conta == r["conta"].ToString()))
+            //        {
+            //            sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nome"].ToString().Trim());
+            //            sh.GetRow(numlinha).GetCell(2).SetCellValue(Convert.ToDouble(r["saldo"].ToString()));
+            //            SaldoConta += (Convert.ToDouble(r["receita"].ToString())) - (Convert.ToDouble(r["despesa"].ToString()));
+            //            numlinha++;
+            //        }
+            //        SaldoTipoProjeto += SaldoConta;
+            //        numlinha++;
+            //        sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
+            //        sh.GetRow(numlinha).GetCell(2).CellStyle = cellStylebold;
+            //        sh.GetRow(numlinha).GetCell(0).SetCellValue("Saldo da Conta");
+            //        sh.GetRow(numlinha).GetCell(2).SetCellValue(SaldoConta);
+            //    }
+            //    QuebrarPagina(sh, ref numlinha);
+
+            //}
             foreach (DataRow r in banco.tabela.Rows)
             {
-                SaldoProjeto -= Convert.ToDouble(r["despesa"].ToString());
-                SaldoProjeto += Convert.ToDouble(r["receita"].ToString());
-                //var p = numlinha % linhasporpagina;
-                //if (_conta != r["conta"].ToString())
-                //{
-                //    sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim() + " - " + r["descricao"].ToString().Trim());
-                //    _conta = r["conta"].ToString();
-                //    numlinha++;
-                //}
-                //var linha = sh.CreateRow(numlinha);
+                SaldoProjeto += (Convert.ToDouble(r["receita"].ToString())) - (Convert.ToDouble(r["despesa"].ToString()));
+                SaldoConta += (Convert.ToDouble(r["receita"].ToString())) - (Convert.ToDouble(r["despesa"].ToString()));
+                SaldoGeral += (Convert.ToDouble(r["receita"].ToString())) - (Convert.ToDouble(r["despesa"].ToString()));
+                var p = numlinha % linhasporpagina;
+                if (p == 0)
+                {
+                    sh.SetRowBreak(numlinha);
+                    numlinha++;
+                    sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
+                    sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nometipo"].ToString().Trim());
+                    sh.GetRow(numlinha).GetCell(0).CellStyle.BorderBottom = BorderStyle.Double;
+                    numlinha+=2;
+                    sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim() + " - " + r["descricao"].ToString().Trim());
+                    numlinha++;
+                    imprimiucabecalho = true;
+                }
+                if (_conta != r["conta"].ToString())
+                {
+                    if (!imprimiucabecalho)
+                    {
+                        sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
+                        sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim() + " - " + r["descricao"].ToString().Trim());
+                    }
+                    else
+                    {
+                        imprimiucabecalho = false;
+                    }
+                    numlinha++;
+                    sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
+                    sh.GetRow(numlinha).GetCell(2).CellStyle = cellStylebold;
+                    sh.GetRow(numlinha).GetCell(0).SetCellValue("Saldo da Conta");
+                    sh.GetRow(numlinha).GetCell(2).SetCellValue(SaldoConta);
+                    SaldoConta = 0;
+                    _conta = r["conta"].ToString();
+                    numlinha++;
+                }
                 try
                 {
                     sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nome"].ToString().Trim());
-                    //                    sh.GetRow(numlinha).GetCell(0).SetCellValue(Convert.ToDouble(r["receita"].ToString()));
-                    //                    sh.GetRow(numlinha).GetCell(1).SetCellValue(Convert.ToDouble(r["despesa"].ToString()));
-                    sh.GetRow(numlinha).GetCell(1).SetCellValue(Convert.ToDouble(r["saldo"].ToString()));
-                    sh.GetRow(numlinha).GetCell(2).SetCellValue(r["conta"].ToString().Trim());
+                    sh.GetRow(numlinha).GetCell(2).SetCellValue(Convert.ToDouble(r["saldo"].ToString()));
                 }
                 catch
                 {
