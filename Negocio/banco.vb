@@ -210,10 +210,11 @@ Public Class clBanco
         Dim jss As JsonSerializerSettings = New JsonSerializerSettings()
         jss.ContractResolver = New CamelCasePropertyNamesContractResolver()
 
-        If (Not IsNothing(tabela))
+        If (Not IsNothing(tabela)) Then
             Return JsonConvert.SerializeObject(ds, Formatting.Indented, jss)
         ElseIf (Not IsNothing(ds.Tables(0))) Then
-            Return JsonConvert.SerializeObject(ds, Formatting.Indented, jss) 'fastJSON.JSON.ToJSON(ds.Tables(0))
+            'Return JsonConvert.SerializeObject(ds, Formatting.Indented, jss) 'fastJSON.JSON.ToJSON(ds.Tables(0))
+            Return fastJSON.JSON.ToNiceJSON(ds.Tables(0))
         Else
             Return JsonConvert.SerializeObject("Sem dados na tabela", jss)
         End If

@@ -206,5 +206,26 @@ namespace ctrlProjetoService.Controllers
             yield return gen.AtualizarCamposTabela("movimentos", campo, id, valor);
         }
 
+        #region Antigo FlexBuilder
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("ListarContaMae")]
+        public IEnumerable<string> ListarContaMae(int coordenador)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.ListarContaMae(coordenador);
+        }
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("ListarMovimentosContaFlexBuilder")]
+        public IEnumerable<string> ListarMovimentosContaFlexBuilder(string datainicial, string datafinal, string conta)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.ListarMovimentosContaFlexBuilder(datainicial, datafinal, conta);
+        }
+
+
+        #endregion
+
     }
 }

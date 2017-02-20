@@ -75,6 +75,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="logErro.cs" />
     <Compile Include="Movimentos.cs" />
+    <Compile Include="NegocioBancos.cs" />
     <Compile Include="NegociosGenericos.cs" />
     <Compile Include="NegocioUtil.cs" />
     <Compile Include="projetos.cs" />

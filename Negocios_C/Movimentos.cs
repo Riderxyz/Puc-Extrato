@@ -596,23 +596,12 @@ namespace Puc.Negocios_C
 
             ICellStyle cellStylenormal = wb.CreateCellStyle();
             cellStylenormal.SetFont(hFontNormal);
-            //cellStylenormal.BorderBottom = BorderStyle.None;
-            //cellStylenormal.BorderTop = BorderStyle.None;
-            //cellStylenormal.BorderLeft = BorderStyle.None;
-            //cellStylenormal.BorderRight = BorderStyle.None;
-
 
             ICellStyle cellStylebold = wb.CreateCellStyle();
             cellStylebold.SetFont(hFontBold);
 
-
             ICellStyle cellStyleCurrencybold = wb.CreateCellStyle();
-           // cellStyleCurrencybold.DataFormat = wb.CreateDataFormat().GetFormat("###,##0.00");
             cellStylebold.SetFont(hFontBold);
-            //cellStylebold.BorderBottom = BorderStyle.None;
-            //cellStylebold.BorderTop = BorderStyle.None;
-            //cellStylebold.BorderLeft = BorderStyle.None;
-            //cellStylebold.BorderRight = BorderStyle.None;
 
             #endregion
 
@@ -663,7 +652,7 @@ namespace Puc.Negocios_C
                             numlinha++;
                             p = numlinha % linhasporpagina;
                             contaLinha++;
-                            
+
                         }
                         if (p == 0)
                         {
@@ -688,8 +677,6 @@ namespace Puc.Negocios_C
                     sh.GetRow(numlinha).GetCell(1).SetCellValue(SaldoConta);
                     sh.GetRow(numlinha).GetCell(1).CellStyle.DataFormat = wb.CreateDataFormat().GetFormat("###,##0.00");
                     sh.GetRow(numlinha).GetCell(2).SetCellValue(2);
-                 //   bordercells(ref sh, linhainicial, numlinha, 0, 1, true);
-                 //   bordercells(ref sh, linhainicial, linhainicial, 0, 1);
                     numlinha++;
                 }
                 sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
@@ -702,55 +689,6 @@ namespace Puc.Negocios_C
                 QuebrarPagina(ref sh, ref numlinha);
 
             }
-            //foreach (DataRow r in banco.tabela.Rows)
-            //{
-            //    SaldoProjeto += (Convert.ToDouble(r["receita"].ToString())) - (Convert.ToDouble(r["despesa"].ToString()));
-            //    SaldoConta += (Convert.ToDouble(r["receita"].ToString())) - (Convert.ToDouble(r["despesa"].ToString()));
-            //    SaldoGeral += (Convert.ToDouble(r["receita"].ToString())) - (Convert.ToDouble(r["despesa"].ToString()));
-            //    var p = numlinha % linhasporpagina;
-            //    if (p == 0)
-            //    {
-            //        sh.SetRowBreak(numlinha);
-            //        numlinha++;
-            //        sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
-            //        sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nometipo"].ToString().Trim());
-            //        sh.GetRow(numlinha).GetCell(0).CellStyle.BorderBottom = BorderStyle.Double;
-            //        numlinha+=2;
-            //        sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim() + " - " + r["descricao"].ToString().Trim());
-            //        numlinha++;
-            //        imprimiucabecalho = true;
-            //    }
-            //    if (_conta != r["conta"].ToString())
-            //    {
-            //        if (!imprimiucabecalho)
-            //        {
-            //            sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
-            //            sh.GetRow(numlinha).GetCell(0).SetCellValue(r["conta"].ToString().Trim() + " - " + r["descricao"].ToString().Trim());
-            //        }
-            //        else
-            //        {
-            //            imprimiucabecalho = false;
-            //        }
-            //        numlinha++;
-            //        sh.GetRow(numlinha).GetCell(0).CellStyle = cellStylebold;
-            //        sh.GetRow(numlinha).GetCell(2).CellStyle = cellStylebold;
-            //        sh.GetRow(numlinha).GetCell(0).SetCellValue("Saldo da Conta");
-            //        sh.GetRow(numlinha).GetCell(2).SetCellValue(SaldoConta);
-            //        SaldoConta = 0;
-            //        _conta = r["conta"].ToString();
-            //        numlinha++;
-            //    }
-            //    try
-            //    {
-            //        sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nome"].ToString().Trim());
-            //        sh.GetRow(numlinha).GetCell(2).SetCellValue(Convert.ToDouble(r["saldo"].ToString()));
-            //    }
-            //    catch
-            //    {
-
-            //    }
-            //    numlinha++;
-            //}
 
             wb.SetPrintArea(0, 0, 1, 0, numlinha);
             //sh.PrintSetup.PaperSize = (short)PaperSize.A4;
@@ -1144,6 +1082,63 @@ namespace Puc.Negocios_C
             return lResult;
 
 
+        }
+
+        #endregion
+
+        #region Consultas no Sistema Antigo
+        public string ListarContaMae(int coordenador)
+        {
+            string lResult = "";
+            clBanco  banco = new clBanco("FPLF");
+            banco.parametros.Clear();
+          //  banco.parametros.Add(new System.Data.SqlClient.SqlParameter("coordenador", coordenador));
+            banco.ExecuteAndReturnData("sp_internet_ContasMaeGet");
+            if (banco.tabela != null)
+            {
+                if (banco.tabela.Rows.Count > 0)
+                {
+                    lResult = banco.GetJsonTabela();
+                }
+            }
+            return lResult;
+        }
+
+        public string ListarMovimentosContaFlexBuilder(string datainicial, string datafinal, string conta)
+        {
+            string lResult = "";
+            clBanco banco = new clBanco("FPLF");
+            banco.parametros.Clear();
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("di", datainicial));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("df", datafinal));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("contamae", conta));
+            banco.ExecuteAndReturnData("[sp_internet_movimentos_flexbuilder]");
+            if (banco.tabela != null)
+            {
+                if (banco.tabela.Rows.Count > 0)
+                {
+                    lResult = banco.GetJsonTabela();
+                }
+            }
+            return lResult;
+        }
+
+
+        public string ListarSaldoConta(int coordenador)
+        {
+            string lResult = "";
+
+            banco.parametros.Clear();
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("coordenador", coordenador));
+            banco.ExecuteAndReturnData("sp_internet_ContasMaeGet");
+            if (banco.tabela != null)
+            {
+                if (banco.tabela.Rows.Count > 0)
+                {
+                    lResult = banco.GetJsonTabela();
+                }
+            }
+            return lResult;
         }
     }
     #endregion
