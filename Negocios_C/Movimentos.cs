@@ -1196,8 +1196,8 @@ namespace Puc.Negocios_C
                 linha.GetCell(0).SetCellValue(r["texto"].ToString());
                 linha.GetCell(1).SetCellValue(Convert.ToDateTime(r["data"]));
 
-                linha.GetCell(3).SetCellValue(Convert.ToDouble(r["receita"].ToString()));
-                linha.GetCell(4).SetCellValue(Convert.ToDouble(r["despesa"].ToString()));
+                linha.GetCell(2).SetCellValue(Convert.ToDouble(r["receita"].ToString()));
+                linha.GetCell(3).SetCellValue(Convert.ToDouble(r["despesa"].ToString()));
                 linha.GetCell(4).SetCellValue(Convert.ToDouble(r["saldo"].ToString()));
                 numlinha++;
             }
@@ -1205,7 +1205,7 @@ namespace Puc.Negocios_C
             sh.GetRow(5).GetCell(2).SetCellValue(despesas);
             wb.SetPrintArea(0, 0, 4, 0, numlinha);
             sh.FitToPage = false;// RowBreak(8);
-            ExportarArquivo(wb, "Extrato_Rubrica.xls");
+            ExportarArquivo(wb, "Movimentação de projetos.xls");
             return "";
         }
 
