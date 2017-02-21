@@ -5,20 +5,20 @@ Imports System.Data.SqlClient
 Imports System.IO
 Imports NPOI.HSSF.UserModel
 Imports NPOI.SS.UserModel
-Imports System.web
+Imports System.Web
 
 Public Class ExtratoNegocios
 #Region "Propriedades"
     'Property extrato  As Dominio.extratoNegocios
     'Property ListaProjetos As List(Of Dominio.projeto)
-    Private _ifont As ifont
+    Private _ifont As IFont
     Private _nomeprojeto As String
-    Private _nomeconta As string
-    public property wb As HSSFWorkbook
-    public Property NomeArquivoPlanilha As String = ""
+    Private _nomeconta As String
+    Public Property wb As HSSFWorkbook
+    Public Property NomeArquivoPlanilha As String = ""
     Public ReadOnly CaracteresValidos As String = " abcdefghijklmnopqrstuvxwyzABCDEFGHIJKLMNOPQRSTUVXWYZ0123456789_-#"
     Public Property workbook As IWorkbook
-    Public readonly property FontePadrao As Ifont
+    Public ReadOnly Property FontePadrao As IFont
         Get
             _ifont = wb.CreateFont()
             _ifont.FontHeightInPoints = 11
@@ -27,46 +27,46 @@ Public Class ExtratoNegocios
             Return _ifont
         End Get
     End Property
-    Public property NomeProjeto As String
+    Public Property NomeProjeto As String
         Get
             Dim result As String = ""
             For Each c In _nomeprojeto
-                If (CaracteresValidos.IndexOf(c) <> -1)
+                If (CaracteresValidos.IndexOf(c) <> -1) Then
                     result = result + c
                 End If
             Next
             Return result
         End Get
-        Set(value As string)
+        Set(value As String)
             _nomeprojeto = value
         End Set
     End Property
-    Public Property NomeConta As string
+    Public Property NomeConta As String
         Get
             Dim result As String = ""
             For Each c In _nomeconta
-                If (CaracteresValidos.IndexOf(c) <> -1)
+                If (CaracteresValidos.IndexOf(c) <> -1) Then
                     result = result + c
                 End If
             Next
             Return result
         End Get
-        Set(value As string)
+        Set(value As String)
             _nomeconta = value
         End Set
     End Property
-    Public readonly property NomeArquivoExtrato As String
+    Public ReadOnly Property NomeArquivoExtrato As String
         Get
             Return String.Format("Extrato de projetos - {0}.xls", NomeProjeto)
         End Get
     End Property
-    Public readonly property NomeArquivoSaldoProjetos As String
+    Public ReadOnly Property NomeArquivoSaldoProjetos As String
         Get
             Return "Total das Contas.xls "
         End Get
     End Property
 
-        Public readonly property NomeArquivoAnaliseContas As String
+    Public ReadOnly Property NomeArquivoAnaliseContas As String
         Get
             Return String.Format("Saldo dos Projetos - {0}.xls", NomeConta.Trim)
         End Get
@@ -84,7 +84,7 @@ Public Class ExtratoNegocios
     Public Function GetExtrato(projeto As Integer, dataInicial As String, datafinal As String, pagina As Int16, pagina_tamanho As Int16) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
-        banco.parametros.Clear
+        banco.parametros.Clear()
         banco.parametros.Add(New SqlParameter("di", dataInicial))
         banco.parametros.Add(New SqlParameter("df", datafinal))
         banco.parametros.Add(New SqlParameter("cdProjeto", projeto))
@@ -108,7 +108,7 @@ Public Class ExtratoNegocios
     Public Function GetExtratoExcel(projeto As Integer, dataInicial As String, datafinal As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
-        banco.parametros.Clear
+        banco.parametros.Clear()
         banco.parametros.Add(New SqlParameter("di", dataInicial))
         banco.parametros.Add(New SqlParameter("df", datafinal))
         banco.parametros.Add(New SqlParameter("cdProjeto", projeto))
@@ -134,7 +134,7 @@ Public Class ExtratoNegocios
     Public Function GetSaldoProjeto(projeto As Integer, data As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
-        banco.parametros.Clear
+        banco.parametros.Clear()
         banco.parametros.Add(New SqlParameter("data", data))
         banco.parametros.Add(New SqlParameter("cdProjeto", projeto))
 
@@ -151,10 +151,10 @@ Public Class ExtratoNegocios
         End If
         Return lResult
     End Function
-    Public Function GetSaldoProjetoExcel(coordenador As Integer, data As String, conta As string) As String
+    Public Function GetSaldoProjetoExcel(coordenador As Integer, data As String, conta As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
-        banco.parametros.Clear
+        banco.parametros.Clear()
         banco.parametros.Add(New SqlParameter("data", data))
         banco.parametros.Add(New SqlParameter("coordenador", coordenador))
 
@@ -178,7 +178,7 @@ Public Class ExtratoNegocios
     Public Function GetSaldoContas(coordenador As Integer, data As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
-        banco.parametros.Clear
+        banco.parametros.Clear()
         banco.parametros.Add(New SqlParameter("data", data))
         banco.parametros.Add(New SqlParameter("coordenador", coordenador))
 
@@ -198,7 +198,7 @@ Public Class ExtratoNegocios
     Public Function GetSaldoContasExcel(coordenador As Integer, data As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
-        banco.parametros.Clear
+        banco.parametros.Clear()
         banco.parametros.Add(New SqlParameter("data", data))
         banco.parametros.Add(New SqlParameter("coordenador", coordenador))
 
@@ -222,7 +222,7 @@ Public Class ExtratoNegocios
     Public Function GetAnaliseContas(coordenador As Integer, conta As String, data As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
-        banco.parametros.Clear
+        banco.parametros.Clear()
         banco.parametros.Add(New SqlParameter("data", data))
         banco.parametros.Add(New SqlParameter("coordenador", coordenador))
         banco.parametros.Add(New SqlParameter("contaMae", conta))
@@ -240,10 +240,10 @@ Public Class ExtratoNegocios
         End If
         Return lResult
     End Function
-    Public Function GetAnaliseContasExcel(coordenador As Integer, conta As string, data As String) As String
+    Public Function GetAnaliseContasExcel(coordenador As Integer, conta As String, data As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
-        banco.parametros.Clear
+        banco.parametros.Clear()
         banco.parametros.Add(New SqlParameter("data", data))
         banco.parametros.Add(New SqlParameter("coordenador", coordenador))
         banco.parametros.Add(New SqlParameter("contaMae", conta))
@@ -272,7 +272,7 @@ Public Class ExtratoNegocios
         lResult = banco.GetJsonTabela
         Return lResult
     End Function
-    Function ExcelEmpty(nomeArquivo As string) As String
+    Function ExcelEmpty(nomeArquivo As String) As String
         Dim banco As clBanco = New clBanco
         Dim lResult As String
         banco.CarregarTabela(String.Format("select '{0}' nomeArquivo", nomeArquivo))
@@ -280,7 +280,7 @@ Public Class ExtratoNegocios
         lResult = banco.GetJsonTabela
         Return lResult
     End Function
-    Function ExcelError(nomeArquivo As string) As String
+    Function ExcelError(nomeArquivo As String) As String
         Dim banco As clBanco = New clBanco
         Dim lResult As String
         banco.CarregarTabela(String.Format("select 'erro' nomeArquivo", nomeArquivo))
@@ -291,12 +291,12 @@ Public Class ExtratoNegocios
 #End Region
 
 #Region "Excel"
-    Private Sub GerarXlsExtrato(tabela As DataTable, inicio As String, fim As string)
+    Private Sub GerarXlsExtrato(tabela As DataTable, inicio As String, fim As String)
         Dim ws As ISheet
         Dim rec As DataRow
-        Dim linha As Integer = 7
-        Dim projeto As string
-        Dim _doubleCellStyle as ICellStyle
+        Dim linha As Integer = 5
+        Dim projeto As String
+        Dim _doubleCellStyle As ICellStyle
         Dim dataFormatCustom As IDataFormat
 
         Dim fs As FileStream = New FileStream(System.Web.HttpContext.Current.Server.MapPath("\templates\padrao_extrato.xls"), FileMode.Open, FileAccess.Read)
@@ -307,41 +307,23 @@ Public Class ExtratoNegocios
         dataFormatCustom = workbook.CreateDataFormat()
         ws = workbook.GetSheetAt(0)
         rec = tabela.Rows(0)
-        ws.GetRow(3).GetCell(1).SetCellValue(rec("nome").ToString)
-        ws.GetRow(4).GetCell(1).SetCellValue(Date.Parse(inicio))
-        ws.GetRow(4).GetCell(3).SetCellValue(Date.Parse(fim))
-        ws.GetRow(4).GetCell(1).CellStyle.DataFormat = dataFormatCustom.GetFormat("dd/MM/yyyy")
-        ws.GetRow(4).GetCell(3).CellStyle.DataFormat = dataFormatCustom.GetFormat("dd/MM/yyyy")
+        ws.GetRow(2).GetCell(1).SetCellValue(rec("nome").ToString)
+        ws.GetRow(3).GetCell(1).SetCellValue(Date.Parse(inicio).ToString("dd/MM/yyyy") + " a " + Date.Parse(fim).ToString("dd/MM/yyyy"))
+        'ws.GetRow(3).GetCell(3).SetCellValue(Date.Parse(fim))
         projeto = rec("nome").ToString
         NomeProjeto = projeto
         For Each r As DataRow In tabela.Rows
-
-            ws.CreateRow(linha)
-            ws.GetRow(linha).CreateCell(0).SetCellValue(Date.Parse(r("data").ToString))
-            ws.GetRow(linha).GetCell(0).CellStyle.DataFormat = dataFormatCustom.GetFormat("dd/MM/yyyy")
-            ws.GetRow(linha).GetCell(0).CellStyle.SetFont(FontePadrao)
-            ws.GetRow(linha).CreateCell(1).SetCellValue(r("texto").ToString)
-
-            ws.GetRow(linha).CreateCell(8).SetCellValue(Double.Parse(r("receita").ToString))
-            ws.GetRow(linha).GetCell(8).SetCellType(CellType.Numeric)
-            ws.GetRow(linha).GetCell(8).CellStyle = _doubleCellStyle
-            ws.GetRow(linha).CreateCell(9).SetCellValue(Double.Parse(r("despesa").ToString))
-            ws.GetRow(linha).GetCell(9).SetCellType(CellType.Numeric)
-            ws.GetRow(linha).GetCell(9).CellStyle = _doubleCellStyle
-            ws.GetRow(linha).CreateCell(10).SetCellValue(Double.Parse(r("saldo").ToString))
-            ws.GetRow(linha).GetCell(10).SetCellType(CellType.Numeric)
-            ws.GetRow(linha).GetCell(10).CellStyle = _doubleCellStyle
-
-            ws.GetRow(linha).GetCell(0).CellStyle.SetFont(FontePadrao)
-            ws.GetRow(linha).GetCell(1).CellStyle.SetFont(FontePadrao)
-            ws.GetRow(linha).GetCell(8).CellStyle.SetFont(FontePadrao)
-            ws.GetRow(linha).GetCell(9).CellStyle.SetFont(FontePadrao)
-            ws.GetRow(linha).GetCell(10).CellStyle.SetFont(FontePadrao)
-
-            ws.GetRow(linha).Height = 600
+            ws.GetRow(linha).GetCell(0).SetCellValue(Date.Parse(r("data").ToString))
+            ws.GetRow(linha).GetCell(1).SetCellValue(r("texto").ToString)
+            ws.GetRow(linha).GetCell(2).SetCellValue(r("fatura").ToString)
+            ws.GetRow(linha).GetCell(3).SetCellValue(Convert.ToDouble(r("receita").ToString))
+            ws.GetRow(linha).GetCell(4).SetCellValue(Convert.ToDouble(r("despesa").ToString))
+            ws.GetRow(linha).GetCell(5).SetCellValue(Convert.ToDouble(r("saldo").ToString))
             linha = linha + 1
         Next
-        ws.ForceFormulaRecalculation = true
+        wb.SetPrintArea(0, 0, 5, 0, linha)
+        ws.FitToPage = False
+        ws.ForceFormulaRecalculation = True
         SalvarPlanilha(workbook, NomeArquivoExtrato)
         fs.Close()
     End Sub
@@ -350,7 +332,7 @@ Public Class ExtratoNegocios
         Dim ws As ISheet
         Dim rec As DataRow
         Dim linha As Integer = 7
-        Dim _doubleCellStyle as ICellStyle
+        Dim _doubleCellStyle As ICellStyle
         Dim dataFormatCustom As IDataFormat
 
         Dim fs As FileStream = New FileStream(System.Web.HttpContext.Current.Server.MapPath("\templates\padrao_saldo_contas.xls"), FileMode.Open, FileAccess.Read)
@@ -378,16 +360,16 @@ Public Class ExtratoNegocios
             ws.GetRow(linha).Height = 600
             linha = linha + 1
         Next
-        ws.ForceFormulaRecalculation = true
+        ws.ForceFormulaRecalculation = True
         SalvarPlanilha(workbook, NomeArquivoSaldoProjetos)
         fs.Close()
     End Sub
-    Private Sub GerarXlsAnaliseContas(tabela As DataTable, data As String, conta As string)
+    Private Sub GerarXlsAnaliseContas(tabela As DataTable, data As String, conta As String)
         Dim objConta As Negocio.contaNegocio = New contaNegocio
         Dim ws As ISheet
         Dim rec As DataRow
         Dim linha As Integer = 7
-        Dim _doubleCellStyle as ICellStyle
+        Dim _doubleCellStyle As ICellStyle
         Dim dataFormatCustom As IDataFormat
 
         Dim fs As FileStream = New FileStream(System.Web.HttpContext.Current.Server.MapPath("\templates\padrao_Saldo_Projetos.xls"), FileMode.Open, FileAccess.Read)
@@ -400,7 +382,7 @@ Public Class ExtratoNegocios
         dataFormatCustom = workbook.CreateDataFormat()
         ws = workbook.GetSheetAt(0)
         rec = tabela.Rows(0)
-        
+
         ws.GetRow(1).GetCell(0).SetCellValue("CONTROLE DE PROJETOS - SALDO DOS PROJETOS")
         ws.GetRow(3).GetCell(1).SetCellValue(NomeConta)
         ws.GetRow(4).GetCell(1).SetCellValue(Date.Parse(data))
@@ -417,19 +399,19 @@ Public Class ExtratoNegocios
             ws.GetRow(linha).Height = 600
             linha = linha + 1
         Next
-        ws.ForceFormulaRecalculation = true
+        ws.ForceFormulaRecalculation = True
         SalvarPlanilha(workbook, NomeArquivoAnaliseContas)
         fs.Close()
     End Sub
 
-    Private sub SalvarPlanilha(workbook as HSSFWorkbook, nomeArquivo As string)
-        dim dldir As String = AppDomain.CurrentDomain.BaseDirectory + "Download\\excel\\"
-        dim uldir As string = AppDomain.CurrentDomain.BaseDirectory + "Upload\\default_export_file\\"
+    Private Sub SalvarPlanilha(workbook As HSSFWorkbook, nomeArquivo As String)
+        Dim dldir As String = AppDomain.CurrentDomain.BaseDirectory + "Download\\excel\\"
+        Dim uldir As String = AppDomain.CurrentDomain.BaseDirectory + "Upload\\default_export_file\\"
         NomeArquivoPlanilha = nomeArquivo
-        Dim xfile As FileStream = new FileStream(Path.Combine(dldir, NomeArquivoPlanilha), FileMode.Create, System.IO.FileAccess.Write)
+        Dim xfile As FileStream = New FileStream(Path.Combine(dldir, NomeArquivoPlanilha), FileMode.Create, System.IO.FileAccess.Write)
         workbook.Write(xfile)
         xfile.Close()
-    End sub
+    End Sub
 #End Region
 
 #Region "Outros acesso a banco"
