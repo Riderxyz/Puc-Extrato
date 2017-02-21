@@ -224,6 +224,14 @@ namespace ctrlProjetoService.Controllers
             yield return movimento.ListarMovimentosContaFlexBuilder(datainicial, datafinal, conta);
         }
 
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("ListarSaldoContaFlexBuilder")]
+        public IEnumerable<string> ListarSaldoContaFlexBuilder(string data, int coordenador)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.ListarSaldoContaFlexBuilder(coordenador, data);
+        }
 
         #endregion
 

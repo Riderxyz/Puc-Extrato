@@ -1124,13 +1124,14 @@ namespace Puc.Negocios_C
         }
 
 
-        public string ListarSaldoConta(int coordenador)
+        public string ListarSaldoContaFlexBuilder(int coordenador, string data)
         {
             string lResult = "";
-
+            clBanco banco = new clBanco("FPLF");
             banco.parametros.Clear();
             banco.parametros.Add(new System.Data.SqlClient.SqlParameter("coordenador", coordenador));
-            banco.ExecuteAndReturnData("sp_internet_ContasMaeGet");
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("datafim", data));
+            banco.ExecuteAndReturnData("sp_int_saldos");
             if (banco.tabela != null)
             {
                 if (banco.tabela.Rows.Count > 0)
