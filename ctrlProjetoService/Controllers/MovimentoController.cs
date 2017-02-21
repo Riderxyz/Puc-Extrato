@@ -20,7 +20,7 @@ namespace ctrlProjetoService.Controllers
             if (projeto != -1)
                 yield return movimento.GerarExcelExtratoRubrica(projeto: projeto, rubrica: Convert.ToInt32(rubrica), dtInicio: dtInicio, dtFim: dtFim);
             else
-                yield return movimento.GerarExcelExtratoRubrica(rubrica: Convert.ToInt32(rubrica), dtInicio: dtInicio, dtFim: dtFim );
+                yield return movimento.GerarExcelExtratoRubrica(rubrica: Convert.ToInt32(rubrica), dtInicio: dtInicio, dtFim: dtFim);
         }
 
         [EnableCors("*", "*", "*")]
@@ -232,7 +232,42 @@ namespace ctrlProjetoService.Controllers
             Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
             yield return movimento.ListarSaldoContaFlexBuilder(coordenador, data);
         }
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("ListarMovimentoProjetosFlexBuilder")]
+        public IEnumerable<string> ListarMovimentoProjetosFlexBuilder(int projeto, string dataInicio, string dataFim)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.ListarMovimentoProjetosFlexBuilder(projeto, dataInicio, dataFim);
+        }
 
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("GerarExcelMovimentoProjetosFlexBuilder")]
+        public IEnumerable<string> GerarExcelMovimentoProjetosFlexBuilder(int projeto, string dataInicio, string dataFim)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.GerarExcelMovimentoProjetosFlexBuilder(projeto, dataInicio, dataFim);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("GerarExcelSaldoContaFlexBuilder")]
+        public IEnumerable<string> GerarExcelSaldoContaFlexBuilder(int coordenador, string data)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.GerarExcelSaldoContaFlexBuilder(coordenador, data);
+        }
+
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("GerarExcelMovimentoContasFlexBuilder")]
+        public IEnumerable<string> GerarExcelMovimentoContasFlexBuilder(string datainicial, string datafinal, string conta)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.GerarExcelMovimentoContasFlexBuilder(datainicial, datafinal, conta);
+        }
         #endregion
 
     }

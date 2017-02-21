@@ -14,6 +14,7 @@ namespace Puc.Negocios_C
     {
         Puc.Negocios_C.logErro log = new logErro();
         Negocio.clBanco banco = new clBanco();
+        Negocio.clBanco bancoAntigo = new clBanco("FPLF");
 
         #region Estilos
 #pragma warning disable CS0649 // Field 'Movimentos.hFontNormal' is never assigned to, and will always have its default value null
@@ -1090,9 +1091,9 @@ namespace Puc.Negocios_C
         public string ListarContaMae(int coordenador)
         {
             string lResult = "";
-            clBanco  banco = new clBanco("FPLF");
+            clBanco banco = new clBanco("FPLF");
             banco.parametros.Clear();
-          //  banco.parametros.Add(new System.Data.SqlClient.SqlParameter("coordenador", coordenador));
+            //  banco.parametros.Add(new System.Data.SqlClient.SqlParameter("coordenador", coordenador));
             banco.ExecuteAndReturnData("sp_internet_ContasMaeGet");
             if (banco.tabela != null)
             {
@@ -1107,40 +1108,205 @@ namespace Puc.Negocios_C
         public string ListarMovimentosContaFlexBuilder(string datainicial, string datafinal, string conta)
         {
             string lResult = "";
-            clBanco banco = new clBanco("FPLF");
-            banco.parametros.Clear();
-            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("di", datainicial));
-            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("df", datafinal));
-            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("contamae", conta));
-            banco.ExecuteAndReturnData("[sp_internet_movimentos_flexbuilder]");
-            if (banco.tabela != null)
+            bancoAntigo.parametros.Clear();
+            bancoAntigo.parametros.Add(new System.Data.SqlClient.SqlParameter("di", datainicial));
+            bancoAntigo.parametros.Add(new System.Data.SqlClient.SqlParameter("df", datafinal));
+            bancoAntigo.parametros.Add(new System.Data.SqlClient.SqlParameter("contamae", conta));
+            bancoAntigo.ExecuteAndReturnData("[sp_internet_movimentos_flexbuilder]");
+            if (bancoAntigo.tabela != null)
             {
-                if (banco.tabela.Rows.Count > 0)
+                if (bancoAntigo.tabela.Rows.Count > 0)
                 {
-                    lResult = banco.GetJsonTabela();
+                    lResult = bancoAntigo.GetJsonTabela();
                 }
             }
             return lResult;
         }
-
 
         public string ListarSaldoContaFlexBuilder(int coordenador, string data)
         {
             string lResult = "";
-            clBanco banco = new clBanco("FPLF");
-            banco.parametros.Clear();
-            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("coordenador", coordenador));
-            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("datafim", data));
-            banco.ExecuteAndReturnData("sp_int_saldos");
-            if (banco.tabela != null)
+
+            bancoAntigo.parametros.Clear();
+            bancoAntigo.parametros.Add(new System.Data.SqlClient.SqlParameter("coordenador", coordenador));
+            bancoAntigo.parametros.Add(new System.Data.SqlClient.SqlParameter("datafim", data));
+            bancoAntigo.ExecuteAndReturnData("sp_int_saldos");
+            if (bancoAntigo.tabela != null)
             {
-                if (banco.tabela.Rows.Count > 0)
+                if (bancoAntigo.tabela.Rows.Count > 0)
                 {
-                    lResult = banco.GetJsonTabela();
+                    lResult = bancoAntigo.GetJsonTabela();
                 }
             }
             return lResult;
         }
+
+        public string ListarMovimentoProjetosFlexBuilder(int projeto, string dataInicio, string dataFim)
+        {
+            string lResult = "";
+            bancoAntigo.parametros.Clear();
+            bancoAntigo.parametros.Add(new System.Data.SqlClient.SqlParameter("cdProjeto", projeto));
+            bancoAntigo.parametros.Add(new System.Data.SqlClient.SqlParameter("di", dataInicio));
+            bancoAntigo.parametros.Add(new System.Data.SqlClient.SqlParameter("df", dataFim));
+            bancoAntigo.ExecuteAndReturnData("sp_internet_movimentos");
+            if (bancoAntigo.tabela != null)
+            {
+                if (bancoAntigo.tabela.Rows.Count > 0)
+                {
+                    lResult = bancoAntigo.GetJsonTabela();
+                }
+            }
+
+            return lResult;
+        }
+
+        public string GerarExcelMovimentoProjetosFlexBuilder(int projeto, string dataInicio, string dataFim)
+        {
+            int numlinha = 0;
+            Double receitas, despesas;
+            HSSFWorkbook wb;// = new HSSFWorkbook();
+            HSSFSheet sh;// = (HSSFSheet)wb.GetSheet("Extrato");
+            try
+            {
+                string x = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings.Get("pathModeloMovimentoProjetosFlexBuilder"));
+                using (FileStream file = new FileStream(x, FileMode.Open, FileAccess.Read))
+                {
+                    wb = new HSSFWorkbook(file);
+                    file.Close();
+                    sh = (HSSFSheet)wb.GetSheetAt(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao abrir o arquivo de modelo. Processo encerrado. Erro " + ex.Message);
+            }
+            ListarMovimentoProjetosFlexBuilder(projeto, dataInicio, dataFim);
+
+            receitas = 0;
+            despesas = 0;
+            numlinha = 7;
+            sh.GetRow(3).GetCell(0).SetCellValue("Projeto: " + bancoAntigo.tabela.Rows[0]["nome"].ToString());
+            sh.GetRow(3).GetCell(2).SetCellValue("Período de: " + Convert.ToDateTime(dataInicio).ToString("dd/MM/yyyy") + " a " + Convert.ToDateTime(dataInicio).ToString("dd/MM/yyyy"));
+            sh.GetRow(5).GetCell(4).SetCellValue(bancoAntigo.tabela.Rows.Count - 1);
+            foreach (DataRow r in bancoAntigo.tabela.Rows)
+            {
+                despesas += Convert.ToDouble(r["despesa"].ToString());
+                receitas += Convert.ToDouble(r["receita"].ToString());
+                var linha = sh.GetRow(numlinha);
+                linha.GetCell(0).SetCellValue(r["texto"].ToString());
+                linha.GetCell(1).SetCellValue(Convert.ToDateTime(r["data"]));
+
+                linha.GetCell(3).SetCellValue(Convert.ToDouble(r["receita"].ToString()));
+                linha.GetCell(4).SetCellValue(Convert.ToDouble(r["despesa"].ToString()));
+                linha.GetCell(4).SetCellValue(Convert.ToDouble(r["saldo"].ToString()));
+                numlinha++;
+            }
+            sh.GetRow(5).GetCell(0).SetCellValue(receitas);
+            sh.GetRow(5).GetCell(2).SetCellValue(despesas);
+            wb.SetPrintArea(0, 0, 4, 0, numlinha);
+            sh.FitToPage = false;// RowBreak(8);
+            ExportarArquivo(wb, "Extrato_Rubrica.xls");
+            return "";
+        }
+
+
+        public string GerarExcelSaldoContaFlexBuilder(int coordenador, string data)
+        {
+            int numlinha = 0;
+            Double receitas, despesas;
+            HSSFWorkbook wb;// = new HSSFWorkbook();
+            HSSFSheet sh;// = (HSSFSheet)wb.GetSheet("Extrato");
+            try
+            {
+                string x = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings.Get("pathModeloSaldoContaFlexBuilder"));
+                using (FileStream file = new FileStream(x, FileMode.Open, FileAccess.Read))
+                {
+                    wb = new HSSFWorkbook(file);
+                    file.Close();
+                    sh = (HSSFSheet)wb.GetSheetAt(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao abrir o arquivo de modelo. Processo encerrado. Erro " + ex.Message);
+            }
+            ListarSaldoContaFlexBuilder(coordenador, data);
+
+            receitas = 0;
+            despesas = 0;
+            numlinha = 7;
+            sh.GetRow(3).GetCell(0).SetCellValue(bancoAntigo.tabela.Rows[0]["nomecoordenador"].ToString());
+            sh.GetRow(3).GetCell(2).SetCellValue("Movimento até : " + Convert.ToDateTime(data).ToString("dd/MM/yyyy"));
+            sh.GetRow(5).GetCell(4).SetCellValue(bancoAntigo.tabela.Rows.Count - 1);
+            foreach (DataRow r in bancoAntigo.tabela.Rows)
+            {
+                despesas += Convert.ToDouble(r["despesa"].ToString());
+                receitas += Convert.ToDouble(r["receita"].ToString());
+                var linha = sh.GetRow(numlinha);
+                linha.GetCell(0).SetCellValue(r["projeto"].ToString());
+                linha.GetCell(2).SetCellValue(Convert.ToDouble(r["receita"].ToString()));
+                linha.GetCell(3).SetCellValue(Convert.ToDouble(r["despesa"].ToString()));
+                linha.GetCell(4).SetCellValue(Convert.ToDouble(r["saldo"].ToString()));
+                numlinha++;
+            }
+            sh.GetRow(5).GetCell(0).SetCellValue(receitas);
+            sh.GetRow(5).GetCell(2).SetCellValue(despesas);
+            wb.SetPrintArea(0, 0, 4, 0, numlinha);
+            sh.FitToPage = false;// RowBreak(8);
+            ExportarArquivo(wb, "Saldo de Contas do Coordenador.xls");
+            return "";
+        }
+
+        public string GerarExcelMovimentoContasFlexBuilder(string datainicial, string datafinal, string conta)
+        {
+            int numlinha = 0;
+            Double receitas, despesas;
+            HSSFWorkbook wb;// = new HSSFWorkbook();
+            HSSFSheet sh;// = (HSSFSheet)wb.GetSheet("Extrato");
+            try
+            {
+                string x = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings.Get("pathModeloMovimentoContasFlexBuilder"));
+                using (FileStream file = new FileStream(x, FileMode.Open, FileAccess.Read))
+                {
+                    wb = new HSSFWorkbook(file);
+                    file.Close();
+                    sh = (HSSFSheet)wb.GetSheetAt(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao abrir o arquivo de modelo. Processo encerrado. Erro " + ex.Message);
+            }
+            ListarMovimentosContaFlexBuilder(datainicial, datafinal, conta);
+
+            receitas = 0;
+            despesas = 0;
+            numlinha = 7;
+            sh.GetRow(3).GetCell(0).SetCellValue(bancoAntigo.tabela.Rows[0]["conta_principal"].ToString()+"-"+bancoAntigo.tabela.Rows[0]["descricao"].ToString());
+            sh.GetRow(3).GetCell(2).SetCellValue("Período de: " + Convert.ToDateTime(datainicial).ToString("dd/MM")+" a " +Convert.ToDateTime(datafinal ).ToString("dd/MM/yyyy"));
+            sh.GetRow(5).GetCell(4).SetCellValue(bancoAntigo.tabela.Rows.Count - 1);
+            foreach (DataRow r in bancoAntigo.tabela.Rows)
+            {
+                despesas += Convert.ToDouble(r["despesa"].ToString());
+                receitas += Convert.ToDouble(r["receita"].ToString());
+                var linha = sh.GetRow(numlinha);
+                linha.GetCell(0).SetCellValue(r["descricao"].ToString());
+                linha.GetCell(1).SetCellValue(r["historico"].ToString());
+                linha.GetCell(2).SetCellValue(Convert.ToDateTime(r["data"]));
+                linha.GetCell(3).SetCellValue(Convert.ToDouble(r["receita"].ToString()));
+                linha.GetCell(4).SetCellValue(Convert.ToDouble(r["despesa"].ToString()));
+                numlinha++;
+            }
+            sh.GetRow(5).GetCell(0).SetCellValue(receitas);
+            sh.GetRow(5).GetCell(2).SetCellValue(despesas);
+            wb.SetPrintArea(0, 0, 4, 0, numlinha);
+            sh.FitToPage = false;// RowBreak(8);
+            ExportarArquivo(wb, "Saldo de Contas do Coordenador.xls");
+            return "";
+        }
+
     }
+
+
     #endregion
 }
