@@ -314,10 +314,14 @@ Public Class ExtratoNegocios
         NomeProjeto = projeto
         For Each r As DataRow In tabela.Rows
             ws.GetRow(linha).GetCell(0).SetCellValue(Date.Parse(r("data").ToString))
-            ws.GetRow(linha).GetCell(1).SetCellValue(r("texto").ToString)
-            ws.GetRow(linha).GetCell(2).SetCellValue(r("fatura").ToString)
-            ws.GetRow(linha).GetCell(3).SetCellValue(Convert.ToDouble(r("receita").ToString))
-            ws.GetRow(linha).GetCell(4).SetCellValue(Convert.ToDouble(r("despesa").ToString))
+            ws.GetRow(linha).GetCell(2).SetCellValue(r("texto").ToString)
+            ws.GetRow(linha).GetCell(1).SetCellValue(r("fatura").ToString)
+            If (linha <> 5) Then
+                ws.GetRow(linha).GetCell(3).SetCellValue(Convert.ToDouble(r("receita").ToString))
+                ws.GetRow(linha).GetCell(4).SetCellValue(Convert.ToDouble(r("despesa").ToString))
+            End If
+
+
             ws.GetRow(linha).GetCell(5).SetCellValue(Convert.ToDouble(r("saldo").ToString))
             linha = linha + 1
         Next
