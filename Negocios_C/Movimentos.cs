@@ -5,6 +5,7 @@ using System.IO;
 using System.Data;
 using System.Web;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 using fastJSON;
 
 namespace Puc.Negocios_C
@@ -165,11 +166,27 @@ namespace Puc.Negocios_C
                 grupo = r["tipo_projeto"].ToString();
                 linha = sh.CreateRow(numlinha);
                 linha.CreateCell(1).SetCellValue(r["nometipoprojeto"].ToString().ToUpper());
-                linha.HeightInPoints = 30;
+                linha.HeightInPoints = 20;
                 linha.GetCell(1).CellStyle = wb.CreateCellStyle();
                 linha.GetCell(1).CellStyle.SetFont(hFontBold);
                 linha.GetCell(1).CellStyle.VerticalAlignment = VerticalAlignment.Center;
                 linha.GetCell(1).CellStyle.BorderBottom = BorderStyle.Double;
+                NPOI.SS.Util.CellRangeAddress cra = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
+                //for (int i = 2;i < 5;i++)
+                //{
+                //    linha.CreateCell(i).SetCellValue(" ");
+                //    linha.GetCell(i).CellStyle.BorderTop = BorderStyle.Double;
+                //    linha.GetCell(i).CellStyle.BorderBottom = BorderStyle.Double;
+
+                //}
+                sh.AddMergedRegion(cra);
+                NPOI.SS.Util.RegionUtil.SetBorderBottom(6, cra, sh, wb);
+                NPOI.SS.Util.RegionUtil.SetBorderTop(6, cra, sh, wb);
+                NPOI.SS.Util.CellUtil.SetAlignment(linha.GetCell(1), wb, 0);
+                //NPOI.SS.Util.RegionUtil.SetBorderRight(NPOI.SS.UserModel.BorderStyle.Medium, cellRange, sheet, wb);
+                //NPOI.SS.Util.RegionUtil.SetBorderLeft(NPOI.SS.UserModel.BorderStyle.Medium, cellRange, sheet, wb);
+
+
                 numlinha++;
                 while ((grupo == r["tipo_projeto"].ToString()) & (conta_registro <= banco.tabela.Rows.Count - 1))
                 {
@@ -193,7 +210,9 @@ namespace Puc.Negocios_C
                         linha.GetCell(4).CellStyle = cellCurrencyStyle;
                         for (int i = 1; i <= 4; i++)
                         {
-                            linha.GetCell(i).CellStyle.SetFont(hFontNormal);
+                            linha.GetCell(i).CellStyle.SetFont(hFontNormal) ;
+                            linha.GetCell(i).CellStyle.BorderTop = BorderStyle.None;
+                            linha.GetCell(i).CellStyle.BorderBottom = BorderStyle.None;
                         }
                         numlinha++;
                         SaldoProjeto += Convert.ToDouble(r["despesa"]);
