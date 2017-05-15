@@ -149,7 +149,8 @@ namespace Puc.Negocios_C
             cellCurrencyStyleBold.DataFormat = wb.CreateDataFormat().GetFormat("###,##0.00");
             cellCurrencyStyleBold.VerticalAlignment = VerticalAlignment.Center;
             cellCurrencyStyleBold.SetFont(hFontBold);
-            cellCurrencyStyleBold.BorderBottom = BorderStyle.Medium;
+            //cellCurrencyStyleBold.BorderBottom = BorderStyle.Medium;
+            cellCurrencyStyleBold.Alignment = HorizontalAlignment.Right;
             #endregion
             proj = Convert.ToInt32(banco.tabela.Rows[0]["projeto"]);
             grupo = "xx";
@@ -230,38 +231,57 @@ namespace Puc.Negocios_C
                     linha.HeightInPoints = 25;
                     // cra = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
                     // sh.AddMergedRegion(cra);
-                    linha.CreateCell(4).SetCellValue(SaldoProjeto);
-                    linha.GetCell(4).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
-                    linha.GetCell(4).CellStyle = cellCurrencyStyleBold;
-                    linha.GetCell(4).CellStyle.VerticalAlignment = VerticalAlignment.Center;
+                    linha.CreateCell(1).SetCellValue(SaldoProjeto);
+                    linha.GetCell(1).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
+                    linha.GetCell(1).CellStyle = cellCurrencyStyleBold;
+                    linha.GetCell(1).CellStyle.VerticalAlignment = VerticalAlignment.Center;
+
+                    NPOI.SS.Util.CellRangeAddress craTotal = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
+                    sh.AddMergedRegion(craTotal);
+                    //NPOI.SS.Util.RegionUtil.SetBorderBottom(6, cra, sh, wb);
+                    NPOI.SS.Util.RegionUtil.SetBorderBottom( 2, craTotal, sh, wb);
+                    NPOI.SS.Util.CellUtil.SetAlignment(linha.GetCell(1), wb, 0);
+                    
                     numlinha++;
                     #endregion
                 }
                 #region Total do Grupo
-                linha = sh.CreateRow(numlinha);
-                linha.HeightInPoints = 35;
-                //cra = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
-                //sh.AddMergedRegion(cra);
-                linha.CreateCell(1).SetCellValue("Total do grupo");
-                linha.GetCell(1).CellStyle.VerticalAlignment = VerticalAlignment.Center;
-                linha.CreateCell(4).SetCellValue(SaldoGrupo);
-                linha.GetCell(4).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
-                linha.GetCell(4).CellStyle = cellCurrencyStyleBold;
-                linha.GetCell(4).CellStyle.VerticalAlignment = VerticalAlignment.Center;
+                // Retirei o total do grupo a pedido do Paulo em maio de 2017
+
+                //linha = sh.CreateRow(numlinha);
+                //linha.HeightInPoints = 35;
+                ////cra = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
+                ////sh.AddMergedRegion(cra);
+                //linha.CreateCell(1).SetCellValue("Total do grupo");
+                //linha.GetCell(1).CellStyle.VerticalAlignment = VerticalAlignment.Center;
+                //linha.CreateCell(4).SetCellValue(SaldoGrupo);
+                //linha.GetCell(4).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
+                //linha.GetCell(4).CellStyle = cellCurrencyStyleBold;
+                //linha.GetCell(4).CellStyle.VerticalAlignment = VerticalAlignment.Center;
                 #endregion
             }
             #region Total Geral
-            numlinha += 2;
+            //numlinha += 2;
             linha = sh.CreateRow(numlinha);
             linha.HeightInPoints = 35;
+            NPOI.SS.Util.CellRangeAddress craFinal = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
             //cra = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
             //sh.AddMergedRegion(cra);
-            linha.CreateCell(1).SetCellValue("Valor total a ser pago");
-            linha.GetCell(1).CellStyle.VerticalAlignment = VerticalAlignment.Center;
-            linha.CreateCell(4).SetCellValue(SaldoGeral);
-            linha.GetCell(4).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
-            linha.GetCell(4).CellStyle = cellCurrencyStyleBold;
-            linha.GetCell(4).CellStyle.VerticalAlignment = VerticalAlignment.Center;
+            linha.CreateCell(1).SetCellValue("Valor total a ser pago: "+SaldoGeral.ToString("###,###,##0.00"));
+          //  linha.CreateCell(2).SetCellValue(SaldoGeral);
+            //            linha.CreateCell(1).SetCellValue("Valor total a ser pago R$ "+SaldoGeral.ToString("0.000.000,00"));
+          //  linha.GetCell(2).CellStyle.VerticalAlignment = VerticalAlignment.Center;
+//            linha.CreateCell(4).SetCellValue(SaldoGeral);
+ //           linha.GetCell(4).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
+            linha.GetCell(1).CellStyle = cellCurrencyStyleBold;
+            //linha.GetCell(2).CellStyle. .VerticalAlignment = VerticalAlignment.Center;
+
+            
+            sh.AddMergedRegion(craFinal);
+            //NPOI.SS.Util.RegionUtil.SetBorderBottom(6, cra, sh, wb);
+            NPOI.SS.Util.RegionUtil.SetBorderTop(2, craFinal, sh, wb);
+            NPOI.SS.Util.CellUtil.SetAlignment(linha.GetCell(1), wb ,  3);
+
             #endregion
             wb.SetPrintArea(0, 1, 4, 1, numlinha);
 
