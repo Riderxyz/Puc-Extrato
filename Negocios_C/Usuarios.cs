@@ -51,6 +51,23 @@ namespace Negocios_C
             }
             return lResult;
         }
+
+        public string Excluir(int idUsuario)
+        {
+            string lResult = "";
+            banco.parametros.Clear();
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("id", idUsuario));
+            banco.ExecuteAndReturnData("sp_CtrlUsuarios_UsuariosDelete", "tabela");
+            if (banco.tabela != null)
+            {
+                if (banco.tabela.Rows.Count > 0)
+                {
+                    lResult = banco.GetJsonTabela();
+                }
+            }
+            return lResult;
+        }
+
         public string Atualizar(int id, string usuario, string nome, int idGrupo)
         {
             string lResult = "";

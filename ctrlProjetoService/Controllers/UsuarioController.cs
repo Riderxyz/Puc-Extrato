@@ -56,6 +56,14 @@ namespace ctrlProjetoService.Controllers
             yield return usuarios.Incluir(usuario, nome, idGrupo);
         }
 
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("Excluir")]
+        public IEnumerable<string> Excluir(int id)
+        {
+            Negocios_C.Usuarios usuarios = new Negocios_C.Usuarios();
+            yield return usuarios.Excluir(id);
+        }
 
         [EnableCors("*", "*", "*")]
         [HttpGet]
