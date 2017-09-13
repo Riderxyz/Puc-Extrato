@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
 using Negocio;
+using Negocios_C;
 using Cors.ConfigProfiles;
 
 namespace services.Controllers
@@ -11,8 +12,8 @@ namespace services.Controllers
         // GET: api/usuarios
         public IEnumerable<string> Get(string _usuario, string _senha)
         {
-            usuariosNegocios usuario = new usuariosNegocios();
-            yield return usuario.ValidarUsuario(_usuario, _senha);
+            Negocios_C.Usuarios usuario = new Usuarios();
+            yield return usuario.ValidarUsuarioCoordenador(_usuario, _senha);
         }
         // GET: api/usuarios
         [System.Web.Http.AcceptVerbs("GET", "POST")]

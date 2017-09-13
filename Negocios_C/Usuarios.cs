@@ -6,6 +6,7 @@ using System.Data;
 using System.Web;
 using NPOI.SS.UserModel;
 using Puc.Negocios_C;
+using System.Data.SqlClient;
 
 namespace Negocios_C
 {
@@ -14,6 +15,27 @@ namespace Negocios_C
         Puc.Negocios_C.logErro log = new logErro();
         Negocio.clBanco banco = new clBanco();
         NegocioUtil util = new NegocioUtil();
+
+        public string ValidarUsuarioCoordenador(string _usuario, string _senha)
+        {
+            string lResult = null;
+            clBanco banco = new clBanco();
+            banco.parametros.Add(new SqlParameter("coordenador", _usuario));
+            banco.parametros.Add(new SqlParameter("pass", _senha));
+
+            banco.ExecuteAndReturnData("sp_internet_ValidarUsuario", "tabUsuario");
+            if (((banco.tabela != null)))
+            {
+                if ((banco.tabela.Rows.Count > 0))
+                {
+                    //  Mapear(banco.tabela)
+                    lResult = banco.GetJsonTabela();
+                }
+            }
+            return lResult;
+        }
+
+
 
         public string Autenticar(string usuario, string pass)
         {

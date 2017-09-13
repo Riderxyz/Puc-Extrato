@@ -15,7 +15,7 @@ namespace Puc.Negocios_C
     {
         Puc.Negocios_C.logErro log = new logErro();
         Negocio.clBanco banco = new clBanco();
-        Negocio.clBanco bancoAntigo = new clBanco("FPLF");
+        Negocio.clBanco bancoAntigo = new clBanco("FPLF_DES");
 
         #region Estilos
 #pragma warning disable CS0649 // Field 'Movimentos.hFontNormal' is never assigned to, and will always have its default value null
@@ -211,7 +211,7 @@ namespace Puc.Negocios_C
                         linha.GetCell(4).CellStyle = cellCurrencyStyle;
                         for (int i = 1; i <= 4; i++)
                         {
-                            linha.GetCell(i).CellStyle.SetFont(hFontNormal) ;
+                            linha.GetCell(i).CellStyle.SetFont(hFontNormal);
                             linha.GetCell(i).CellStyle.BorderTop = BorderStyle.None;
                             linha.GetCell(i).CellStyle.BorderBottom = BorderStyle.None;
                         }
@@ -239,9 +239,9 @@ namespace Puc.Negocios_C
                     NPOI.SS.Util.CellRangeAddress craTotal = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
                     sh.AddMergedRegion(craTotal);
                     //NPOI.SS.Util.RegionUtil.SetBorderBottom(6, cra, sh, wb);
-                    NPOI.SS.Util.RegionUtil.SetBorderBottom( 2, craTotal, sh, wb);
+                    NPOI.SS.Util.RegionUtil.SetBorderBottom(2, craTotal, sh, wb);
                     NPOI.SS.Util.CellUtil.SetAlignment(linha.GetCell(1), wb, 0);
-                    
+
                     numlinha++;
                     #endregion
                 }
@@ -267,20 +267,20 @@ namespace Puc.Negocios_C
             NPOI.SS.Util.CellRangeAddress craFinal = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
             //cra = new NPOI.SS.Util.CellRangeAddress(numlinha, numlinha, 1, 4);
             //sh.AddMergedRegion(cra);
-            linha.CreateCell(1).SetCellValue("Valor total a ser pago: "+SaldoGeral.ToString("###,###,##0.00"));
-          //  linha.CreateCell(2).SetCellValue(SaldoGeral);
+            linha.CreateCell(1).SetCellValue("Valor total a ser pago: " + SaldoGeral.ToString("###,###,##0.00"));
+            //  linha.CreateCell(2).SetCellValue(SaldoGeral);
             //            linha.CreateCell(1).SetCellValue("Valor total a ser pago R$ "+SaldoGeral.ToString("0.000.000,00"));
-          //  linha.GetCell(2).CellStyle.VerticalAlignment = VerticalAlignment.Center;
-//            linha.CreateCell(4).SetCellValue(SaldoGeral);
- //           linha.GetCell(4).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
+            //  linha.GetCell(2).CellStyle.VerticalAlignment = VerticalAlignment.Center;
+            //            linha.CreateCell(4).SetCellValue(SaldoGeral);
+            //           linha.GetCell(4).SetCellType(NPOI.SS.UserModel.CellType.Numeric);
             linha.GetCell(1).CellStyle = cellCurrencyStyleBold;
             //linha.GetCell(2).CellStyle. .VerticalAlignment = VerticalAlignment.Center;
 
-            
+
             sh.AddMergedRegion(craFinal);
             //NPOI.SS.Util.RegionUtil.SetBorderBottom(6, cra, sh, wb);
             NPOI.SS.Util.RegionUtil.SetBorderTop(2, craFinal, sh, wb);
-            NPOI.SS.Util.CellUtil.SetAlignment(linha.GetCell(1), wb ,  3);
+            NPOI.SS.Util.CellUtil.SetAlignment(linha.GetCell(1), wb, 3);
 
             #endregion
             wb.SetPrintArea(0, 1, 4, 1, numlinha);
@@ -428,7 +428,10 @@ namespace Puc.Negocios_C
             foreach (DataRow r in banco.tabela.Rows)
             {
                 if ((numlinha == 4) & (Convert.ToDouble(r["despesa"].ToString()) == 0) & (Convert.ToDouble(r["receita"].ToString()) == 0))
-                    SaldoProjeto = Convert.ToDouble(r["saldo"].ToString());
+                    if (r["saldo"].ToString() != "")
+                        SaldoProjeto = Convert.ToDouble(r["saldo"].ToString());
+                    else
+                        SaldoProjeto = 0;
                 else
                 {
                     SaldoProjeto -= Convert.ToDouble(r["despesa"].ToString());
@@ -478,12 +481,22 @@ namespace Puc.Negocios_C
 
             SaldoProjeto = 0;
             numlinha = 5;
-            sh.GetRow(1).GetCell(1).SetCellValue(banco.tabela.Rows[0]["NomeProjeto"].ToString());
-            sh.GetRow(2).GetCell(1).SetCellValue(banco.tabela.Rows[0]["NomeCoordenador"].ToString());
+            if (projeto != -1)
+            {
+                sh.GetRow(1).GetCell(1).SetCellValue(banco.tabela.Rows[0]["NomeProjeto"].ToString());
+                sh.GetRow(2).GetCell(1).SetCellValue(banco.tabela.Rows[0]["NomeCoordenador"].ToString());
+                sh.GetRow(3).GetCell(1).SetCellValue(banco.tabela.Rows[0]["nomerubricacompleta"].ToString());
+            }
+            else
+            {
+                sh.GetRow(1).GetCell(0).SetCellValue(" ");
+                sh.GetRow(2).GetCell(0).SetCellValue(" ");
+                sh.GetRow(3).GetCell(0).SetCellValue(" ");
+            }
             sh.GetRow(2).GetCell(3).SetCellValue(Convert.ToDateTime(dtInicio).ToString("dd/MM/yyyy"));
             sh.GetRow(2).GetCell(4).SetCellValue("a");
             sh.GetRow(2).GetCell(5).SetCellValue(Convert.ToDateTime(dtFim).ToString("dd/MM/yyyy"));
-            sh.GetRow(3).GetCell(1).SetCellValue(banco.tabela.Rows[0]["nomerubricacompleta"].ToString());
+
             foreach (DataRow r in banco.tabela.Rows)
             {
                 SaldoProjeto -= Convert.ToDouble(r["despesa"].ToString());
@@ -502,7 +515,49 @@ namespace Puc.Negocios_C
             ExportarArquivo(wb, "Extrato_Rubrica.xls");
             return "";
         }
+        public string SaldoPorRubricaCamarao(int rubrica, string dtInicio, string dtFim, int projeto = -1)
+        {
+            int numlinha = 0;
+            Double SaldoProjeto;
+            HSSFWorkbook wb;// = new HSSFWorkbook();
+            HSSFSheet sh;// = (HSSFSheet)wb.GetSheet("Extrato");
+            try
+            {
+                string x = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings.Get("pathModeloCamarao"));
+                using (FileStream file = new FileStream(x, FileMode.Open, FileAccess.Read))
+                {
+                    wb = new HSSFWorkbook(file);
+                    file.Close();
+                    sh = (HSSFSheet)wb.GetSheetAt(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao abrir o arquivo de modelo. Processo encerrado. Erro " + ex.Message);
+            }
 
+            ListarSaldoCamarao(dataInicio: dtInicio, dataFim: dtFim, rubrica: rubrica);
+
+            SaldoProjeto = 0;
+            numlinha = 4;
+            sh.GetRow(2).GetCell(0).SetCellValue(Convert.ToDateTime(dtInicio).ToString("dd/MM/yyyy")+" a "+ Convert.ToDateTime(dtFim).ToString("dd/MM/yyyy") + "  -  Rubrica " + rubrica.ToString());
+            sh.GetRow(1).GetCell(2).SetCellValue("Rubrica " + rubrica.ToString());
+
+            foreach (DataRow r in banco.tabela.Rows)
+            {
+                var linha = sh.GetRow(numlinha);
+                linha.GetCell(0).SetCellValue(r["conta_principal"].ToString());
+                linha.GetCell(1).SetCellValue(r["nomeconta"].ToString());
+                linha.GetCell(2).SetCellValue(Convert.ToDouble(r["saldo"].ToString()));
+                SaldoProjeto += Convert.ToDouble(r["saldo"].ToString());
+                linha.GetCell(3).SetCellValue(SaldoProjeto);
+                numlinha++;
+            }
+            wb.SetPrintArea(0, 0, 5, 0, numlinha);
+            sh.FitToPage = false;// RowBreak(8);
+            ExportarArquivo(wb, "Extrato Rubricas por contas.xls");
+            return "";
+        }
         public string GerarExcelSaldoRubrica(string data, string conta, int projeto)
         {
             int numlinha = 0;
@@ -582,6 +637,7 @@ namespace Puc.Negocios_C
         //        }
         //    }
         //}
+
         public string GerarExcelSaldoProjeto(string data, string conta = "", string projeto = "")
         {
             #region Definição das variaveis
@@ -681,7 +737,7 @@ namespace Puc.Negocios_C
                         impHeader = false;
                         while ((contaLinha <= banco.tabela.Rows.Count - 1) & (_tipoProjeto == r["Tipo_Projeto"].ToString()) & (_conta == r["conta"].ToString()) & (p != 0))
                         {
-                            r = banco.tabela.Rows[contaLinha];
+
 
                             sh.GetRow(numlinha).GetCell(0).SetCellValue(r["nome"].ToString().Trim());
                             sh.GetRow(numlinha).GetCell(1).SetCellValue(Convert.ToDouble(r["saldo"].ToString()));
@@ -692,6 +748,10 @@ namespace Puc.Negocios_C
                             numlinha++;
                             p = numlinha % linhasporpagina;
                             contaLinha++;
+                            if (contaLinha <= banco.tabela.Rows.Count - 1)
+                            {
+                                r = banco.tabela.Rows[contaLinha];
+                            }
 
                         }
                         if (p == 0)
@@ -734,7 +794,7 @@ namespace Puc.Negocios_C
             //sh.PrintSetup.PaperSize = (short)PaperSize.A4;
             sh.FitToPage = false;// RowBreak(8);
 
-            ExportarArquivo(wb, "Extrato.xls");
+            ExportarArquivo(wb, "Saldo dos Projetos.xls");
             return "";
         }
         public string GerarSenhaCoordenador(Int32 coordenador)
@@ -784,6 +844,24 @@ namespace Puc.Negocios_C
         #endregion
 
         #region Modulos de consulta e CRUD
+
+        public string buscarfatura(string fatura, int id)
+        {
+            string lResult = "";
+
+            banco.parametros.Clear();
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("fatura", fatura));
+            banco.parametros.Add(new System.Data.SqlClient.SqlParameter("id", id));
+            banco.ExecuteAndReturnData("sp_CtrlProjetos_MovimentosBuscarFatura", "tabela");
+            if (banco.tabela != null)
+            {
+                if (banco.tabela.Rows.Count > 0)
+                {
+                    lResult = banco.GetJsonTabela();
+                }
+            }
+            return lResult;
+        }
         public string SaldosProjeto(string data, int projeto)
         {
             string lResult = "";
@@ -943,6 +1021,35 @@ namespace Puc.Negocios_C
                 banco.ExecuteAndReturnData("sp_CtrlProjetos_MovimentosLista", "tabmovimento");
             else
                 banco.ExecuteAndReturnData("sp_CtrlProjetos_MovimentosListaPorAlteracao", "tabmovimento");
+            if (banco.tabela != null)
+            {
+                if (banco.tabela.Rows.Count > 0)
+                {
+                    lResult = banco.GetJsonTabela();
+                }
+            }
+            return lResult;
+        }
+
+        public string ListarSaldoCamarao(int rubrica = default(int), string dataInicio = default(string), string dataFim = default(string))
+        {
+            string lResult = "";
+            #region Preparação dos parametros
+            banco.parametros.Clear();
+            if ((rubrica != default(int)) & (rubrica >= 0))
+            {
+                banco.parametros.Add(new System.Data.SqlClient.SqlParameter("rubrica", rubrica));
+            }
+            if (dataInicio != default(string))
+            {
+                banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataInicio", dataInicio));
+            }
+            if (dataFim != default(string))
+            {
+                banco.parametros.Add(new System.Data.SqlClient.SqlParameter("dataFim", dataFim));
+            }
+            #endregion
+            banco.ExecuteAndReturnData("[sp_CtrlProjetos_SaldosRubricasCamarao]", "tabela");
             if (banco.tabela != null)
             {
                 if (banco.tabela.Rows.Count > 0)
@@ -1299,6 +1406,7 @@ namespace Puc.Negocios_C
         public string GerarExcelMovimentoContasFlexBuilder(string datainicial, string datafinal, string conta)
         {
             int numlinha = 0;
+            string NomeConta = "";
             Double receitas, despesas;
             HSSFWorkbook wb;// = new HSSFWorkbook();
             HSSFSheet sh;// = (HSSFSheet)wb.GetSheet("Extrato");
@@ -1321,9 +1429,10 @@ namespace Puc.Negocios_C
             receitas = 0;
             despesas = 0;
             numlinha = 7;
-            sh.GetRow(3).GetCell(0).SetCellValue(bancoAntigo.tabela.Rows[0]["conta_principal"].ToString()+"-"+bancoAntigo.tabela.Rows[0]["descricao"].ToString());
-            sh.GetRow(3).GetCell(2).SetCellValue("Período de: " + Convert.ToDateTime(datainicial).ToString("dd/MM")+" a " +Convert.ToDateTime(datafinal ).ToString("dd/MM/yyyy"));
+            sh.GetRow(3).GetCell(0).SetCellValue(bancoAntigo.tabela.Rows[0]["conta_principal"].ToString() + "-" + bancoAntigo.tabela.Rows[0]["descricao"].ToString());
+            sh.GetRow(3).GetCell(2).SetCellValue("Período de: " + Convert.ToDateTime(datainicial).ToString("dd/MM") + " a " + Convert.ToDateTime(datafinal).ToString("dd/MM/yyyy"));
             sh.GetRow(5).GetCell(4).SetCellValue(bancoAntigo.tabela.Rows.Count - 1);
+            NomeConta = bancoAntigo.tabela.Rows[0]["conta_principal"].ToString().Trim() + "-" + bancoAntigo.tabela.Rows[0]["descricao"].ToString();
             foreach (DataRow r in bancoAntigo.tabela.Rows)
             {
                 despesas += Convert.ToDouble(r["despesa"].ToString());
@@ -1340,7 +1449,7 @@ namespace Puc.Negocios_C
             sh.GetRow(5).GetCell(2).SetCellValue(despesas);
             wb.SetPrintArea(0, 0, 4, 0, numlinha);
             sh.FitToPage = false;// RowBreak(8);
-            ExportarArquivo(wb, "Saldo de Contas do Coordenador.xls");
+            ExportarArquivo(wb, "Movimento por Contas - " + NomeConta + ".xls");
             return "";
         }
 

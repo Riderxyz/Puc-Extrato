@@ -13,10 +13,6 @@ namespace services.Controllers
     public class ExtratosController : ApiController
     {
         // GET: api/Projetos
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
         // GET: api/Projetos
         #region Extratos
         [EnableCors("*", "*", "*")]
@@ -25,6 +21,14 @@ namespace services.Controllers
         {
             ExtratoNegocios extratos = new ExtratoNegocios();
             yield return extratos.GetExtrato(projeto, di, df, pagina, pagina_tamanho);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [Route("api/extratos/getDomain/ddd/{a}")]
+        public IEnumerable<string> GetDomain(int ddd)
+        {
+
+            yield return AppDomain.CurrentDomain.BaseDirectory;
         }
 
         [EnableCors("*", "*", "*")]

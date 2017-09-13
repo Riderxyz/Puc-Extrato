@@ -13,6 +13,24 @@ namespace ctrlProjetoService.Controllers
     {
         [EnableCors("*", "*", "*")]
         [HttpGet]
+        [Route("buscarfatura")]
+        public IEnumerable<string> buscarfatura(string fatura, int id)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.buscarfatura(fatura, id);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
+        [Route("SaldoPorRubricaCamarao")]
+        public IEnumerable<string> SaldoPorRubricaCamarao(string rubrica, string dtInicio, string dtFim)
+        {
+            Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
+            yield return movimento.SaldoPorRubricaCamarao(rubrica: Convert.ToInt32(rubrica), dtInicio: dtInicio, dtFim: dtFim);
+        }
+
+        [EnableCors("*", "*", "*")]
+        [HttpGet]
         [Route("GerarExcelExtratoPorRubrica")]
         public IEnumerable<string> GerarExcelExtratoPorRubrica(string rubrica, string dtInicio, string dtFim, int projeto = -1)
         {
@@ -29,7 +47,7 @@ namespace ctrlProjetoService.Controllers
         public IEnumerable<string> GerarExcelSaldoProjeto(string Conta, string data)
         {
             Puc.Negocios_C.Movimentos movimento = new Puc.Negocios_C.Movimentos();
-            yield return movimento.GerarExcelSaldoProjeto(Conta, data);
+            yield return movimento.GerarExcelSaldoProjeto(conta: Conta, data: data);
         }
 
         [EnableCors("*", "*", "*")]

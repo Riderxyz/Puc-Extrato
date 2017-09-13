@@ -52,19 +52,19 @@ namespace ctrlProjetoService.Controllers
         [EnableCors("*", "*", "*")]
         [HttpGet]
         [Route("Incluir")]
-        public IEnumerable<string> Incluir(string nome, string email)
+        public IEnumerable<string> Incluir(string nome, string email="",string senha="")
         {
             coordenadorNegocio coordenador = new coordenadorNegocio();
-            yield return coordenador.GetCoordenadorIncluir(nome, email);
+            yield return coordenador.GetCoordenadorIncluir(nome, email,senha);
         }
 
         [EnableCors("*", "*", "*")]
         [HttpGet]
         [Route("Atualizar")]
-        public IEnumerable<string> Atualizar(int id, string nome = "", string email = "")
+        public IEnumerable<string> Atualizar(int id, string nome = "", string email = "", string senha="")
         {
             coordenadorNegocio coordenador = new coordenadorNegocio();
-            yield return coordenador.GetCoordenadorUpdate(id, nome, email);
+            yield return coordenador.GetCoordenadorUpdate(id, nome, email,senha);
         }
 
         [HttpGet]

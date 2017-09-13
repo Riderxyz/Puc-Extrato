@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "web", "web\web.vbproj", "{CD8E53D2-B177-494B-AE08-1CEEF98E43D7}"
 EndProject
@@ -17,15 +17,15 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NovaEra", "NovaEra\NovaEra.csproj", "{E8E2D28B-9E3E-46CA-A6AC-6C2AAEB3E7D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "services", "services\services.csproj", "{E144C827-B9DA-4A4D-B89E-40E49971CAF1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C61EFD34-E029-4AB4-A418-C085B1A44AB4} = {C61EFD34-E029-4AB4-A418-C085B1A44AB4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ctrlProjetoService", "ctrlProjetoService\ctrlProjetoService.csproj", "{2DBF2588-D7B8-4010-A1B9-E0CD84B51BE5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Negocios_C", "Negocios_C\Negocios_C.csproj", "{C61EFD34-E029-4AB4-A418-C085B1A44AB4}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -62,5 +62,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

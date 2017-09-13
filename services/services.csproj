@@ -317,6 +317,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -369,6 +370,10 @@
       <Project>{0d672190-8a94-4605-bfe2-0b47fb10cdd5}</Project>
       <Name>Dominio</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Negocios_C\Negocios_C.csproj">
+      <Project>{c61efd34-e029-4ab4-a418-c085b1a44ab4}</Project>
+      <Name>Negocios_C</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Negocio\Negocio.vbproj">
       <Project>{4c5351ab-8f1c-471b-b252-f9a9113befec}</Project>
       <Name>Negocio</Name>
@@ -394,7 +399,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>19017</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

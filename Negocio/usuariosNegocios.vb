@@ -3,13 +3,15 @@ Imports Dominio
 Imports Newtonsoft.Json
 
 Public Class usuariosNegocios
+
 #Region "Propriedades"
     Public Property usuario As Dominio.usuario
     Public Property ListaUsuarios As List(Of Dominio.usuario) = New List(Of Dominio.usuario)
-    Public property nometabela As String ="tabUsuario"
+    Public Property nometabela As String = "tabUsuario"
 #End Region
 
 #Region "Processos"
+
     Public Function ValidarUsuario(_usuario As String, _senha As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
@@ -33,7 +35,7 @@ Public Class usuariosNegocios
     Function Empty() As String
         Dim banco As clBanco = New clBanco
         Dim lResult As String
-        banco.CarregarTabela(String.Format("SELECT 0 as Coordenador, '  ' as Nome , ' ' as senha"), nometabela )
+        banco.CarregarTabela(String.Format("SELECT 0 as Coordenador, '  ' as Nome , ' ' as senha"), nometabela)
         MapearUsuario(banco.tabela)
         usuario.conectado = False
         lResult = banco.GetJsonTabela
@@ -53,8 +55,8 @@ Public Class usuariosNegocios
     End Sub
 #End Region
 
-    #Region "Atualizar Coordenadores"
-    Public function GravarCoordenador(coordenador As Integer, nome As String, email As String) As String
+#Region "Atualizar Coordenadores"
+    Public Function GravarCoordenador(coordenador As Integer, nome As String, email As String) As String
         Dim lResult As String
         Dim banco As clBanco = New clBanco
         banco.parametros.Add(New SqlParameter("coordenador", coordenador))
@@ -73,6 +75,6 @@ Public Class usuariosNegocios
             lResult = Empty() ' JsonConvert.SerializeObject(New Dominio.usuario With {.coordenador = 0, .senha = "", .nome = "", .descricao = "", .conectado = False, .status = ""})
         End If
         Return lResult
-    End function
+    End Function
 #End Region
 End Class

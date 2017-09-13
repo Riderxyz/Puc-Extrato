@@ -109,13 +109,17 @@ Public Class clBanco
             OraCommand.CommandType = CommandType.StoredProcedure
             Conexao.Open()
             reader = OraCommand.ExecuteReader()
+            If Not (reader.HasRows) Then
+                Dim a = 1
+            End If
+
             ds = New DataSet
-            tabela = New DataTable
-            tabela.TableName = tablename
-            tabela.Load(reader)
-            ds.Tables.Add(tabela)
-            parametros.Clear  ' log Logging.Log.listLog.Add(New LogEvent.baseLog())
-        End If
+                tabela = New DataTable
+                tabela.TableName = tablename
+                tabela.Load(reader)
+                ds.Tables.Add(tabela)
+                parametros.Clear()  ' log Logging.Log.listLog.Add(New LogEvent.baseLog())
+            End If
 
     End Sub
 
